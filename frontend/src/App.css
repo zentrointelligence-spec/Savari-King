@@ -1,0 +1,226 @@
+/* Styles spécifiques à l'application avec thème violet unifié */
+
+/* Reset root styles for full layout */
+#root {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  overflow: hidden;
+  background: var(--color-bg-light);
+  color: var(--color-text-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Mode sombre pour root */
+.dark #root {
+  background: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+
+/* Custom Scrollbar Styles avec thème violet */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(112, 69, 175, 0.5) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-accent);
+}
+
+/* Sidebar specific scrollbar avec thème violet */
+.scrollbar-thumb-violet {
+  scrollbar-color: rgba(112, 69, 175, 0.6) transparent;
+}
+
+.scrollbar-thumb-violet::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 3px;
+}
+
+.scrollbar-thumb-violet::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-accent);
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Scrollbar pour les composants admin */
+.scrollbar-admin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) rgba(112, 69, 175, 0.1);
+}
+
+.scrollbar-admin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-admin::-webkit-scrollbar-track {
+  background: rgba(112, 69, 175, 0.1);
+  border-radius: 4px;
+}
+
+.scrollbar-admin::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.scrollbar-admin::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-accent);
+}
+
+/* Smooth scrolling for all elements */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Logo styles avec thème violet */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em rgba(112, 69, 175, 0.6));
+}
+
+.logo.violet:hover {
+  filter: drop-shadow(0 0 2em rgba(139, 101, 194, 0.6));
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em rgba(112, 69, 175, 0.6));
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+  background: var(--color-bg-surface);
+  border: 1px solid rgba(112, 69, 175, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-primary);
+  transform: translateY(-2px);
+}
+
+.dark .card {
+  background: var(--color-bg-dark-surface);
+  border-color: rgba(112, 69, 175, 0.2);
+}
+
+.read-the-docs {
+  color: var(--color-text-muted);
+}
+
+.dark .read-the-docs {
+  color: var(--color-text-muted-dark);
+}
+
+/* Ensure proper layout for full-screen app */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-bg-light);
+  transition: background-color 0.3s ease;
+}
+
+.dark html,
+.dark body {
+  background: var(--color-bg-dark);
+}
+
+/* Classes utilitaires pour l'application */
+.app-container {
+  background: var(--color-bg-light);
+  color: var(--color-text-light);
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.dark .app-container {
+  background: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+
+.app-surface {
+  background: var(--color-bg-surface);
+  border: 1px solid rgba(112, 69, 175, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.dark .app-surface {
+  background: var(--color-bg-dark-surface);
+  border-color: rgba(112, 69, 175, 0.2);
+}
+
+.app-button-primary {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.app-button-primary:hover {
+  box-shadow: var(--shadow-primary);
+  transform: translateY(-2px);
+}
+
+.app-button-secondary {
+  background: var(--gradient-accent);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.app-button-secondary:hover {
+  box-shadow: var(--shadow-accent);
+  transform: translateY(-2px);
+}

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Was Your Trip? - Share Your Experience</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 50px 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        .content {
+            padding: 40px 30px;
+            color: #333;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .message {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .trip-recap {
+            background-color: #f8f9fd;
+            border-left: 4px solid #f5576c;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        .trip-recap h3 {
+            margin: 0 0 15px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+        .trip-recap p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        .trip-recap strong {
+            color: #2c3e50;
+        }
+        .rating-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 35px 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .rating-section h3 {
+            margin: 0 0 20px;
+            font-size: 22px;
+        }
+        .rating-section p {
+            margin: 0 0 25px;
+            opacity: 0.95;
+            font-size: 15px;
+        }
+        .stars {
+            font-size: 48px;
+            margin: 20px 0;
+            letter-spacing: 10px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: #667eea;
+            text-decoration: none;
+            padding: 16px 45px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 15px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        .incentive-box {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 20px 25px;
+            margin: 25px 0;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .incentive-box h4 {
+            margin: 0 0 10px;
+            color: #856404;
+            font-size: 18px;
+        }
+        .incentive-box p {
+            margin: 0;
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .benefit-card {
+            background-color: #f8f9fd;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .benefit-card .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .benefit-card h4 {
+            margin: 0 0 8px;
+            font-size: 15px;
+            color: #2c3e50;
+        }
+        .benefit-card p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+        .testimonial {
+            background-color: #e8f4f8;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border-left: 4px solid #17a2b8;
+        }
+        .testimonial p {
+            margin: 0 0 15px;
+            font-style: italic;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+        .testimonial .author {
+            font-weight: 600;
+            color: #2c3e50;
+            font-style: normal;
+            font-size: 13px;
+        }
+        .social-proof {
+            text-align: center;
+            padding: 25px;
+            background-color: #f8f9fd;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .social-proof h3 {
+            margin: 0 0 15px;
+            color: #2c3e50;
+            font-size: 17px;
+        }
+        .social-proof .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer a {
+            color: #f5576c;
+            text-decoration: none;
+        }
+        .footer p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome Back! 🎉</h1>
+            <p>We hope you had an amazing journey</p>
+        </div>
+
+        <div class="content">
+            <p class="greeting">Dear {{contact_name}},</p>
+
+            <p class="message">
+                We hope you've returned home with wonderful memories from your recent trip with Ebenezer Tours!
+                We'd love to hear about your experience and how we made your <strong>{{tour_name}}</strong>
+                adventure special.
+            </p>
+
+            <div class="trip-recap">
+                <h3>📍 Your Journey Recap</h3>
+                <p><strong>Tour:</strong> {{tour_name}}</p>
+                <p><strong>Package:</strong> {{tier_name}}</p>
+                <p><strong>Travel Date:</strong> {{travel_date}}</p>
+                <p><strong>Booking Reference:</strong> {{booking_reference}}</p>
+            </div>
+
+            <div class="rating-section">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <h3>Share Your Experience</h3>
+                <p>Your feedback helps us improve and helps fellow travelers make informed decisions</p>
+                <a href="{{review_url}}" class="cta-button">
+                    ✍️ Write Your Review
+                </a>
+            </div>
+
+            <div class="incentive-box">
+                <h4>🎁 Thank You Gift!</h4>
+                <p>
+                    As a token of appreciation for sharing your experience, you'll receive a
+                    <strong>10% discount code</strong> for your next booking with us!
+                </p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="icon">🗣️</div>
+                    <h4>Help Others</h4>
+                    <p>Your insights help fellow travelers choose their perfect vacation</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">⚡</div>
+                    <h4>Quick & Easy</h4>
+                    <p>Takes less than 3 minutes to share your thoughts</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">💯</div>
+                    <h4>Be Honest</h4>
+                    <p>We value authentic feedback - positive or constructive</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🎉</div>
+                    <h4>Get Rewarded</h4>
+                    <p>Earn 10% discount on your next adventure with us</p>
+                </div>
+            </div>
+
+            <div class="social-proof">
+                <h3>Join Our Community of Happy Travelers</h3>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">2,500+</div>
+                        <div class="stat-label">5-Star Reviews</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Happy Travelers</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial">
+                <p>
+                    "I just returned from the Kerala Backwaters tour and it was absolutely magical! The team
+                    at Ebenezer Tours thought of everything. From the comfortable accommodations to the
+                    knowledgeable guides, every detail was perfect. I can't wait to book my next adventure!"
+                </p>
+                <div class="author">- Sarah M., Recent Traveler ⭐⭐⭐⭐⭐</div>
+            </div>
+
+            <center>
+                <a href="{{review_url}}" class="cta-button" style="background-color: #28a745; color: white; font-size: 18px; padding: 18px 50px;">
+                    📝 Share My Experience Now
+                </a>
+            </center>
+
+            <p class="message" style="margin-top: 30px; background-color: #f8f9fd; padding: 20px; border-radius: 8px;">
+                <strong>What we'd love to know:</strong><br><br>
+                • How was your overall experience?<br>
+                • Did our team meet your expectations?<br>
+                • What was the highlight of your trip?<br>
+                • Any suggestions for improvement?<br>
+                • Would you recommend us to friends and family?
+            </p>
+
+            <p class="message" style="margin-top: 25px; text-align: center; font-size: 14px;">
+                Not ready to write a review yet? You can also share your photos and tag us on social media
+                <strong>@EbenezerTours</strong> or email us at <strong>{{support_email}}</strong>
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Ebenezer Tours</strong></p>
+            <p>Thank you for traveling with us!</p>
+            <p style="margin-top: 15px;">
+                <a href="{{website_url}}">Website</a> |
+                <a href="{{facebook_url}}">Facebook</a> |
+                <a href="{{instagram_url}}">Instagram</a> |
+                <a href="{{frontend_url}}/tours">Book Your Next Adventure</a>
+            </p>
+            <p style="margin-top: 20px; opacity: 0.8;">
+                © {{current_year}} Ebenezer Tours. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+/* Animations pour les cartes d'addons */
+
+.addon-card-pulse {
+  animation: addonCardPulse 1.2s ease-in-out;
+}
+
+@keyframes addonCardPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 20px 25px -5px rgba(112, 69, 175, 0.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.addon-bar-grow {
+  animation: addonBarGrow 1.2s linear forwards;
+}
+
+@keyframes addonBarGrow {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  10% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.addon-badge-bounce {
+  animation: addonBadgeBounce 1s ease-out;
+}
+
+@keyframes addonBadgeBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(180deg);
+  }
+  60% {
+    transform: scale(1.2) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.addon-star-pop {
+  animation: addonStarPop 0.8s ease-out;
+}
+
+@keyframes addonStarPop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  60% {
+    transform: scale(1.4);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Délais pour les étoiles */
+.addon-star-delay-1 { animation-delay: 0.15s; }
+.addon-star-delay-2 { animation-delay: 0.3s; }
+.addon-star-delay-3 { animation-delay: 0.45s; }
+.addon-star-delay-4 { animation-delay: 0.6s; }

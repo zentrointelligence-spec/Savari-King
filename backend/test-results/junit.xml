@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="37" failures="11" errors="0" time="3.858">
+  <testsuite name="Destination Service - Unit Tests (Standalone)" errors="0" failures="6" skipped="0" timestamp="2025-10-21T21:00:04" time="2.811" tests="14">
+    <testcase classname="Destination Service - Unit Tests (Standalone) getTopDestinations should return top destinations with default limit" name="Destination Service - Unit Tests (Standalone) getTopDestinations should return top destinations with default limit" time="0.017">
+      <failure>Error: expect(received).toHaveProperty(path)
+
+Expected path: &quot;popularityScore&quot;
+Received path: []
+
+Received value: {&quot;attractions&quot;: {&quot;activities&quot;: [], &quot;culturalHighlights&quot;: [], &quot;specialties&quot;: [], &quot;top&quot;: []}, &quot;categories&quot;: [], &quot;climate&quot;: {&quot;info&quot;: undefined, &quot;weatherData&quot;: {}}, &quot;description&quot;: &quot;Gods Own Country&quot;, &quot;flags&quot;: {&quot;ecoFriendly&quot;: false, &quot;isFamilyFriendly&quot;: false, &quot;isFeatured&quot;: true, &quot;isHeritageSite&quot;: false, &quot;isPopular&quot;: false, &quot;isTrending&quot;: false, &quot;isUNESCO&quot;: false, &quot;isWildlifeSanctuary&quot;: false}, &quot;id&quot;: 1, &quot;images&quot;: {&quot;featured&quot;: undefined, &quot;gallery&quot;: [], &quot;main&quot;: undefined, &quot;thumbnail&quot;: undefined, &quot;video&quot;: undefined}, &quot;location&quot;: {&quot;country&quot;: &quot;India&quot;, &quot;latitude&quot;: null, &quot;longitude&quot;: null, &quot;region&quot;: &quot;South India&quot;, &quot;state&quot;: &quot;Kerala&quot;, &quot;timezone&quot;: undefined}, &quot;logistics&quot;: {&quot;accommodationTypes&quot;: [], &quot;howToReach&quot;: undefined, &quot;localTransport&quot;: undefined, &quot;nearestAirport&quot;: undefined, &quot;nearestRailway&quot;: undefined}, &quot;name&quot;: &quot;Kerala&quot;, &quot;nearbyDestinations&quot;: [], &quot;pricing&quot;: {&quot;budgetCategory&quot;: undefined, &quot;max&quot;: 0, &quot;min&quot;: 0}, &quot;recommendations&quot;: {&quot;adventureLevel&quot;: undefined, &quot;difficultyLevel&quot;: undefined, &quot;duration&quot;: undefined}, &quot;relatedDestinations&quot;: [], &quot;seo&quot;: {&quot;canonicalUrl&quot;: undefined, &quot;metaDescription&quot;: undefined, &quot;metaKeywords&quot;: undefined, &quot;metaTitle&quot;: undefined, &quot;ogImage&quot;: undefined}, &quot;shortDescription&quot;: &quot;Beautiful state&quot;, &quot;slug&quot;: &quot;kerala&quot;, &quot;stats&quot;: {&quot;avgRating&quot;: 4.5, &quot;popularityScore&quot;: 0, &quot;reviewCount&quot;: 0, &quot;totalBookings&quot;: 100, &quot;tourCount&quot;: 10, &quot;viewCount&quot;: 0, &quot;wishlistCount&quot;: 50}, &quot;timing&quot;: {&quot;allSeasons&quot;: [], &quot;bestTimeToVisit&quot;: undefined, &quot;currentSeason&quot;: null, &quot;currentSeasonDescription&quot;: null, &quot;offSeason&quot;: undefined, &quot;peakSeason&quot;: undefined, &quot;recommendedDuration&quot;: undefined, &quot;upcomingFestivals&quot;: []}, &quot;travelInfo&quot;: {&quot;currency&quot;: undefined, &quot;localCustoms&quot;: undefined, &quot;localLanguage&quot;: undefined, &quot;packingSuggestions&quot;: [], &quot;safetyInfo&quot;: undefined, &quot;timezoneOffset&quot;: undefined, &quot;travelTips&quot;: undefined}}
+    at Object.toHaveProperty (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.unit.test.js:53:25)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getTopDestinations should handle empty results" name="Destination Service - Unit Tests (Standalone) getTopDestinations should handle empty results" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getTopDestinations should handle database errors gracefully" name="Destination Service - Unit Tests (Standalone) getTopDestinations should handle database errors gracefully" time="0.004">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) formatDestinationResponse should format raw database row correctly" name="Destination Service - Unit Tests (Standalone) formatDestinationResponse should format raw database row correctly" time="0.003">
+      <failure>Error: expect(received).toHaveProperty(path, value)
+
+Expected path: &quot;main&quot;
+
+Expected value: &quot;https://example.com/kerala.jpg&quot;
+Received value: undefined
+    at Object.toHaveProperty (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.unit.test.js:155:32)
+    at Promise.then.completed (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) formatDestinationResponse should handle null/undefined values gracefully" name="Destination Service - Unit Tests (Standalone) formatDestinationResponse should handle null/undefined values gracefully" time="0.002">
+      <failure>Error: expect(received).toBeNull()
+
+Received: undefined
+    at Object.toBeNull (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.unit.test.js:203:37)
+    at Promise.then.completed (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) formatDestinationResponse should parse JSONB fields correctly" name="Destination Service - Unit Tests (Standalone) formatDestinationResponse should parse JSONB fields correctly" time="0.001">
+      <failure>Error: expect(received).toHaveLength(expected)
+
+Expected length: 1
+Received length: 0
+Received array:  []
+    at Object.toHaveLength (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.unit.test.js:226:50)
+    at Promise.then.completed (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getDestinationById should return a formatted destination by ID" name="Destination Service - Unit Tests (Standalone) getDestinationById should return a formatted destination by ID" time="0.003">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getDestinationById should return null for non-existent destination" name="Destination Service - Unit Tests (Standalone) getDestinationById should return null for non-existent destination" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getRelatedDestinations should return related destinations" name="Destination Service - Unit Tests (Standalone) getRelatedDestinations should return related destinations" time="0.004">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+- StringContaining &quot;WHERE d.id != $1&quot;,
++ &quot;
+    WITH source_dest AS (
+      SELECT budget_category, adventure_level, activities, region
+      FROM destinations
+      WHERE id = $1
+    )
+    SELECT
+      d.*,
+      (
+        (d.tour_count * 0.25) +
+        (d.avg_rating * 5 * 0.20) +
+        (d.total_bookings * 0.30) +
+        (d.wishlist_count * 0.10) +
+        (CASE WHEN d.is_featured THEN 10 ELSE 0 END) +
+        (CASE WHEN d.is_trending THEN 5 ELSE 0 END)
+      ) as popularity_score,
+      -- Similarity score
+      (
+        (CASE WHEN d.budget_category = (SELECT budget_category FROM source_dest) THEN 10 ELSE 0 END) +
+        (CASE WHEN d.adventure_level = (SELECT adventure_level FROM source_dest) THEN 10 ELSE 0 END) +
+        (CASE WHEN d.activities &amp;&amp; (SELECT activities FROM source_dest) THEN 15 ELSE 0 END) +
+        (CASE WHEN d.region = (SELECT region FROM source_dest) THEN 5 ELSE 0 END)
+      ) as similarity_score
+    FROM destinations d, source_dest
+    WHERE d.is_active = true
+      AND d.id != $1
+    ORDER BY similarity_score DESC, popularity_score DESC
+    LIMIT $2
+  &quot;,
+  [1, 4],
+
+Number of calls: 1
+    at Object.toHaveBeenCalledWith (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.unit.test.js:290:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getNearbyDestinations should return destinations within radius" name="Destination Service - Unit Tests (Standalone) getNearbyDestinations should return destinations within radius" time="0.003">
+      <failure>Error: expect(received).toHaveProperty(path, value)
+
+Expected path: &quot;distance&quot;
+Received path: []
+
+Expected value: 50.5
+Received value: {&quot;attractions&quot;: {&quot;activities&quot;: [], &quot;culturalHighlights&quot;: [], &quot;specialties&quot;: [], &quot;top&quot;: []}, &quot;categories&quot;: [], &quot;climate&quot;: {&quot;info&quot;: undefined, &quot;weatherData&quot;: {}}, &quot;description&quot;: undefined, &quot;distance_km&quot;: &quot;NaN&quot;, &quot;flags&quot;: {&quot;ecoFriendly&quot;: false, &quot;isFamilyFriendly&quot;: false, &quot;isFeatured&quot;: false, &quot;isHeritageSite&quot;: false, &quot;isPopular&quot;: false, &quot;isTrending&quot;: false, &quot;isUNESCO&quot;: false, &quot;isWildlifeSanctuary&quot;: false}, &quot;id&quot;: 2, &quot;images&quot;: {&quot;featured&quot;: undefined, &quot;gallery&quot;: [], &quot;main&quot;: undefined, &quot;thumbnail&quot;: undefined, &quot;video&quot;: undefined}, &quot;location&quot;: {&quot;country&quot;: undefined, &quot;latitude&quot;: 9.9312, &quot;longitude&quot;: 76.2673, &quot;region&quot;: undefined, &quot;state&quot;: undefined, &quot;timezone&quot;: undefined}, &quot;logistics&quot;: {&quot;accommodationTypes&quot;: [], &quot;howToReach&quot;: undefined, &quot;localTransport&quot;: undefined, &quot;nearestAirport&quot;: undefined, &quot;nearestRailway&quot;: undefined}, &quot;name&quot;: &quot;Cochin&quot;, &quot;nearbyDestinations&quot;: [], &quot;pricing&quot;: {&quot;budgetCategory&quot;: undefined, &quot;max&quot;: 0, &quot;min&quot;: 0}, &quot;recommendations&quot;: {&quot;adventureLevel&quot;: undefined, &quot;difficultyLevel&quot;: undefined, &quot;duration&quot;: undefined}, &quot;relatedDestinations&quot;: [], &quot;seo&quot;: {&quot;canonicalUrl&quot;: undefined, &quot;metaDescription&quot;: undefined, &quot;metaKeywords&quot;: undefined, &quot;metaTitle&quot;: undefined, &quot;ogImage&quot;: undefined}, &quot;shortDescription&quot;: undefined, &quot;slug&quot;: &quot;cochin&quot;, &quot;stats&quot;: {&quot;avgRating&quot;: 4.4, &quot;popularityScore&quot;: 0, &quot;reviewCount&quot;: 0, &quot;totalBookings&quot;: 120, &quot;tourCount&quot;: 7, &quot;viewCount&quot;: 0, &quot;wishlistCount&quot;: 35}, &quot;timing&quot;: {&quot;allSeasons&quot;: [], &quot;bestTimeToVisit&quot;: undefined, &quot;currentSeason&quot;: null, &quot;currentSeasonDescription&quot;: null, &quot;offSeason&quot;: undefined, &quot;peakSeason&quot;: undefined, &quot;recommendedDuration&quot;: undefined, &quot;upcomingFestivals&quot;: []}, &quot;travelInfo&quot;: {&quot;currency&quot;: undefined, &quot;localCustoms&quot;: undefined, &quot;localLanguage&quot;: undefined, &quot;packingSuggestions&quot;: [], &quot;safetyInfo&quot;: undefined, &quot;timezoneOffset&quot;: undefined, &quot;travelTips&quot;: undefined}}
+    at Object.toHaveProperty (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.unit.test.js:321:25)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getDestinationStats should return comprehensive statistics" name="Destination Service - Unit Tests (Standalone) getDestinationStats should return comprehensive statistics" time="0.002">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getDestinationStats should return null for non-existent destination" name="Destination Service - Unit Tests (Standalone) getDestinationStats should return null for non-existent destination" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getEnrichedDestinations should build query with search filter" name="Destination Service - Unit Tests (Standalone) getEnrichedDestinations should build query with search filter" time="0.002">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests (Standalone) getEnrichedDestinations should apply multiple filters" name="Destination Service - Unit Tests (Standalone) getEnrichedDestinations should apply multiple filters" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Destination Service - Unit Tests" errors="0" failures="5" skipped="0" timestamp="2025-10-21T21:00:04" time="2.813" tests="23">
+    <testcase classname="Destination Service - Unit Tests getTopDestinations should return top destinations with default limit" name="Destination Service - Unit Tests getTopDestinations should return top destinations with default limit" time="0.016">
+      <failure>Error: expect(received).toHaveProperty(path)
+
+Expected path: &quot;popularityScore&quot;
+Received path: []
+
+Received value: {&quot;attractions&quot;: {&quot;activities&quot;: [], &quot;culturalHighlights&quot;: [], &quot;specialties&quot;: [], &quot;top&quot;: []}, &quot;categories&quot;: [], &quot;climate&quot;: {&quot;info&quot;: undefined, &quot;weatherData&quot;: {}}, &quot;description&quot;: undefined, &quot;flags&quot;: {&quot;ecoFriendly&quot;: false, &quot;isFamilyFriendly&quot;: false, &quot;isFeatured&quot;: true, &quot;isHeritageSite&quot;: false, &quot;isPopular&quot;: false, &quot;isTrending&quot;: false, &quot;isUNESCO&quot;: false, &quot;isWildlifeSanctuary&quot;: false}, &quot;id&quot;: 1, &quot;images&quot;: {&quot;featured&quot;: undefined, &quot;gallery&quot;: [], &quot;main&quot;: undefined, &quot;thumbnail&quot;: undefined, &quot;video&quot;: undefined}, &quot;location&quot;: {&quot;country&quot;: undefined, &quot;latitude&quot;: null, &quot;longitude&quot;: null, &quot;region&quot;: undefined, &quot;state&quot;: undefined, &quot;timezone&quot;: undefined}, &quot;logistics&quot;: {&quot;accommodationTypes&quot;: [], &quot;howToReach&quot;: undefined, &quot;localTransport&quot;: undefined, &quot;nearestAirport&quot;: undefined, &quot;nearestRailway&quot;: undefined}, &quot;name&quot;: &quot;Kerala&quot;, &quot;nearbyDestinations&quot;: [], &quot;pricing&quot;: {&quot;budgetCategory&quot;: undefined, &quot;max&quot;: 0, &quot;min&quot;: 0}, &quot;recommendations&quot;: {&quot;adventureLevel&quot;: undefined, &quot;difficultyLevel&quot;: undefined, &quot;duration&quot;: undefined}, &quot;relatedDestinations&quot;: [], &quot;seo&quot;: {&quot;canonicalUrl&quot;: undefined, &quot;metaDescription&quot;: undefined, &quot;metaKeywords&quot;: undefined, &quot;metaTitle&quot;: undefined, &quot;ogImage&quot;: undefined}, &quot;shortDescription&quot;: undefined, &quot;slug&quot;: &quot;kerala&quot;, &quot;stats&quot;: {&quot;avgRating&quot;: 4.5, &quot;popularityScore&quot;: 0, &quot;reviewCount&quot;: 0, &quot;totalBookings&quot;: 100, &quot;tourCount&quot;: 10, &quot;viewCount&quot;: 0, &quot;wishlistCount&quot;: 50}, &quot;timing&quot;: {&quot;allSeasons&quot;: [], &quot;bestTimeToVisit&quot;: undefined, &quot;currentSeason&quot;: null, &quot;currentSeasonDescription&quot;: null, &quot;offSeason&quot;: undefined, &quot;peakSeason&quot;: undefined, &quot;recommendedDuration&quot;: undefined, &quot;upcomingFestivals&quot;: []}, &quot;travelInfo&quot;: {&quot;currency&quot;: undefined, &quot;localCustoms&quot;: undefined, &quot;localLanguage&quot;: undefined, &quot;packingSuggestions&quot;: [], &quot;safetyInfo&quot;: undefined, &quot;timezoneOffset&quot;: undefined, &quot;travelTips&quot;: undefined}}
+    at Object.toHaveProperty (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.test.js:54:25)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getTopDestinations should filter by featured criteria" name="Destination Service - Unit Tests getTopDestinations should filter by featured criteria" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getTopDestinations should filter by trending criteria" name="Destination Service - Unit Tests getTopDestinations should filter by trending criteria" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getTopDestinations should handle empty results" name="Destination Service - Unit Tests getTopDestinations should handle empty results" time="0.002">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getTopDestinations should handle database errors gracefully" name="Destination Service - Unit Tests getTopDestinations should handle database errors gracefully" time="0.005">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getDestinationById should return a formatted destination by ID" name="Destination Service - Unit Tests getDestinationById should return a formatted destination by ID" time="0.003">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getDestinationById should return null for non-existent destination" name="Destination Service - Unit Tests getDestinationById should return null for non-existent destination" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getDestinationById should return null for inactive destination" name="Destination Service - Unit Tests getDestinationById should return null for inactive destination" time="0.002">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getRelatedDestinations should return related destinations based on region and category" name="Destination Service - Unit Tests getRelatedDestinations should return related destinations based on region and category" time="0.004">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+- StringContaining &quot;WHERE d.id != $1&quot;,
++ &quot;
+    WITH source_dest AS (
+      SELECT budget_category, adventure_level, activities, region
+      FROM destinations
+      WHERE id = $1
+    )
+    SELECT
+      d.*,
+      (
+        (d.tour_count * 0.25) +
+        (d.avg_rating * 5 * 0.20) +
+        (d.total_bookings * 0.30) +
+        (d.wishlist_count * 0.10) +
+        (CASE WHEN d.is_featured THEN 10 ELSE 0 END) +
+        (CASE WHEN d.is_trending THEN 5 ELSE 0 END)
+      ) as popularity_score,
+      -- Similarity score
+      (
+        (CASE WHEN d.budget_category = (SELECT budget_category FROM source_dest) THEN 10 ELSE 0 END) +
+        (CASE WHEN d.adventure_level = (SELECT adventure_level FROM source_dest) THEN 10 ELSE 0 END) +
+        (CASE WHEN d.activities &amp;&amp; (SELECT activities FROM source_dest) THEN 15 ELSE 0 END) +
+        (CASE WHEN d.region = (SELECT region FROM source_dest) THEN 5 ELSE 0 END)
+      ) as similarity_score
+    FROM destinations d, source_dest
+    WHERE d.is_active = true
+      AND d.id != $1
+    ORDER BY similarity_score DESC, popularity_score DESC
+    LIMIT $2
+  &quot;,
+  [1, 4],
+
+Number of calls: 1
+    at Object.toHaveBeenCalledWith (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.test.js:232:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getRelatedDestinations should limit results to specified count" name="Destination Service - Unit Tests getRelatedDestinations should limit results to specified count" time="0.002">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getNearbyDestinations should return destinations within specified radius" name="Destination Service - Unit Tests getNearbyDestinations should return destinations within specified radius" time="0.004">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+- StringContaining &quot;ST_Distance&quot;,
++ &quot;
+    WITH source_location AS (
+      SELECT latitude, longitude
+      FROM destinations
+      WHERE id = $1 AND latitude IS NOT NULL AND longitude IS NOT NULL
+    ),
+    destinations_with_distance AS (
+      SELECT
+        d.*,
+        (
+          (d.tour_count * 0.25) +
+          (d.avg_rating * 5 * 0.20) +
+          (d.total_bookings * 0.30) +
+          (d.wishlist_count * 0.10) +
+          (CASE WHEN d.is_featured THEN 10 ELSE 0 END) +
+          (CASE WHEN d.is_trending THEN 5 ELSE 0 END)
+        ) as popularity_score,
+        -- Calculate distance in km using Haversine formula
+        (
+          6371 * acos(
+            cos(radians((SELECT latitude FROM source_location))) *
+            cos(radians(d.latitude)) *
+            cos(radians(d.longitude) - radians((SELECT longitude FROM source_location))) +
+            sin(radians((SELECT latitude FROM source_location))) *
+            sin(radians(d.latitude))
+          )
+        ) as distance_km
+      FROM destinations d, source_location
+      WHERE d.is_active = true
+        AND d.id != $1
+        AND d.latitude IS NOT NULL
+        AND d.longitude IS NOT NULL
+    )
+    SELECT *
+    FROM destinations_with_distance
+    WHERE distance_km &lt;= $2
+    ORDER BY distance_km ASC, popularity_score DESC
+    LIMIT $3
+  &quot;,
+  [1, 100, 4],
+
+Number of calls: 1
+    at Object.toHaveBeenCalledWith (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.test.js:275:24)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getNearbyDestinations should handle destinations without coordinates" name="Destination Service - Unit Tests getNearbyDestinations should handle destinations without coordinates" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getDestinationStats should return comprehensive statistics" name="Destination Service - Unit Tests getDestinationStats should return comprehensive statistics" time="0.002">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getDestinationStats should return null for non-existent destination" name="Destination Service - Unit Tests getDestinationStats should return null for non-existent destination" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getEnrichedDestinations should apply search filter" name="Destination Service - Unit Tests getEnrichedDestinations should apply search filter" time="0.003">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getEnrichedDestinations should apply region filter" name="Destination Service - Unit Tests getEnrichedDestinations should apply region filter" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getEnrichedDestinations should apply budget filter" name="Destination Service - Unit Tests getEnrichedDestinations should apply budget filter" time="0">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests getEnrichedDestinations should apply rating filter" name="Destination Service - Unit Tests getEnrichedDestinations should apply rating filter" time="0">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests formatDestinationResponse should format raw database row correctly" name="Destination Service - Unit Tests formatDestinationResponse should format raw database row correctly" time="0.004">
+      <failure>Error: expect(received).toHaveProperty(path, value)
+
+Expected path: &quot;main&quot;
+
+Expected value: &quot;https://example.com/kerala.jpg&quot;
+Received value: undefined
+    at Object.toHaveProperty (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.test.js:423:32)
+    at Promise.then.completed (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests formatDestinationResponse should handle null/undefined values gracefully" name="Destination Service - Unit Tests formatDestinationResponse should handle null/undefined values gracefully" time="0.001">
+      <failure>Error: expect(received).toBeNull()
+
+Received: undefined
+    at Object.toBeNull (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\tests\services\destinationService.test.js:447:37)
+    at Promise.then.completed (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at _runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at _runTestsForDescribeBlock (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\Administrator\Desktop\Sam\Booking Website\ebooking-app\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests Edge Cases and Error Handling should handle SQL injection attempts safely" name="Destination Service - Unit Tests Edge Cases and Error Handling should handle SQL injection attempts safely" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests Edge Cases and Error Handling should handle very large limit values" name="Destination Service - Unit Tests Edge Cases and Error Handling should handle very large limit values" time="0.001">
+    </testcase>
+    <testcase classname="Destination Service - Unit Tests Edge Cases and Error Handling should handle negative limit values" name="Destination Service - Unit Tests Edge Cases and Error Handling should handle negative limit values" time="0">
+    </testcase>
+  </testsuite>
+</testsuites>

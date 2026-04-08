@@ -1,0 +1,767 @@
+/* Import des améliorations CSS personnalisées */
+@import "./styles/enhancements.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS pour le thème violet unifié */
+:root {
+  /* Couleurs principales du thème violet */
+  --color-primary: #7045af;
+  --color-secondary: #59378a;
+  --color-accent: #8b65c2;
+  --color-dark: #111111;
+  --color-dark-light: #2a2a2a;
+
+  /* Variations de couleurs pour plus de flexibilité */
+  --color-primary-light: #8b65c2;
+  --color-primary-dark: #59378a;
+  --color-secondary-light: #7045af;
+  --color-secondary-dark: #4a2d73;
+  --color-accent-light: #a584d1;
+  --color-accent-dark: #7045af;
+
+  /* Couleurs de fond */
+  --color-bg-light: #ffffff;
+  --color-bg-surface: #f8f9fa;
+  --color-bg-dark: #111111;
+  --color-bg-dark-light: #2a2a2a;
+  --color-bg-dark-surface: #1a1a1a;
+
+  /* Couleurs de texte */
+  --color-text-light: #2a2a2a;
+  --color-text-dark: #f3f4f6;
+  --color-text-muted: #6b7280;
+  --color-text-muted-dark: #9ca3af;
+
+  /* Couleurs d'état */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Ombres avec thème violet */
+  --shadow-primary: 0 4px 25px -5px rgba(112, 69, 175, 0.3),
+    0 10px 10px -5px rgba(112, 69, 175, 0.1);
+  --shadow-secondary: 0 4px 25px -5px rgba(89, 55, 138, 0.3),
+    0 10px 10px -5px rgba(89, 55, 138, 0.1);
+  --shadow-accent: 0 4px 25px -5px rgba(139, 101, 194, 0.3),
+    0 10px 10px -5px rgba(139, 101, 194, 0.1);
+  --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.07),
+    0 10px 20px -2px rgba(0, 0, 0, 0.04);
+  --shadow-medium: 0 4px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-hard: 0 10px 40px -10px rgba(0, 0, 0, 0.2),
+    0 2px 10px -2px rgba(0, 0, 0, 0.04);
+
+  /* Gradients avec thème violet */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  --gradient-accent: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-primary) 100%
+  );
+  --gradient-dark: linear-gradient(
+    135deg,
+    var(--color-dark) 0%,
+    var(--color-dark-light) 100%
+  );
+  --gradient-surface: linear-gradient(
+    135deg,
+    var(--color-bg-surface) 0%,
+    var(--color-bg-light) 100%
+  );
+}
+
+/* Mode sombre - Variables CSS améliorées avec palette sombre élégante */
+.dark {
+  /* Couleurs principales pour le mode sombre - Palette bleu nuit/indigo */
+  --color-primary: #4f46e5; /* Indigo vif pour les éléments principaux */
+  --color-secondary: #3730a3; /* Indigo plus foncé */
+  --color-accent: #6366f1; /* Indigo clair pour les accents */
+
+  /* Couleurs de fond pour le mode sombre */
+  --color-bg-light: #0f172a; /* Slate 900 - fond principal très sombre */
+  --color-bg-surface: #1e293b; /* Slate 800 - surfaces */
+  --color-bg-dark-surface: #334155; /* Slate 700 - surfaces élevées */
+
+  /* Couleurs de texte pour le mode sombre */
+  --color-text-light: #f1f5f9; /* Slate 100 - texte principal */
+  --color-text-dark: #f1f5f9; /* Slate 100 */
+  --color-text-muted: #94a3b8; /* Slate 400 - texte secondaire */
+  --color-text-muted-dark: #64748b; /* Slate 500 */
+
+  /* Gradients adaptés au mode sombre */
+  --gradient-primary: linear-gradient(
+    135deg,
+    #4f46e5 0%,
+    /* Indigo */ #3730a3 100% /* Indigo foncé */
+  );
+  --gradient-accent: linear-gradient(
+    135deg,
+    #6366f1 0%,
+    /* Indigo clair */ #4f46e5 100% /* Indigo */
+  );
+  --gradient-surface: linear-gradient(
+    135deg,
+    #1e293b 0%,
+    /* Slate 800 */ #0f172a 100% /* Slate 900 */
+  );
+
+  /* Ombres adaptées au mode sombre avec teinte indigo */
+  --shadow-primary: 0 4px 25px -5px rgba(79, 70, 229, 0.4),
+    0 10px 10px -5px rgba(79, 70, 229, 0.2);
+  --shadow-secondary: 0 4px 25px -5px rgba(55, 48, 163, 0.4),
+    0 10px 10px -5px rgba(55, 48, 163, 0.2);
+  --shadow-accent: 0 4px 25px -5px rgba(99, 102, 241, 0.4),
+    0 10px 10px -5px rgba(99, 102, 241, 0.2);
+  --shadow-soft: 0 2px 15px -3px rgba(0, 0, 0, 0.4),
+    0 10px 20px -2px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 25px -5px rgba(0, 0, 0, 0.5),
+    0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  --shadow-hard: 0 10px 40px -10px rgba(0, 0, 0, 0.7),
+    0 2px 10px -2px rgba(0, 0, 0, 0.4);
+}
+
+/* Classes utilitaires pour le thème violet */
+.bg-primary-gradient {
+  background: var(--gradient-primary);
+}
+
+.bg-accent-gradient {
+  background: var(--gradient-accent);
+}
+
+.bg-dark-gradient {
+  background: var(--gradient-dark);
+}
+
+.text-primary-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.shadow-primary {
+  box-shadow: var(--shadow-primary);
+}
+
+.shadow-secondary {
+  box-shadow: var(--shadow-secondary);
+}
+
+.shadow-accent {
+  box-shadow: var(--shadow-accent);
+}
+
+/* Animation pour le menu mobile */
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+/* Barre de défilement personnalisée */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 3px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+/* Styles pour le mode sombre améliorés */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background: var(--color-bg-dark);
+  color: var(--color-text-dark);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Styles spécifiques pour les éléments en mode sombre avec palette indigo */
+.dark .bg-white {
+  background-color: var(--color-bg-surface) !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: var(--color-bg-surface) !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: var(--color-bg-dark-surface) !important;
+}
+
+.dark .text-gray-900 {
+  color: var(--color-text-light) !important;
+}
+
+.dark .text-gray-800 {
+  color: var(--color-text-light) !important;
+}
+
+.dark .text-gray-700 {
+  color: #cbd5e1 !important; /* Slate 300 */
+}
+
+.dark .text-gray-600 {
+  color: var(--color-text-muted) !important; /* Slate 400 */
+}
+
+.dark .text-gray-500 {
+  color: var(--color-text-muted-dark) !important; /* Slate 500 */
+}
+
+.dark .border-gray-200 {
+  border-color: rgba(
+    79,
+    70,
+    229,
+    0.2
+  ) !important; /* Indigo avec transparence */
+}
+
+.dark .border-gray-300 {
+  border-color: rgba(
+    79,
+    70,
+    229,
+    0.3
+  ) !important; /* Indigo avec transparence */
+}
+
+/* Amélioration des cartes en mode sombre */
+.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .shadow {
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.dark .shadow-md {
+  box-shadow: var(--shadow-medium) !important;
+}
+
+.dark .shadow-lg {
+  box-shadow: var(--shadow-hard) !important;
+}
+
+/* Amélioration des inputs en mode sombre avec palette indigo */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: var(--color-bg-dark-surface);
+  border-color: rgba(79, 70, 229, 0.3); /* Indigo avec transparence */
+  color: var(--color-text-light);
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); /* Indigo avec transparence */
+}
+
+/* Amélioration des boutons en mode sombre */
+.dark .btn-secondary {
+  background-color: var(--color-bg-dark-surface);
+  border-color: rgba(79, 70, 229, 0.3); /* Indigo avec transparence */
+  color: var(--color-text-light);
+}
+
+.dark .btn-secondary:hover {
+  background-color: var(--color-bg-surface);
+  border-color: var(--color-primary);
+}
+
+/* Animations personnalisées pour les composants */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float-up {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(var(--float-distance, -10px));
+  }
+}
+
+@keyframes float-down {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(var(--float-distance, 10px));
+  }
+}
+
+@keyframes float-left {
+  0%,
+  100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(var(--float-distance, -10px));
+  }
+}
+
+@keyframes float-right {
+  0%,
+  100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(var(--float-distance, 10px));
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(112, 69, 175, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(112, 69, 175, 0.8),
+      0 0 30px rgba(112, 69, 175, 0.6);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Classes d'animation */
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fadeInDown {
+  animation: fadeInDown 0.6s ease-out forwards;
+}
+
+.animate-fadeInLeft {
+  animation: fadeInLeft 0.6s ease-out forwards;
+}
+
+.animate-fadeInRight {
+  animation: fadeInRight 0.6s ease-out forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.animate-slideInUp {
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+.animate-zoomIn {
+  animation: zoomIn 0.6s ease-out forwards;
+}
+
+.animate-float-up {
+  animation: float-up 3s ease-in-out infinite;
+}
+
+.animate-float-down {
+  animation: float-down 3s ease-in-out infinite;
+}
+
+.animate-float-left {
+  animation: float-left 3s ease-in-out infinite;
+}
+
+.animate-float-right {
+  animation: float-right 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(112, 69, 175, 0.4);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Classes d'effets visuels avec thème violet */
+.violet-glow {
+  box-shadow: var(--shadow-primary);
+}
+
+.violet-glow:hover {
+  box-shadow: 0 0 30px rgba(112, 69, 175, 0.6);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.violet-border {
+  border: 2px solid var(--color-primary);
+}
+
+.violet-border-gradient {
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+    var(--gradient-primary) border-box;
+}
+
+.violet-text-glow {
+  text-shadow: 0 0 10px rgba(112, 69, 175, 0.5);
+}
+
+.violet-backdrop {
+  backdrop-filter: blur(10px);
+  background: rgba(112, 69, 175, 0.1);
+  border: 1px solid rgba(112, 69, 175, 0.2);
+}
+
+/* Amélioration des barres de défilement avec thème violet */
+.violet-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.violet-scrollbar::-webkit-scrollbar-track {
+  background: rgba(112, 69, 175, 0.1);
+  border-radius: 4px;
+}
+
+.violet-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.violet-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-accent);
+}
+
+/* Loading animations */
+.loading-dots {
+  display: inline-block;
+}
+
+.loading-dots::after {
+  content: "";
+  animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+  0%,
+  20% {
+    content: "";
+  }
+  40% {
+    content: ".";
+  }
+  60% {
+    content: "..";
+  }
+  80%,
+  100% {
+    content: "...";
+  }
+}
+
+/* Responsive animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom utilities */
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.backdrop-blur-xs {
+  backdrop-filter: blur(2px);
+}
+
+.backdrop-blur-3xl {
+  backdrop-filter: blur(64px);
+}
+
+/* Classes Tailwind personnalisées pour le thème violet */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+.border-primary {
+  border-color: var(--color-primary);
+}
+
+.border-secondary {
+  border-color: var(--color-secondary);
+}
+
+.border-accent {
+  border-color: var(--color-accent);
+}
+
+.hover\:text-primary:hover {
+  color: var(--color-primary);
+}
+
+.hover\:text-secondary:hover {
+  color: var(--color-secondary);
+}
+
+.hover\:text-accent:hover {
+  color: var(--color-accent);
+}
+
+.hover\:bg-primary:hover {
+  background-color: var(--color-primary);
+}
+
+.hover\:bg-secondary:hover {
+  background-color: var(--color-secondary);
+}
+
+.hover\:bg-accent:hover {
+  background-color: var(--color-accent);
+}
+
+.dark\:text-accent:is(.dark *) {
+  color: var(--color-accent);
+}
+
+.dark\:hover\:text-accent:hover:is(.dark *) {
+  color: var(--color-accent);
+}
+
+.video-rotated {
+  transform: rotate(-90deg);
+}
+
+/* Animations personnalisées pour les cartes d'addons */
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes star-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s ease-out forwards;
+}
+
+.animate-star-pop {
+  animation: star-pop 0.4s ease-out forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 0.6s ease-in-out;
+}
+
+/* Animation Shimmer pour les barres de progression */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}

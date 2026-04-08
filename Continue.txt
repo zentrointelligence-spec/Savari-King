@@ -1,0 +1,1404 @@
+Voici un plan d'implémentation complet et structuré pour refondre le
+  système "Discover Our Destinations" :
+
+  ---
+  📋 PLAN D'IMPLÉMENTATION COMPLET - DESTINATIONS MODULE
+
+  PHASE 1 : CONSOLIDATION & NETTOYAGE (1-2 jours)
+
+  1.1 Unification Backend
+
+  Étape 1.1.1 : Créer un Service Centralisé
+
+  Fichier : backend/src/services/destinationService.js (nouveau)
+
+  Objectifs :
+  - Centraliser toute la logique métier des destinations
+  - Éliminer la duplication entre destinationController et
+  homepageController
+  - Créer des fonctions réutilisables
+
+  Fonctions à créer :
+  // Calcul du score de popularité unifié
+  calculatePopularityScore(destination, weights = {})
+
+  // Récupération enrichie des destinations
+  getEnrichedDestinations(filters = {}, options = {})
+
+  // Récupération des top destinations
+  getTopDestinations(limit = 6, criteria = 'popularity')
+
+  // Récupération des destinations par région/catégorie
+  getDestinationsByFilter(filterType, filterValue, options = {})
+
+  // Statistiques d'une destination
+  getDestinationStats(destinationId)
+
+  // Destinations similaires/recommandées
+  getRelatedDestinations(destinationId, limit = 4)
+
+  // Destinations à proximité
+  getNearbyDestinations(destinationId, radiusKm = 500)
+
+  Données retournées enrichies :
+  {
+    id, name, slug, description,
+    location: { country, state, region, latitude, longitude },
+    images: { main, thumbnail, gallery },
+    timing: {
+      bestTimeToVisit,
+      peakSeason,
+      offSeason,
+      currentSeason,
+      festivals: [] // prochains événements
+    },
+    climate: { info, weatherData },
+    attractions: { top, activities, specialties, culturalHighlights },
+    stats: {
+      tourCount, avgRating, reviewCount,
+      totalBookings, wishlistCount
+    },
+    pricing: { min, max, budgetCategory },
+    flags: {
+      isFeatured, isPopular, isTrending,
+      isUNESCO, isHeritageSite, isWildlifeSanctuary,
+      isFamilyFriendly, ecoFriendly
+    },
+    logistics: {
+      nearestAirport, nearestRailway,
+      localTransport, howToReach
+    },
+    recommendations: {
+      duration, difficultyLevel, adventureLevel
+    },
+    seo: { metaTitle, metaDescription, canonicalUrl }
+  }
+
+  Étape 1.1.2 : Refactoriser les Contrôleurs
+
+  Fichiers :
+  - backend/src/controllers/destinationController.js (refactor)
+  - backend/src/controllers/homepageController.js (modifier)
+
+  Actions :
+  1. Supprimer getPopularDestinations() de homepageController.js
+  2. Remplacer par un appel à destinationService.getTopDestinations()
+  3. Simplifier destinationController.js pour qu'il utilise le service
+  4. Ajouter de nouveaux endpoints :
+    - GET /api/destinations/popular (paramétrable)
+    - GET /api/destinations/featured
+    - GET /api/destinations/trending
+    - GET /api/destinations/:id/related
+    - GET /api/destinations/:id/nearby
+    - GET /api/destinations/search (recherche avancée)
+
+  Étape 1.1.3 : Optimisation Base de Données
+
+  Fichier : backend/src/db/migrations/optimize_destinations_queries.sql
+  (nouveau)
+
+  Actions :
+  -- 1. Créer une vue matérialisée pour les destinations populaires
+  CREATE MATERIALIZED VIEW mv_popular_destinations AS
+  SELECT
+    d.*,
+    -- Calcul du score de popularité
+    (
+      (d.tour_count * 0.25) +
+      (d.avg_rating * 5 * 0.20) +
+      (d.total_bookings * 0.30) +
+      (d.wishlist_count * 0.10) +
+      (CASE WHEN d.is_featured THEN 10 ELSE 0 END) +
+      (CASE WHEN d.is_trending THEN 5 ELSE 0 END)
+    ) as popularity_score,
+    -- Saison actuelle
+    (
+      SELECT ds.season_name
+      FROM destination_seasons ds
+      WHERE ds.destination_id = d.id
+        AND EXTRACT(MONTH FROM CURRENT_DATE) BETWEEN ds.month_start AND
+  ds.month_end
+      LIMIT 1
+    ) as current_season,
+    -- Prochains festivals (3 mois)
+    (
+      SELECT jsonb_agg(festival)
+      FROM jsonb_array_elements(d.festivals_events) festival
+      WHERE (festival->>'date')::date BETWEEN CURRENT_DATE AND CURRENT_DATE
+  + INTERVAL '3 months'
+    ) as upcoming_festivals
+  FROM destinations d
+  WHERE d.is_active = true;
+
+  -- Index sur la vue matérialisée
+  CREATE INDEX idx_mv_popular_dest_score ON
+  mv_popular_destinations(popularity_score DESC);
+  CREATE INDEX idx_mv_popular_dest_featured ON
+  mv_popular_destinations(is_featured, popularity_score DESC);
+
+  -- Fonction de rafraîchissement (à appeler périodiquement)
+  CREATE OR REPLACE FUNCTION refresh_popular_destinations()
+  RETURNS void AS $$
+  BEGIN
+    REFRESH MATERIALIZED VIEW CONCURRENTLY mv_popular_destinations;
+  END;
+  $$ LANGUAGE plpgsql;
+
+  -- 2. Créer une fonction pour calculer le score
+  CREATE OR REPLACE FUNCTION calculate_destination_popularity_score(dest_id
+  INTEGER)
+  RETURNS NUMERIC AS $$
+  DECLARE
+    score NUMERIC;
+  BEGIN
+    SELECT
+      (
+        (d.tour_count * 0.25) +
+        (d.avg_rating * 5 * 0.20) +
+        (d.total_bookings * 0.30) +
+        (d.wishlist_count * 0.10) +
+        (CASE WHEN d.is_featured THEN 10 ELSE 0 END) +
+        (CASE WHEN d.is_trending THEN 5 ELSE 0 END)
+      )
+    INTO score
+    FROM destinations d
+    WHERE d.id = dest_id;
+
+    RETURN COALESCE(score, 0);
+  END;
+  $$ LANGUAGE plpgsql;
+
+  -- 3. Trigger pour mettre à jour automatiquement
+  CREATE OR REPLACE FUNCTION update_destination_popularity()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    -- Rafraîchir la vue matérialisée de manière asynchrone
+    PERFORM pg_notify('refresh_destinations', NEW.id::text);
+    RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql;
+
+  CREATE TRIGGER trg_destination_stats_updated
+  AFTER UPDATE OF tour_count, avg_rating, total_bookings, wishlist_count
+  ON destinations
+  FOR EACH ROW
+  EXECUTE FUNCTION update_destination_popularity();
+
+  Job de rafraîchissement :
+  - Créer backend/src/jobs/refreshDestinationsJob.js
+  - Rafraîchir la vue matérialisée toutes les heures
+  - Utiliser node-cron ou agenda.js
+
+  ---
+  PHASE 2 : ENRICHISSEMENT DES DONNÉES (1 jour)
+
+  2.1 Migration de Données Complémentaires
+
+  Étape 2.1.1 : Enrichir les Destinations Existantes
+
+  Fichier : backend/src/db/migrations/enrich_destinations_data.sql (nouveau)
+
+  Actions :
+  -- Ajouter des données manquantes pour les destinations existantes
+
+  -- 1. Enrichir Kerala
+  UPDATE destinations SET
+    top_attractions = ARRAY['Backwaters of Alleppey', 'Munnar Tea Gardens',
+  'Fort Kochi', 'Periyar Wildlife Sanctuary', 'Varkala Beach'],
+    activities = ARRAY['Houseboat Cruise', 'Tea Plantation Tours',
+  'Ayurvedic Treatments', 'Wildlife Safari', 'Beach Activities', 'Cultural
+  Performances'],
+    specialties = ARRAY['Kathakali Dance', 'Ayurveda', 'Spice Plantations',
+  'Kerala Cuisine', 'Traditional Architecture'],
+    cultural_highlights = ARRAY['Temple Festivals', 'Boat Races',
+  'Traditional Music', 'Local Handicrafts'],
+    best_time_to_visit = 'October to March (Pleasant weather, ideal for
+  sightseeing)',
+    peak_season = 'December to January',
+    off_season = 'June to September (Monsoon)',
+    climate_info = 'Tropical monsoon climate with heavy rainfall during
+  monsoon season',
+    recommended_duration = '5-7 days',
+    difficulty_level = 'easy',
+    adventure_level = 'low',
+    family_friendly = true,
+    eco_friendly = true,
+    weather_data = jsonb_build_object(
+      'summer', jsonb_build_object('temp_min', 25, 'temp_max', 35,
+  'description', 'Hot and humid'),
+      'monsoon', jsonb_build_object('temp_min', 23, 'temp_max', 30,
+  'description', 'Heavy rainfall, lush greenery'),
+      'winter', jsonb_build_object('temp_min', 20, 'temp_max', 30,
+  'description', 'Pleasant and comfortable')
+    ),
+    festivals_events = jsonb_build_array(
+      jsonb_build_object('name', 'Onam', 'month', 'August-September',
+  'date', '2025-09-05', 'description', 'Harvest festival with boat races and
+   cultural programs'),
+      jsonb_build_object('name', 'Thrissur Pooram', 'month', 'April-May',
+  'date', '2025-05-10', 'description', 'Grand temple festival with elephant
+  procession'),
+      jsonb_build_object('name', 'Nehru Trophy Boat Race', 'month',
+  'August', 'date', '2025-08-15', 'description', 'Famous snake boat race')
+    ),
+    travel_tips = 'Dress modestly when visiting temples. Try local cuisine.
+  Book houseboats in advance during peak season. Carry light cotton clothes
+  and rain gear during monsoon.',
+    local_customs = 'Remove shoes before entering homes and temples. Respect
+   local dress codes. Ask permission before photographing people.',
+    safety_info = 'Generally safe for tourists. Be cautious during monsoon
+  season. Follow safety guidelines during water activities.',
+    packing_suggestions = ARRAY['Light cotton clothing', 'Comfortable
+  walking shoes', 'Sunscreen and hat', 'Mosquito repellent', 'Rain jacket
+  (during monsoon)', 'Modest clothing for temple visits']
+  WHERE slug = 'kerala';
+
+  -- 2. Similarment pour autres destinations...
+  -- (Répéter pour Lakshadweep, Andhra Pradesh, etc.)
+
+  Étape 2.1.2 : Fonction Helper pour Saisons
+
+  Fichier : backend/src/services/seasonService.js (nouveau)
+
+  // Détermine si c'est la bonne saison pour visiter
+  function isGoodSeasonToVisit(destination, date = new Date())
+
+  // Retourne la saison actuelle
+  function getCurrentSeason(destination, date = new Date())
+
+  // Retourne les festivals à venir
+  function getUpcomingFestivals(destination, monthsAhead = 3)
+
+  // Recommandations météo
+  function getWeatherRecommendations(destination, date = new Date())
+
+  ---
+  PHASE 3 : NOUVEAU FRONTEND ENRICHI (2-3 jours)
+
+  3.1 Services Frontend
+
+  Étape 3.1.1 : Service API Destinations
+
+  Fichier : frontend/src/services/destinationService.js (refactor complet)
+
+  import api from '../config/api';
+
+  export const destinationService = {
+    // Récupérer les destinations populaires
+    getPopularDestinations: async (limit = 6) => {
+      const response = await
+  api.get(`/api/destinations/popular?limit=${limit}`);
+      return response.data;
+    },
+
+    // Récupérer toutes les destinations avec filtres
+    getDestinations: async (filters = {}) => {
+      const params = new URLSearchParams(filters);
+      const response = await api.get(`/api/destinations?${params}`);
+      return response.data;
+    },
+
+    // Recherche avancée
+    searchDestinations: async (searchParams) => {
+      const response = await api.post('/api/destinations/search',
+  searchParams);
+      return response.data;
+    },
+
+    // Détails d'une destination
+    getDestinationById: async (id) => {
+      const response = await api.get(`/api/destinations/${id}`);
+      return response.data;
+    },
+
+    // Destinations similaires
+    getRelatedDestinations: async (id, limit = 4) => {
+      const response = await
+  api.get(`/api/destinations/${id}/related?limit=${limit}`);
+      return response.data;
+    },
+
+    // Destinations à proximité
+    getNearbyDestinations: async (id, limit = 4) => {
+      const response = await
+  api.get(`/api/destinations/${id}/nearby?limit=${limit}`);
+      return response.data;
+    },
+
+    // Toggle like
+    toggleLike: async (id) => {
+      const response = await api.post(`/api/destinations/${id}/like`);
+      return response.data;
+    },
+
+    // Destinations likées par l'utilisateur
+    getUserLikedDestinations: async () => {
+      const response = await api.get('/api/destinations/liked');
+      return response.data;
+    }
+  };
+
+  3.2 Composants Améliorés
+
+  Étape 3.2.1 : TopDestinations Refactorisé
+
+  Fichier : frontend/src/components/home/TopDestinations.jsx (refactor
+  complet)
+
+  Changements majeurs :
+  1. Remplacer Class Component par Function Component (hooks)
+  2. Utiliser destinationService au lieu de fetch direct
+  3. Intégrer i18n pour multilingue
+  4. Gérer les likes serveur (si connecté) ou localStorage (si non connecté)
+  5. Afficher les données enrichies (saisons, badges, attractions)
+
+  Structure :
+  import { useState, useEffect } from 'react';
+  import { useTranslation } from 'react-i18next';
+  import { destinationService } from '../../services/destinationService';
+  import EnrichedDestinationCard from './EnrichedDestinationCard';
+
+  function TopDestinations() {
+    const { t } = useTranslation();
+    const [destinations, setDestinations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      loadDestinations();
+    }, []);
+
+    const loadDestinations = async () => {
+      try {
+        setLoading(true);
+        const data = await destinationService.getPopularDestinations(6);
+        setDestinations(data.data || []);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // ... render avec EnrichedDestinationCard
+  }
+
+  Étape 3.2.2 : Nouvelle Carte Destination Enrichie
+
+  Fichier : frontend/src/components/destinations/EnrichedDestinationCard.jsx
+   (nouveau)
+
+  Éléments à afficher :
+  <DestinationCard>
+    {/* Image avec badges overlay */}
+    <ImageSection>
+      <MainImage />
+      <Badges>
+        {isUNESCO && <Badge icon="unesco">UNESCO Site</Badge>}
+        {isFeatured && <Badge>Featured</Badge>}
+        {isTrending && <Badge>Trending</Badge>}
+      </Badges>
+      <LikeButton />
+    </ImageSection>
+
+    {/* Informations principales */}
+    <InfoSection>
+      <Title>{name}</Title>
+      <Location>{country} • {region}</Location>
+
+      {/* Stats */}
+      <Stats>
+        <Stat icon="tours">{tourCount} tours</Stat>
+        <Stat icon="star">{avgRating.toFixed(1)}</Stat>
+        <Stat icon="bookings">{totalBookings}+ bookings</Stat>
+      </Stats>
+
+      {/* Saison actuelle */}
+      {currentSeason && (
+        <SeasonBadge optimal={isOptimalSeason}>
+          <Icon>☀️</Icon>
+          <Text>{isOptimalSeason ? 'Best season now!' :
+  currentSeason}</Text>
+        </SeasonBadge>
+      )}
+
+      {/* Top attractions (3 max) */}
+      <Attractions>
+        {topAttractions.slice(0, 3).map(attraction => (
+          <AttractionTag key={attraction}>{attraction}</AttractionTag>
+        ))}
+        {topAttractions.length > 3 && <MoreTag>+{topAttractions.length - 3}
+  more</MoreTag>}
+      </Attractions>
+
+      {/* Prix */}
+      <PriceRange>
+        From {formatCurrency(priceMin)} • {budgetCategory}
+      </PriceRange>
+
+      {/* Festivals à venir */}
+      {upcomingFestivals?.length > 0 && (
+        <FestivalAlert>
+          🎉 {upcomingFestivals[0].name} -
+  {formatDate(upcomingFestivals[0].date)}
+        </FestivalAlert>
+      )}
+
+      {/* Actions */}
+      <Actions>
+        <PrimaryButton to={`/destinations/${id}`}>Explore</PrimaryButton>
+        <SecondaryButton to={`/tours?destination=${id}`}>View
+  Tours</SecondaryButton>
+      </Actions>
+    </InfoSection>
+  </DestinationCard>
+
+  Étape 3.2.3 : Page Destinations Complète (Refactor)
+
+  Fichier : frontend/src/pages/DestinationsPage.jsx (refactor complet)
+
+  Remplacer mockDestinations par vraies données :
+
+  import { destinationService } from '../services/destinationService';
+
+  function DestinationsPage() {
+    const [destinations, setDestinations] = useState([]);
+    const [filters, setFilters] = useState({
+      search: '',
+      region: 'all',
+      budgetCategory: 'all',
+      adventureLevel: 'all',
+      season: 'all',
+      flags: [] // UNESCO, Wildlife, Heritage, etc.
+    });
+
+    useEffect(() => {
+      loadDestinations();
+    }, [filters]);
+
+    const loadDestinations = async () => {
+      const data = await destinationService.getDestinations(filters);
+      setDestinations(data.data);
+    };
+
+    // ...
+  }
+
+  Nouveaux filtres :
+  - Budget Category (Budget / Moderate / Luxury / Premium)
+  - Adventure Level (Low / Moderate / High / Extreme)
+  - Special Features (UNESCO, Wildlife Sanctuary, Heritage Site,
+  Eco-Friendly, Family-Friendly)
+  - Best Season (Current Season / Flexible)
+  - Difficulty Level (Easy / Moderate / Challenging / Expert)
+
+  Étape 3.2.4 : Page Détails Destination
+
+  Fichier : frontend/src/pages/DestinationDetailPage.jsx (nouveau)
+
+  Sections :
+  1. Hero Section : Grande image, titre, badges, stats principales
+  2. Overview : Description complète, informations clés
+  3. When to Visit : Saisons, météo, festivals
+  4. Top Attractions : Grid avec images et descriptions
+  5. Activities : Ce qu'on peut faire
+  6. Interactive Map : Carte avec marker + nearby destinations
+  7. Tours Available : Liste des tours pour cette destination
+  8. Travel Tips : Conseils pratiques, customs locaux, sécurité
+  9. Related Destinations : Destinations similaires
+  10. Nearby Destinations : Destinations à proximité géographique
+
+  ---
+  PHASE 4 : FONCTIONNALITÉS AVANCÉES (2-3 jours)
+
+  4.1 Système de Likes Unifié
+
+  Étape 4.1.1 : Backend - Middleware de Synchronisation
+
+  Fichier : backend/src/middleware/likeSyncMiddleware.js (nouveau)
+
+  Logique :
+  - Si utilisateur non connecté → retourner un token temporaire pour
+  tracking localStorage
+  - Si utilisateur se connecte → migrer les likes localStorage vers DB
+  - Synchronisation bidirectionnelle
+
+  exports.syncLikesOnLogin = async (req, res, next) => {
+    const userId = req.user.id;
+    const localLikes = req.body.localLikes || []; // Envoyé par le frontend
+  lors de la connexion
+
+    if (localLikes.length > 0) {
+      // Migrer les likes locaux vers la DB
+      for (const destId of localLikes) {
+        await db.query(
+          'INSERT INTO destination_likes (user_id, destination_id) VALUES
+  ($1, $2) ON CONFLICT DO NOTHING',
+          [userId, destId]
+        );
+      }
+    }
+
+    next();
+  };
+
+  Étape 4.1.2 : Frontend - Hook Personnalisé
+
+  Fichier : frontend/src/hooks/useDestinationLikes.js (nouveau)
+
+  import { useState, useEffect } from 'react';
+  import { useAuth } from '../context/AuthContext';
+  import { destinationService } from '../services/destinationService';
+
+  export function useDestinationLikes() {
+    const { user } = useAuth();
+    const [likedDestinations, setLikedDestinations] = useState(new Set());
+
+    useEffect(() => {
+      loadLikes();
+    }, [user]);
+
+    const loadLikes = async () => {
+      if (user) {
+        // Utilisateur connecté : charger depuis le serveur
+        const data = await destinationService.getUserLikedDestinations();
+        setLikedDestinations(new Set(data.map(d => d.id)));
+      } else {
+        // Non connecté : charger depuis localStorage
+        const local = JSON.parse(localStorage.getItem('likedDestinations')
+  || '[]');
+        setLikedDestinations(new Set(local));
+      }
+    };
+
+    const toggleLike = async (destinationId) => {
+      if (user) {
+        // Connecté : appel serveur
+        await destinationService.toggleLike(destinationId);
+      } else {
+        // Non connecté : localStorage
+        const newLikes = new Set(likedDestinations);
+        if (newLikes.has(destinationId)) {
+          newLikes.delete(destinationId);
+        } else {
+          newLikes.add(destinationId);
+        }
+        localStorage.setItem('likedDestinations',
+  JSON.stringify([...newLikes]));
+        setLikedDestinations(newLikes);
+      }
+
+      loadLikes(); // Recharger
+    };
+
+    const isLiked = (destinationId) => likedDestinations.has(destinationId);
+
+    return { likedDestinations, toggleLike, isLiked };
+  }
+
+  4.2 Carte Interactive
+
+  Étape 4.2.1 : Installation
+
+  npm install leaflet react-leaflet
+
+  Étape 4.2.2 : Composant Carte
+
+  Fichier : frontend/src/components/destinations/DestinationsMap.jsx
+  (nouveau)
+
+  import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+  import 'leaflet/dist/leaflet.css';
+
+  function DestinationsMap({ destinations, selectedDestination,
+  onDestinationClick }) {
+    const defaultCenter = [20.5937, 78.9629]; // Centre de l'Inde
+    const defaultZoom = 5;
+
+    return (
+      <MapContainer center={defaultCenter} zoom={defaultZoom} style={{
+  height: '500px', width: '100%' }}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; OpenStreetMap contributors'
+        />
+        {destinations.filter(d => d.location.latitude &&
+  d.location.longitude).map(dest => (
+          <Marker
+            key={dest.id}
+            position={[dest.location.latitude, dest.location.longitude]}
+            eventHandlers={{
+              click: () => onDestinationClick(dest)
+            }}
+          >
+            <Popup>
+              <div>
+                <h3>{dest.name}</h3>
+                <p>{dest.shortDescription}</p>
+                <Link to={`/destinations/${dest.id}`}>View Details</Link>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    );
+  }
+
+  4.3 Recherche Avancée
+
+  Étape 4.3.1 : Backend - Endpoint de Recherche
+
+  Fichier : backend/src/controllers/destinationController.js (ajouter)
+
+  exports.advancedSearch = async (req, res) => {
+    try {
+      const {
+        query,           // Recherche textuelle
+        regions,         // Array de régions
+        budgetCategories,
+        adventureLevels,
+        flags,           // Array: ['unesco', 'wildlife', 'heritage',
+  'eco_friendly']
+        season,          // 'current' ou mois spécifique
+        minRating,
+        maxPrice,
+        activities       // Array d'activités recherchées
+      } = req.body;
+
+      let sqlQuery = `
+        SELECT d.*,
+          calculate_destination_popularity_score(d.id) as popularity_score
+        FROM destinations d
+        WHERE d.is_active = true
+      `;
+
+      const conditions = [];
+      const params = [];
+      let paramIndex = 1;
+
+      // Recherche textuelle (full-text search)
+      if (query) {
+        conditions.push(`(
+          to_tsvector('english', d.name || ' ' || COALESCE(d.description,
+  ''))
+          @@ plainto_tsquery('english', $${paramIndex})
+        )`);
+        params.push(query);
+        paramIndex++;
+      }
+
+      // Filtres par région
+      if (regions && regions.length > 0) {
+        conditions.push(`d.region = ANY($${paramIndex})`);
+        params.push(regions);
+        paramIndex++;
+      }
+
+      // Filtres par budget
+      if (budgetCategories && budgetCategories.length > 0) {
+        conditions.push(`d.budget_category = ANY($${paramIndex})`);
+        params.push(budgetCategories);
+        paramIndex++;
+      }
+
+      // Filtres par niveau d'aventure
+      if (adventureLevels && adventureLevels.length > 0) {
+        conditions.push(`d.adventure_level = ANY($${paramIndex})`);
+        params.push(adventureLevels);
+        paramIndex++;
+      }
+
+      // Flags spéciaux
+      if (flags && flags.length > 0) {
+        const flagConditions = [];
+        if (flags.includes('unesco')) flagConditions.push('d.unesco_site =
+  true');
+        if (flags.includes('wildlife'))
+  flagConditions.push('d.wildlife_sanctuary = true');
+        if (flags.includes('heritage')) flagConditions.push('d.heritage_site
+   = true');
+        if (flags.includes('eco_friendly'))
+  flagConditions.push('d.eco_friendly = true');
+        if (flags.includes('family_friendly'))
+  flagConditions.push('d.family_friendly = true');
+
+        if (flagConditions.length > 0) {
+          conditions.push(`(${flagConditions.join(' OR ')})`);
+        }
+      }
+
+      // Note minimale
+      if (minRating) {
+        conditions.push(`d.avg_rating >= $${paramIndex}`);
+        params.push(minRating);
+        paramIndex++;
+      }
+
+      // Prix maximum
+      if (maxPrice) {
+        conditions.push(`d.price_range_min <= $${paramIndex}`);
+        params.push(maxPrice);
+        paramIndex++;
+      }
+
+      // Activités recherchées
+      if (activities && activities.length > 0) {
+        conditions.push(`d.activities && $${paramIndex}`);
+        params.push(activities);
+        paramIndex++;
+      }
+
+      // Saison actuelle
+      if (season === 'current') {
+        conditions.push(`
+          EXISTS (
+            SELECT 1 FROM destination_seasons ds
+            WHERE ds.destination_id = d.id
+              AND EXTRACT(MONTH FROM CURRENT_DATE) BETWEEN ds.month_start
+  AND ds.month_end
+          )
+        `);
+      }
+
+      // Construire la requête finale
+      if (conditions.length > 0) {
+        sqlQuery += ' AND ' + conditions.join(' AND ');
+      }
+
+      sqlQuery += ' ORDER BY popularity_score DESC, d.avg_rating DESC LIMIT
+  50';
+
+      const result = await db.query(sqlQuery, params);
+
+      res.status(200).json({
+        status: 200,
+        data: result.rows,
+        count: result.rows.length
+      });
+    } catch (error) {
+      console.error('Error in advanced search:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  Étape 4.3.2 : Frontend - Composant Recherche
+
+  Fichier : frontend/src/components/destinations/AdvancedSearchPanel.jsx
+  (nouveau)
+
+  Interface de recherche avec :
+  - Barre de recherche textuelle avec autocomplete
+  - Filtres multi-sélection pour régions, budgets, niveaux
+  - Toggles pour flags spéciaux (UNESCO, Wildlife, etc.)
+  - Slider pour note minimale
+  - Slider pour budget maximum
+  - Multi-select pour activités
+  - Toggle "Meilleure saison actuellement"
+
+  4.4 Système de Recommandations
+
+  Étape 4.4.1 : Backend - Algorithme de Recommandations
+
+  Fichier : backend/src/services/recommendationService.js (nouveau)
+
+  // Recommandations basées sur l'historique utilisateur
+  async function getPersonalizedRecommendations(userId, limit = 6) {
+    // 1. Analyser l'historique de bookings de l'utilisateur
+    const userHistory = await db.query(`
+      SELECT DISTINCT d.id, d.budget_category, d.adventure_level, d.region,
+  d.activities
+      FROM bookings b
+      JOIN tours t ON b.tour_id = t.id
+      JOIN tour_destinations td ON t.id = td.tour_id
+      JOIN destinations d ON td.destination_id = d.id
+      WHERE b.user_id = $1 AND b.status NOT IN ('cancelled', 'failed')
+    `, [userId]);
+
+    if (userHistory.rows.length === 0) {
+      // Pas d'historique → retourner les destinations populaires
+      return destinationService.getTopDestinations(limit);
+    }
+
+    // 2. Extraire les préférences de l'utilisateur
+    const preferences = analyzeUserPreferences(userHistory.rows);
+
+    // 3. Trouver des destinations similaires non visitées
+    const recommendations = await db.query(`
+      SELECT d.*,
+        calculate_destination_popularity_score(d.id) as score,
+        (
+          -- Score de similarité avec les préférences
+          (CASE WHEN d.budget_category = $1 THEN 10 ELSE 0 END) +
+          (CASE WHEN d.adventure_level = $2 THEN 10 ELSE 0 END) +
+          (CASE WHEN d.activities && $3 THEN 15 ELSE 0 END) +
+          (CASE WHEN d.region = ANY($4) THEN 5 ELSE 0 END)
+        ) as similarity_score
+      FROM destinations d
+      WHERE d.is_active = true
+        AND d.id NOT IN (
+          SELECT DISTINCT td.destination_id
+          FROM bookings b
+          JOIN tours t ON b.tour_id = t.id
+          JOIN tour_destinations td ON t.id = td.tour_id
+          WHERE b.user_id = $5
+        )
+      ORDER BY similarity_score DESC, score DESC
+      LIMIT $6
+    `, [
+      preferences.budgetCategory,
+      preferences.adventureLevel,
+      preferences.activities,
+      preferences.regions,
+      userId,
+      limit
+    ]);
+
+    return recommendations.rows;
+  }
+
+  function analyzeUserPreferences(history) {
+    // Logique pour extraire les préférences dominantes
+    const budgetCounts = {};
+    const adventureCounts = {};
+    const allActivities = new Set();
+    const allRegions = new Set();
+
+    history.forEach(dest => {
+      budgetCounts[dest.budget_category] =
+  (budgetCounts[dest.budget_category] || 0) + 1;
+      adventureCounts[dest.adventure_level] =
+  (adventureCounts[dest.adventure_level] || 0) + 1;
+      dest.activities?.forEach(act => allActivities.add(act));
+      if (dest.region) allRegions.add(dest.region);
+    });
+
+    return {
+      budgetCategory: Object.keys(budgetCounts).reduce((a, b) =>
+  budgetCounts[a] > budgetCounts[b] ? a : b),
+      adventureLevel: Object.keys(adventureCounts).reduce((a, b) =>
+  adventureCounts[a] > adventureCounts[b] ? a : b),
+      activities: Array.from(allActivities),
+      regions: Array.from(allRegions)
+    };
+  }
+
+  ---
+  PHASE 5 : OPTIMISATIONS & PERFORMANCE (1 jour)
+
+  5.1 Caching
+
+  Étape 5.1.1 : Backend - Redis Caching
+
+  Fichier : backend/src/middleware/cacheMiddleware.js (nouveau)
+
+  const redis = require('redis');
+  const client = redis.createClient();
+
+  exports.cacheDestinations = (duration = 3600) => {
+    return async (req, res, next) => {
+      const key = `destinations:${req.originalUrl}`;
+
+      try {
+        const cachedData = await client.get(key);
+        if (cachedData) {
+          return res.json(JSON.parse(cachedData));
+        }
+
+        // Override res.json pour cacher la réponse
+        const originalJson = res.json.bind(res);
+        res.json = (data) => {
+          client.setex(key, duration, JSON.stringify(data));
+          return originalJson(data);
+        };
+
+        next();
+      } catch (error) {
+        next();
+      }
+    };
+  };
+
+  Application :
+  // Dans destinationRoutes.js
+  router.get('/popular', cacheDestinations(1800),
+  destinationController.getPopularDestinations);
+
+  Étape 5.1.2 : Frontend - React Query
+
+  Installation :
+  npm install @tanstack/react-query
+
+  Configuration :
+  // frontend/src/App.jsx
+  import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        cacheTime: 10 * 60 * 1000, // 10 minutes
+      },
+    },
+  });
+
+  function App() {
+    return (
+      <QueryClientProvider client={queryClient}>
+        {/* ... */}
+      </QueryClientProvider>
+    );
+  }
+
+  Utilisation :
+  // Dans TopDestinations.jsx
+  import { useQuery } from '@tanstack/react-query';
+
+  function TopDestinations() {
+    const { data, isLoading, error } = useQuery({
+      queryKey: ['destinations', 'popular'],
+      queryFn: () => destinationService.getPopularDestinations(6),
+    });
+
+    // ...
+  }
+
+  5.2 Lazy Loading & Code Splitting
+
+  // frontend/src/App.jsx
+  import { lazy, Suspense } from 'react';
+
+  const DestinationsPage = lazy(() => import('./pages/DestinationsPage'));
+  const DestinationDetailPage = lazy(() =>
+  import('./pages/DestinationDetailPage'));
+
+  // Dans les routes
+  <Route
+    path="/destinations"
+    element={
+      <Suspense fallback={<Loader />}>
+        <DestinationsPage />
+      </Suspense>
+    }
+  />
+
+  5.3 Image Optimization
+
+  CDN + Responsive Images
+
+  <picture>
+    <source
+      srcSet={`${CDN_URL}/${destination.thumbnail_image}?w=400&f=webp`}
+      type="image/webp"
+      media="(max-width: 640px)"
+    />
+    <source
+      srcSet={`${CDN_URL}/${destination.main_image_url}?w=800&f=webp`}
+      type="image/webp"
+    />
+    <img
+      src={`${CDN_URL}/${destination.main_image_url}?w=800`}
+      alt={destination.name}
+      loading="lazy"
+    />
+  </picture>
+
+  ---
+  PHASE 6 : INTERNATIONALISATION (1 jour)
+
+  6.1 Traductions
+
+  Étape 6.1.1 : Fichiers de Traduction
+
+  Fichiers : frontend/src/i18n/locales/*/destinations.json
+
+  Structure :
+  {
+    "destinations": {
+      "title": "Discover Our Destinations",
+      "popularTitle": "Popular Destinations",
+      "filters": {
+        "search": "Search destinations...",
+        "region": "Region",
+        "budget": "Budget",
+        "adventureLevel": "Adventure Level",
+        "season": "Best Season"
+      },
+      "card": {
+        "tours": "{{count}} tours",
+        "viewDetails": "Explore",
+        "viewTours": "View Tours",
+        "bestSeasonNow": "Best season now!",
+        "upcomingFestival": "Upcoming: {{name}}"
+      },
+      "details": {
+        "whenToVisit": "When to Visit",
+        "topAttractions": "Top Attractions",
+        "activities": "Things to Do",
+        "travelTips": "Travel Tips",
+        "nearbyDestinations": "Nearby Destinations"
+      }
+    }
+  }
+
+  6.2 Contenu Multilingue en Base
+
+  Migration : backend/src/db/migrations/add_destination_translations.sql
+
+  CREATE TABLE destination_translations (
+    id SERIAL PRIMARY KEY,
+    destination_id INTEGER REFERENCES destinations(id) ON DELETE CASCADE,
+    language_code VARCHAR(5) NOT NULL, -- 'en', 'fr', 'es', 'hi', etc.
+    name VARCHAR(255),
+    description TEXT,
+    short_description TEXT,
+    travel_tips TEXT,
+    local_customs TEXT,
+    safety_info TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(destination_id, language_code)
+  );
+
+  CREATE INDEX idx_dest_trans_dest_lang ON
+  destination_translations(destination_id, language_code);
+
+  Modifier les queries pour inclure les traductions :
+  SELECT
+    d.*,
+    COALESCE(dt.name, d.name) as name,
+    COALESCE(dt.description, d.description) as description
+  FROM destinations d
+  LEFT JOIN destination_translations dt
+    ON d.id = dt.destination_id
+    AND dt.language_code = $1
+  WHERE d.is_active = true
+
+  ---
+  PHASE 7 : TESTS & QUALITÉ (1-2 jours)
+
+  7.1 Tests Backend
+
+  Étape 7.1.1 : Tests Unitaires Services
+
+  Fichier : backend/tests/services/destinationService.test.js (nouveau)
+
+  const destinationService =
+  require('../../src/services/destinationService');
+
+  describe('Destination Service', () => {
+    describe('calculatePopularityScore', () => {
+      test('should calculate score correctly with default weights', () => {
+        const destination = {
+          tour_count: 10,
+          avg_rating: 4.5,
+          total_bookings: 50,
+          wishlist_count: 20,
+          is_featured: true,
+          is_trending: false
+        };
+
+        const score =
+  destinationService.calculatePopularityScore(destination);
+        expect(score).toBeGreaterThan(0);
+      });
+    });
+
+    describe('getTopDestinations', () => {
+      test('should return top destinations ordered by popularity', async ()
+  => {
+        const destinations = await destinationService.getTopDestinations(6);
+        expect(destinations).toHaveLength(6);
+        expect(destinations[0].popularity_score).toBeGreaterThanOrEqual(dest
+  inations[1].popularity_score);
+      });
+    });
+  });
+
+  Étape 7.1.2 : Tests d'Intégration API
+
+  Fichier : backend/tests/integration/destinations.test.js (nouveau)
+
+  const request = require('supertest');
+  const app = require('../../src/index');
+
+  describe('Destinations API', () => {
+    describe('GET /api/destinations/popular', () => {
+      test('should return popular destinations', async () => {
+        const res = await request(app)
+          .get('/api/destinations/popular?limit=3')
+          .expect(200);
+
+        expect(res.body.status).toBe(200);
+        expect(res.body.data).toHaveLength(3);
+        expect(res.body.data[0]).toHaveProperty('id');
+        expect(res.body.data[0]).toHaveProperty('name');
+        expect(res.body.data[0]).toHaveProperty('popularity_score');
+      });
+    });
+
+    describe('POST /api/destinations/search', () => {
+      test('should search destinations with filters', async () => {
+        const res = await request(app)
+          .post('/api/destinations/search')
+          .send({
+            query: 'kerala',
+            budgetCategories: ['moderate'],
+            flags: ['eco_friendly']
+          })
+          .expect(200);
+
+        expect(res.body.data.length).toBeGreaterThan(0);
+        expect(res.body.data[0].name.toLowerCase()).toContain('kerala');
+      });
+    });
+  });
+
+  7.2 Tests Frontend
+
+  Étape 7.2.1 : Tests Composants
+
+  Fichier :
+  frontend/src/components/destinations/EnrichedDestinationCard.test.jsx
+  (nouveau)
+
+  import { render, screen, fireEvent } from '@testing-library/react';
+  import { BrowserRouter } from 'react-router-dom';
+  import EnrichedDestinationCard from './EnrichedDestinationCard';
+
+  const mockDestination = {
+    id: 1,
+    name: 'Kerala',
+    slug: 'kerala',
+    location: { country: 'India', region: 'South India' },
+    tourCount: 25,
+    avgRating: 4.8,
+    totalBookings: 150,
+    flags: { isFeatured: true, isUNESCO: false },
+    topAttractions: ['Backwaters', 'Tea Gardens', 'Beaches']
+  };
+
+  describe('EnrichedDestinationCard', () => {
+    test('renders destination information correctly', () => {
+      render(
+        <BrowserRouter>
+          <EnrichedDestinationCard destination={mockDestination} />
+        </BrowserRouter>
+      );
+
+      expect(screen.getByText('Kerala')).toBeInTheDocument();
+      expect(screen.getByText(/South India/)).toBeInTheDocument();
+      expect(screen.getByText(/25 tours/)).toBeInTheDocument();
+      expect(screen.getByText(/4.8/)).toBeInTheDocument();
+    });
+
+    test('calls toggleLike when like button clicked', () => {
+      const mockToggleLike = jest.fn();
+
+      render(
+        <BrowserRouter>
+          <EnrichedDestinationCard
+            destination={mockDestination}
+            onToggleLike={mockToggleLike}
+          />
+        </BrowserRouter>
+      );
+
+      const likeButton = screen.getByRole('button', { name: /like/i });
+      fireEvent.click(likeButton);
+
+      expect(mockToggleLike).toHaveBeenCalledWith(1);
+    });
+  });
+
+  7.3 Tests E2E
+
+  Installation :
+  npm install --save-dev cypress
+
+  Fichier : cypress/e2e/destinations.cy.js (nouveau)
+
+  describe('Destinations Flow', () => {
+    it('should display popular destinations on homepage', () => {
+      cy.visit('/');
+      cy.get('[data-testid="popular-destinations"]').should('exist');
+
+  cy.get('[data-testid="destination-card"]').should('have.length.at.least',
+  1);
+    });
+
+    it('should navigate to destinations page and filter', () => {
+      cy.visit('/destinations');
+
+      // Apply filters
+      cy.get('[data-testid="region-filter"]').select('South India');
+      cy.get('[data-testid="budget-filter"]').select('moderate');
+
+      // Check results
+      cy.get('[data-testid="destination-card"]').should('exist');
+      cy.get('[data-testid="destination-card"]').first().should('contain',
+  'India');
+    });
+
+    it('should view destination details', () => {
+      cy.visit('/destinations');
+      cy.get('[data-testid="destination-card"]').first().click();
+
+      cy.url().should('include', '/destinations/');
+      cy.get('[data-testid="destination-name"]').should('exist');
+      cy.get('[data-testid="top-attractions"]').should('exist');
+      cy.get('[data-testid="available-tours"]').should('exist');
+    });
+  });
+
+  ---
+  PHASE 8 : DOCUMENTATION & DÉPLOIEMENT (1 jour)
+
+  8.1 Documentation API
+
+  Fichier : backend/src/docs/destinations-api.md (nouveau)
+
+  Utiliser Swagger/OpenAPI :
+  // backend/src/index.js
+  const swaggerUi = require('swagger-ui-express');
+  const swaggerDocument = require('./docs/swagger.json');
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+  8.2 Documentation Utilisateur
+
+  Fichier : DESTINATIONS_MODULE_GUIDE.md (nouveau)
+
+  Sections :
+  - Architecture du module
+  - Structure de la base de données
+  - Endpoints API disponibles
+  - Guide d'utilisation des composants frontend
+  - Comment ajouter une nouvelle destination
+  - Comment personnaliser les filtres
+  - Maintenance et optimisation
+
+  8.3 Migration Data
+  Script : backend/src/scripts/migrate-destinations.js (nouveau)
+  // Script pour migrer/enrichir les destinations existantes
+  async function migrateDestinations() {
+    console.log('Starting destination migration...');
+    // 1. Enrichir les données manquantes
+    // 2. Calculer les scores de popularité
+    // 3. Rafraîchir les vues matérialisées
+    // 4. Générer les slugs manquants
+    // 5. Vérifier l'intégrité des données
+    console.log('Migration completed!');
+  }
+  8.4 Monitoring
+  Fichier : backend/src/monitoring/destinationMetrics.js (nouveau)
+  // Métriques à suivre :
+  // - Temps de réponse des endpoints
+  // - Popularité des destinations (vues, likes, bookings)
+  // - Efficacité du cache
+  // - Requêtes de recherche les plus fréquentes
+  // - Taux de conversion (vues → bookings)
+  ---
+  📊 RÉCAPITULATIF DU PLANNING
+  | Phase                              | Durée Estimée | Priorité |
+  Dépendances |
+  |------------------------------------|---------------|----------|---------
+  ----|
+  | Phase 1 : Consolidation Backend    | 1-2 jours     | CRITIQUE | Aucune
+      |
+  | Phase 2 : Enrichissement Données   | 1 jour        | HAUTE    | Phase 1
+      |
+  | Phase 3 : Frontend Enrichi         | 2-3 jours     | CRITIQUE | Phase 1,
+   2  |
+  | Phase 4 : Fonctionnalités Avancées | 2-3 jours     | MOYENNE  | Phase 3
+      |
+  | Phase 5 : Optimisations            | 1 jour        | HAUTE    | Phase 3
+      |
+  | Phase 6 : Internationalisation     | 1 jour        | MOYENNE  | Phase 3
+      |
+  | Phase 7 : Tests                    | 1-2 jours     | HAUTE    | Toutes
+      |
+  | Phase 8 : Documentation            | 1 jour        | MOYENNE  | Toutes
+      |
+  TOTAL : 10-15 jours de développement
+  ---
+  🎯 LIVRABLES PAR PHASE
+  Phase 1
+  - ✅ Service centralisé destinationService.js
+  - ✅ Contrôleurs refactorisés
+  - ✅ Endpoints API unifiés
+  - ✅ Migration SQL d'optimisation
+  - ✅ Job de rafraîchissement
+  Phase 2
+  - ✅ Migration d'enrichissement des données
+  - ✅ Service de gestion des saisons
+  - ✅ Données complètes pour toutes les destinations
+  Phase 3
+  - ✅ Service API frontend refactorisé
+  - ✅ Composants enrichis (TopDestinations, DestinationCard)
+  - ✅ Page Destinations connectée (sans mocks)
+  - ✅ Page Détails Destination complète
+  Phase 4
+  - ✅ Système de likes unifié (hook personnalisé)
+  - ✅ Carte interactive
+  - ✅ Recherche avancée
+  - ✅ Système de recommandations
+  Phase 5
+  - ✅ Caching Redis backend
+  - ✅ React Query frontend
+  - ✅ Lazy loading
+  - ✅ Optimisation images
+  Phase 6
+  - ✅ Fichiers de traduction
+  - ✅ Table destination_translations
+  - ✅ Queries multilingues
+  Phase 7
+  - ✅ Tests unitaires (services)
+  - ✅ Tests d'intégration (API)
+  - ✅ Tests composants (React)
+  - ✅ Tests E2E (Cypress)
+  Phase 8
+  - ✅ Documentation API (Swagger)
+  - ✅ Guide utilisateur
+  - ✅ Scripts de migration
+  - ✅ Dashboard de monitoring
+  ---
+● Voilà le plan d'implémentation complet !
+  Ce plan est structuré pour être exécuté progressivement, avec des phases
+  qui s'enchaînent logiquement. Chaque phase apporte de la valeur immédiate
+  tout en préparant les suivantes.
+  Points clés :
+  - Phases 1-3 sont critiques et corrigent les problèmes fondamentaux
+  - Phase 4 ajoute les fonctionnalités "wow" qui différencient votre
+  plateforme
+  - Phases 5-6 assurent la scalabilité et l'internationalisation
+  - Phases 7-8 garantissent la qualité et la maintenabilité
+Voici ce qui a deja ete fait:
+✢ Testing Phase 1: Executing migration and testing API… (esc to interrupt)
+  ⎿  [×] Phase 1.1.1: Create centralized destinationService.js
+     [×] Phase 1.1.2: Refactor destinationController.js
+     [×] Phase 1.1.3: Create database optimization migration
+     [×] Phase 1.1.4: Create refresh destinations job
+     [ ] Test Phase 1: Execute migration and test API
+     [ ] Phase 2.1: Enrich existing destinations data
+     [ ] Phase 2.2: Create seasonService.js
+     [ ] Phase 3.1: Refactor frontend destinationService
+     [ ] Phase 3.2: Create enriched destination components
+✅ PHASE 1, 2, ET 3 COMPLÉTÉES !
+
+RÉSUMÉ COMPLET :
+================
+
+✅ PHASE 1 : Backend consolidé avec 10+ endpoints, vue matérialisée, tests 100% réussis
+✅ PHASE 2 : 13 destinations enrichies, 35+ festivals, seasonService créé
+✅ PHASE 3 : Frontend components créés (SeasonIndicator, FestivalBadge, EnrichedDestinationCard), TopDestinations refactorisé
+
+PROCHAINE ÉTAPE : Créer DestinationDetailPage (page complète de détails) ou tester l'intégration frontend
+
+Fichiers créés Phase 3:
+- frontend/src/services/destinationService.js (refactorisé - 307 lignes)
+- frontend/src/components/destinations/SeasonIndicator.jsx
+- frontend/src/components/destinations/FestivalBadge.jsx
+- frontend/src/components/destinations/EnrichedDestinationCard.jsx
+- frontend/src/components/home/TopDestinations.jsx (refactorisé)
+
+Tous les composants sont prêts à être utilisés ! 🎉

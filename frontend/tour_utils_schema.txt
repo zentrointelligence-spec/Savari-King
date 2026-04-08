@@ -1,0 +1,365 @@
+Sachant ceci:
+"
+ebookingsam-# \d tour_categories
+                                            Table "public.tour_categories"
+      Column       |            Type             | Collation | Nullable |                   Default
+-------------------+-----------------------------+-----------+----------+---------------------------------------------
+ id                | integer                     |           | not null | nextval('tour_categories_id_seq'::regclass)
+ name              | character varying(100)      |           | not null |
+ slug              | character varying(100)      |           | not null |
+ description       | text                        |           |          |
+ icon              | character varying(50)       |           |          | 'fa-map'::character varying
+ color_theme       | character varying(7)        |           |          | '#007bff'::character varying
+ image             | character varying(255)      |           |          |
+ meta_title        | character varying(255)      |           |          |
+ meta_description  | text                        |           |          |
+ meta_keywords     | character varying(500)      |           |          |
+ is_active         | boolean                     |           |          | true
+ is_featured       | boolean                     |           |          | false
+ is_popular        | boolean                     |           |          | false
+ display_order     | integer                     |           |          | 0
+ active_tour_count | integer                     |           |          | 0
+ total_bookings    | integer                     |           |          | 0
+ avg_rating        | numeric(3,2)                |           |          | 0.00
+ min_price         | numeric(10,2)               |           |          |
+ max_price         | numeric(10,2)               |           |          |
+ created_at        | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+ updated_at        | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+ is_new            | boolean                     |           |          | true
+Indexes:
+    "tour_categories_pkey" PRIMARY KEY, btree (id)
+    "idx_categories_active_only" btree (id, name, slug, display_order) WHERE is_active = true
+    "idx_tour_categories_active" btree (is_active)
+    "idx_tour_categories_active_tours" btree (active_tour_count DESC)
+    "idx_tour_categories_avg_rating" btree (avg_rating DESC)
+    "idx_tour_categories_display_order" btree (display_order)
+    "idx_tour_categories_featured" btree (is_featured)
+    "idx_tour_categories_popular" btree (is_popular)
+    "idx_tour_categories_slug" btree (slug)
+    "tour_categories_name_key" UNIQUE CONSTRAINT, btree (name)
+    "tour_categories_slug_key" UNIQUE CONSTRAINT, btree (slug)
+Check constraints:
+    "chk_tour_categories_counts_positive" CHECK (active_tour_count >= 0 AND total_bookings >= 0)
+    "chk_tour_categories_price_valid" CHECK (min_price >= 0::numeric AND max_price >= 0::numeric AND max_price >= min_price)
+    "chk_tour_categories_rating_valid" CHECK (avg_rating >= 0::numeric AND avg_rating <= 5::numeric)
+Referenced by:
+    TABLE "tours" CONSTRAINT "fk_tours_category" FOREIGN KEY (category_id) REFERENCES tour_categories(id) ON UPDATE CASCADE ON DELETE SET NULL
+    TABLE "tour_category_assignments" CONSTRAINT "tour_category_assignments_category_id_fkey" FOREIGN KEY (category_id) REFERENCES tour_categories(id) ON DELETE CASCADE
+Triggers:
+    update_tour_categories_updated_at BEFORE UPDATE ON tour_categories FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()
+"
+et
+"
+ebookingsam-# \d tour_category_assignments
+        Table "public.tour_category_assignments"
+   Column    |  Type   | Collation | Nullable | Default
+-------------+---------+-----------+----------+---------
+ tour_id     | integer |           | not null |
+ category_id | integer |           | not null |
+Indexes:
+    "tour_category_assignments_pkey" PRIMARY KEY, btree (tour_id, category_id)
+Foreign-key constraints:
+    "tour_category_assignments_category_id_fkey" FOREIGN KEY (category_id) REFERENCES tour_categories(id) ON DELETE CASCADE
+    "tour_category_assignments_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+"
+et
+"
+ebookingsam-# \d tour_destinations
+                      Table "public.tour_destinations"
+     Column     |           Type           | Collation | Nullable | Default
+----------------+--------------------------+-----------+----------+---------
+ tour_id        | integer                  |           | not null |
+ destination_id | integer                  |           | not null |
+ display_order  | integer                  |           |          | 0
+ created_at     | timestamp with time zone |           |          | now()
+Indexes:
+    "tour_destinations_pkey" PRIMARY KEY, btree (tour_id, destination_id)
+    "idx_tour_destinations_destination" btree (destination_id)
+    "idx_tour_destinations_destination_id" btree (destination_id)
+    "idx_tour_destinations_tour" btree (tour_id)
+    "idx_tour_destinations_tour_id" btree (tour_id)
+Foreign-key constraints:
+    "tour_destinations_destination_id_fkey" FOREIGN KEY (destination_id) REFERENCES destinations(id) ON DELETE CASCADE
+    "tour_destinations_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+"
+et
+"
+ebookingsam-# \d tour_exclusions
+                                         Table "public.tour_exclusions"
+   Column    |            Type             | Collation | Nullable |                   Default
+-------------+-----------------------------+-----------+----------+---------------------------------------------
+ id          | integer                     |           | not null | nextval('tour_exclusions_id_seq'::regclass)
+ tour_id     | integer                     |           |          |
+ title       | character varying(255)      |           | not null |
+ description | text                        |           |          |
+ created_at  | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+Indexes:
+    "tour_exclusions_pkey" PRIMARY KEY, btree (id)
+    "idx_tour_exclusions_tour" btree (tour_id)
+Foreign-key constraints:
+    "tour_exclusions_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+"
+et
+"
+ebookingsam-# \d tour_images
+                                          Table "public.tour_images"
+    Column     |            Type             | Collation | Nullable |                 Default
+---------------+-----------------------------+-----------+----------+-----------------------------------------
+ id            | integer                     |           | not null | nextval('tour_images_id_seq'::regclass)
+ tour_id       | integer                     |           |          |
+ image_url     | text                        |           | not null |
+ caption       | text                        |           |          |
+ is_primary    | boolean                     |           |          | false
+ display_order | integer                     |           |          | 0
+ created_at    | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+Indexes:
+    "tour_images_pkey" PRIMARY KEY, btree (id)
+    "idx_tour_images_order" btree (display_order)
+    "idx_tour_images_primary" btree (is_primary)
+    "idx_tour_images_tour" btree (tour_id)
+Foreign-key constraints:
+    "tour_images_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+"
+et
+"
+ebookingsam-# \d tour_inclusions
+                                          Table "public.tour_inclusions"
+     Column     |            Type             | Collation | Nullable |                   Default
+----------------+-----------------------------+-----------+----------+---------------------------------------------
+ id             | integer                     |           | not null | nextval('tour_inclusions_id_seq'::regclass)
+ tour_id        | integer                     |           |          |
+ inclusion_type | character varying(50)       |           | not null |
+ title          | character varying(255)      |           | not null |
+ description    | text                        |           |          |
+ icon           | character varying(50)       |           |          |
+ is_included    | boolean                     |           |          | true
+ created_at     | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+Indexes:
+    "tour_inclusions_pkey" PRIMARY KEY, btree (id)
+    "idx_tour_inclusions_tour" btree (tour_id)
+    "idx_tour_inclusions_type" btree (inclusion_type)
+Foreign-key constraints:
+    "tour_inclusions_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+"
+et
+"
+ebookingsam-# \d tour_statistics
+                                              Table "public.tour_statistics"
+         Column         |            Type             | Collation | Nullable |                   Default                
+------------------------+-----------------------------+-----------+----------+---------------------------------------------
+ id                     | integer                     |           | not null | nextval('tour_statistics_id_seq'::regclass)
+ tour_id                | integer                     |           | not null |
+ total_bookings         | integer                     |           |          | 0
+ total_revenue          | numeric(12,2)               |           |          | 0.00
+ total_participants     | integer                     |           |          | 0
+ bookings_this_month    | integer                     |           |          | 0
+ bookings_last_month    | integer                     |           |          | 0
+ revenue_this_month     | numeric(12,2)               |           |          | 0.00
+ revenue_last_month     | numeric(12,2)               |           |          | 0.00
+ avg_rating             | numeric(3,2)                |           |          | 0.00
+ total_reviews          | integer                     |           |          | 0
+ five_star_reviews      | integer                     |           |          | 0
+ four_star_reviews      | integer                     |           |          | 0
+ three_star_reviews     | integer                     |           |          | 0
+ two_star_reviews       | integer                     |           |          | 0
+ one_star_reviews       | integer                     |           |          | 0
+ page_views             | integer                     |           |          | 0
+ page_views_this_month  | integer                     |           |          | 0
+ inquiries_count        | integer                     |           |          | 0
+ conversion_rate        | numeric(5,2)                |           |          | 0.00
+ wishlist_count         | integer                     |           |          | 0
+ share_count            | integer                     |           |          | 0
+ click_count            | integer                     |           |          | 0
+ cancellation_rate      | numeric(5,2)                |           |          | 0.00
+ repeat_customer_rate   | numeric(5,2)                |           |          | 0.00
+ recommendation_score   | numeric(3,2)                |           |          | 0.00
+ peak_season_bookings   | integer                     |           |          | 0
+ off_season_bookings    | integer                     |           |          | 0
+ avg_booking_value      | numeric(10,2)               |           |          | 0.00
+ min_booking_value      | numeric(10,2)               |           |          |
+ max_booking_value      | numeric(10,2)               |           |          |
+ domestic_bookings      | integer                     |           |          | 0
+ international_bookings | integer                     |           |          | 0
+ group_bookings         | integer                     |           |          | 0
+ individual_bookings    | integer                     |           |          | 0
+ avg_booking_lead_time  | integer                     |           |          | 0
+ last_booking_date      | timestamp without time zone |           |          |
+ first_booking_date     | timestamp without time zone |           |          |
+ is_trending            | boolean                     |           |          | false
+ is_bestseller          | boolean                     |           |          | false
+ trend_score            | numeric(5,2)                |           |          | 0.00
+ last_calculated_at     | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+ created_at             | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+ updated_at             | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+Indexes:
+    "tour_statistics_pkey" PRIMARY KEY, btree (id)
+    "idx_tour_statistics_avg_rating" btree (avg_rating DESC)
+    "idx_tour_statistics_bestseller" btree (is_bestseller) WHERE is_bestseller = true
+    "idx_tour_statistics_conversion_rate" btree (conversion_rate DESC)
+    "idx_tour_statistics_last_calculated" btree (last_calculated_at)
+    "idx_tour_statistics_total_bookings" btree (total_bookings DESC)
+    "idx_tour_statistics_total_revenue" btree (total_revenue DESC)
+    "idx_tour_statistics_tour_id" UNIQUE, btree (tour_id)
+    "idx_tour_statistics_trend_score" btree (trend_score DESC)
+    "idx_tour_statistics_trending" btree (is_trending) WHERE is_trending = true
+Check constraints:
+    "chk_cancellation_rate" CHECK (cancellation_rate >= 0::numeric AND cancellation_rate <= 100::numeric)
+    "chk_conversion_rate" CHECK (conversion_rate >= 0::numeric AND conversion_rate <= 100::numeric)
+    "chk_ratings" CHECK (avg_rating >= 0::numeric AND avg_rating <= 5::numeric)
+    "chk_recommendation_score" CHECK (recommendation_score >= 0::numeric AND recommendation_score <= 5::numeric)
+    "chk_repeat_rate" CHECK (repeat_customer_rate >= 0::numeric AND repeat_customer_rate <= 100::numeric)
+    "chk_trend_score" CHECK (trend_score >= 0::numeric AND trend_score <= 100::numeric)
+Foreign-key constraints:
+    "fk_tour_statistics_tour" FOREIGN KEY (tour_id) REFERENCES tours(id) ON UPDATE CASCADE ON DELETE CASCADE
+Triggers:
+    update_tour_statistics_updated_at BEFORE UPDATE ON tour_statistics FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()
+"
+et
+"
+ebookingsam-# \d touraddons
+              Table "public.touraddons"
+  Column  |  Type   | Collation | Nullable | Default
+----------+---------+-----------+----------+---------
+ tour_id  | integer |           | not null |
+ addon_id | integer |           | not null |
+Indexes:
+    "touraddons_pkey" PRIMARY KEY, btree (tour_id, addon_id)
+Foreign-key constraints:
+    "touraddons_addon_id_fkey" FOREIGN KEY (addon_id) REFERENCES addons(id) ON DELETE CASCADE
+    "touraddons_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+"
+et
+"
+ebookingsam-# \d tours
+                                                Table "public.tours"
+          Column           |            Type             | Collation | Nullable |              Default
+---------------------------+-----------------------------+-----------+----------+-----------------------------------
+ id                        | integer                     |           | not null | nextval('tours_id_seq'::regclass)
+ name                      | character varying(255)      |           | not null |
+ main_image_url            | character varying(255)      |           |          |
+ itinerary                 | jsonb                       |           |          |
+ is_active                 | boolean                     |           |          | true
+ category                  | character varying(100)      |           |          |
+ destinations              | text[]                      |           |          |
+ slug                      | character varying(255)      |           |          |
+ themes                    | text[]                      |           |          |
+ rating                    | numeric(3,2)                |           |          | 4.8
+ review_count              | integer                     |           |          | 0
+ is_new                    | boolean                     |           |          | false
+ created_at                | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+ updated_at                | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+ category_id               | integer                     |           |          |
+ is_featured               | boolean                     |           |          | false
+ is_bestseller             | boolean                     |           |          | false
+ is_trending               | boolean                     |           |          | false
+ display_order             | integer                     |           |          | 0
+ short_description         | character varying(500)      |           |          |
+ highlights                | text[]                      |           |          |
+ inclusions                | text[]                      |           |          |
+ exclusions                | text[]                      |           |          |
+ min_age                   | integer                     |           |          | 0
+ max_group_size            | integer                     |           |          | 20
+ languages                 | character varying(200)      |           |          | 'English'::character varying
+ original_price            | numeric(10,2)               |           |          |
+ discount_percentage       | numeric(5,2)                |           |          | 0.00
+ early_bird_discount       | numeric(5,2)                |           |          | 0.00
+ group_discount_threshold  | integer                     |           |          | 4
+ group_discount_percentage | numeric(5,2)                |           |          | 0.00
+ available_from            | date                        |           |          |
+ available_until           | date                        |           |          |
+ blackout_dates            | jsonb                       |           |          | '[]'::jsonb
+ seasonal_pricing          | jsonb                       |           |          | '{}'::jsonb
+ gallery_images            | text[]                      |           |          |
+ video_url                 | character varying(500)      |           |          |
+ virtual_tour_url          | character varying(500)      |           |          |
+ thumbnail_image           | character varying(255)      |           |          |
+ view_count                | integer                     |           |          | 0
+ booking_count             | integer                     |           |          | 0
+ wishlist_count            | integer                     |           |          | 0
+ avg_rating                | numeric(3,2)                |           |          | 0.00
+ meta_title                | character varying(255)      |           |          |
+ meta_description          | text                        |           |          |
+ meta_keywords             | character varying(500)      |           |          |
+ canonical_url             | character varying(500)      |           |          |
+ starting_location         | character varying(200)      |           |          |
+ ending_location           | character varying(200)      |           |          |
+ coordinates               | point                       |           |          |
+ covered_destinations      | text[]                      |           |          |
+ cancellation_policy       | text                        |           |          |
+ booking_terms             | text                        |           |          |
+ what_to_bring             | text[]                      |           |          |
+ important_notes           | text                        |           |          |
+ eco_friendly              | boolean                     |           |          | false
+ cultural_immersion        | boolean                     |           |          | false
+ family_friendly           | boolean                     |           |          | false
+ adventure_level           | character varying(20)       |           |          | 'low'::character varying
+Indexes:
+    "tours_pkey" PRIMARY KEY, btree (id)
+    "idx_tours_active" btree (is_active, available_from, available_until)
+    "idx_tours_active_only" btree (id, name, original_price, rating) WHERE is_active = true
+    "idx_tours_age_requirement" btree (min_age) WHERE is_active = true
+    "idx_tours_availability" btree (available_from, available_until)
+    "idx_tours_availability_period" btree (available_from, available_until, is_active) WHERE is_active = true
+    "idx_tours_bestseller" btree (is_bestseller) WHERE is_bestseller = true
+    "idx_tours_bestseller_trending" btree (is_bestseller, is_trending) WHERE is_bestseller = true OR is_trending = true
+    "idx_tours_by_category_homepage" btree (category_id, is_active, rating DESC, booking_count DESC) WHERE is_active = true
+    "idx_tours_category_aggregation" btree (category_id, rating, booking_count, original_price) WHERE is_active = true
+    "idx_tours_category_featured" btree (category_id, is_featured) WHERE is_featured = true
+    "idx_tours_category_id" btree (category_id)
+    "idx_tours_category_join" btree (category_id, is_active, booking_count, rating)
+    "idx_tours_coordinates" gist (coordinates) WHERE coordinates IS NOT NULL
+    "idx_tours_created_at" btree (created_at DESC)
+    "idx_tours_destinations" gin (destinations)
+    "idx_tours_discount" btree (discount_percentage DESC) WHERE discount_percentage > 0::numeric
+    "idx_tours_display_order" btree (display_order)
+    "idx_tours_eco_friendly" btree (eco_friendly) WHERE eco_friendly = true
+    "idx_tours_family_friendly" btree (family_friendly) WHERE family_friendly = true
+    "idx_tours_featured" btree (is_featured) WHERE is_featured = true
+    "idx_tours_fulltext_search" gin (to_tsvector('english'::regconfig, (((name::text || ' '::text) || COALESCE(short_description, ''::character varying)::text) || ' '::text) || COALESCE(meta_description, ''::text))) WHERE is_active = true
+    "idx_tours_group_size" btree (max_group_size) WHERE is_active = true
+    "idx_tours_homepage_bestseller" btree (is_bestseller, booking_count DESC, rating DESC) WHERE is_active = true AND is_bestseller = true
+    "idx_tours_homepage_featured" btree (is_featured, display_order, rating DESC) WHERE is_active = true AND is_featured = true
+    "idx_tours_homepage_new" btree (is_new, created_at DESC, rating DESC) WHERE is_active = true AND is_new = true
+    "idx_tours_homepage_trending" btree (is_trending, view_count DESC, created_at DESC) WHERE is_active = true AND is_trending = true
+    "idx_tours_is_new" btree (is_new)
+    "idx_tours_new" btree (is_new) WHERE is_new = true
+    "idx_tours_performance_metrics" btree (booking_count DESC, view_count DESC, wishlist_count DESC, rating DESC) WHERE is_active = true
+    "idx_tours_popular_by_category" btree (category_id, is_active, booking_count DESC, rating DESC, view_count DESC) WHERE is_active = true
+    "idx_tours_popularity" btree (booking_count DESC, view_count DESC)
+    "idx_tours_price_category" btree (category_id, original_price, rating DESC) WHERE is_active = true
+    "idx_tours_price_range" btree (original_price) WHERE is_active = true
+    "idx_tours_price_rating" btree (original_price, rating DESC) WHERE is_active = true
+    "idx_tours_rating" btree (rating DESC)
+    "idx_tours_recent_quality" btree (created_at DESC, rating DESC, review_count DESC) WHERE is_active = true
+    "idx_tours_revenue" btree (original_price, booking_count DESC) WHERE is_active = true
+    "idx_tours_search" gin (to_tsvector('english'::regconfig, COALESCE(name, ''::character varying)::text))
+    "idx_tours_temporal_trends" btree (created_at, booking_count DESC, view_count DESC) WHERE is_active = true
+    "idx_tours_themes" gin (themes)
+    "idx_tours_trending" btree (is_trending) WHERE is_trending = true
+    "tours_slug_key" UNIQUE CONSTRAINT, btree (slug)
+Check constraints:
+    "chk_tours_age_minimum_valid" CHECK (min_age >= 0 AND min_age <= 100)
+    "chk_tours_counts_positive" CHECK (view_count >= 0 AND booking_count >= 0 AND wishlist_count >= 0 AND review_count >= 0)
+    "chk_tours_discount_valid" CHECK (discount_percentage >= 0::numeric AND discount_percentage <= 100::numeric)
+    "chk_tours_group_size_valid" CHECK (max_group_size > 0)
+    "chk_tours_price_positive" CHECK (original_price >= 0::numeric)
+    "chk_tours_rating_valid" CHECK (rating >= 0::numeric AND rating <= 5::numeric)
+Foreign-key constraints:
+    "fk_tours_category" FOREIGN KEY (category_id) REFERENCES tour_categories(id) ON UPDATE CASCADE ON DELETE SET NULL
+Referenced by:
+    TABLE "bookings" CONSTRAINT "bookings_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "featured_reviews" CONSTRAINT "fk_featured_reviews_tour" FOREIGN KEY (tour_id) REFERENCES tours(id) ON UPDATE CASCADE ON DELETE SET NULL
+    TABLE "tour_statistics" CONSTRAINT "fk_tour_statistics_tour" FOREIGN KEY (tour_id) REFERENCES tours(id) ON UPDATE CASCADE ON DELETE CASCADE
+    TABLE "packagetiers" CONSTRAINT "packagetiers_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "reviews" CONSTRAINT "reviews_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "tour_category_assignments" CONSTRAINT "tour_category_assignments_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "tour_destinations" CONSTRAINT "tour_destinations_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "tour_exclusions" CONSTRAINT "tour_exclusions_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "tour_images" CONSTRAINT "tour_images_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "tour_inclusions" CONSTRAINT "tour_inclusions_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+    TABLE "touraddons" CONSTRAINT "touraddons_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE    TABLE "user_favorites" CONSTRAINT "user_favorites_tour_id_fkey" FOREIGN KEY (tour_id) REFERENCES tours(id) ON DELETE CASCADE
+Triggers:
+    trigger_maintain_tour_pricing BEFORE UPDATE OF original_price, discount_percentage ON tours FOR EACH ROW EXECUTE FUNCTION maintain_tour_pricing()
+    trigger_update_category_statistics AFTER UPDATE OF category_id, is_active, booking_count, rating, review_count ON tours FOR EACH ROW EXECUTE FUNCTION update_category_statistics()
+    update_tours_updated_at BEFORE UPDATE ON tours FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()
+"

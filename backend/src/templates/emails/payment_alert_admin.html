@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Received - Admin Alert</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+        }
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .header .success-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 35px 30px;
+            color: #333;
+        }
+        .payment-summary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 25px 0;
+        }
+        .payment-summary .amount {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+        .payment-summary .currency {
+            font-size: 32px;
+        }
+        .reference-box {
+            background-color: #667eea;
+            color: white;
+            padding: 18px 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 25px 0;
+        }
+        .reference-box strong {
+            font-size: 24px;
+            letter-spacing: 1.5px;
+        }
+        .booking-info {
+            background-color: #f8f9fd;
+            border: 2px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .booking-info h3 {
+            margin: 0 0 15px;
+            font-size: 17px;
+            color: #2c3e50;
+            border-bottom: 2px solid #28a745;
+            padding-bottom: 10px;
+        }
+        .info-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            width: 180px;
+            flex-shrink: 0;
+        }
+        .info-value {
+            color: #333;
+            flex: 1;
+        }
+        .action-required {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 18px 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        .action-required h4 {
+            margin: 0 0 10px;
+            color: #856404;
+            font-size: 16px;
+        }
+        .action-required ul {
+            margin: 10px 0 0;
+            padding-left: 20px;
+        }
+        .action-required li {
+            margin: 8px 0;
+            color: #856404;
+            font-size: 14px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .cta-button:hover {
+            background-color: #218838;
+        }
+        .cta-button.secondary {
+            background-color: #667eea;
+        }
+        .cta-button.secondary:hover {
+            background-color: #5568d3;
+        }
+        .payment-details {
+            background-color: #e8f4f8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+        }
+        .payment-details h4 {
+            margin: 0 0 12px;
+            color: #0c5460;
+            font-size: 15px;
+        }
+        .payment-details .info-row {
+            border-bottom-color: #bee5eb;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .stat-card {
+            background-color: #f8f9fd;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e1e8ed;
+        }
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 8px;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: #666;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .timestamp {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Payment Received!</h1>
+            <div class="success-badge">BOOKING CONFIRMED</div>
+        </div>
+
+        <div class="content">
+            <p style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 20px;">
+                Great news! A customer has completed payment for their booking.
+            </p>
+
+            <div class="payment-summary">
+                <p style="margin: 0; font-size: 14px; opacity: 0.9;">Total Payment Received</p>
+                <div class="amount">
+                    <span class="currency">₹</span>{{final_price}}
+                </div>
+                <p style="margin: 0; font-size: 14px; opacity: 0.9;">
+                    ✓ Payment confirmed and processed
+                </p>
+            </div>
+
+            <div class="reference-box">
+                <p style="margin: 0 0 5px; font-size: 14px; opacity: 0.9;">Booking Reference</p>
+                <strong>{{booking_reference}}</strong>
+            </div>
+
+            <div class="booking-info">
+                <h3>📋 Booking Details</h3>
+                <div class="info-row">
+                    <div class="info-label">Tour:</div>
+                    <div class="info-value"><strong>{{tour_name}}</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Package Tier:</div>
+                    <div class="info-value">{{tier_name}}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Travel Date:</div>
+                    <div class="info-value">{{travel_date}}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Travelers:</div>
+                    <div class="info-value">{{num_adults}} Adult(s), {{num_children}} Child(ren)</div>
+                </div>
+            </div>
+
+            <div class="booking-info">
+                <h3>👤 Customer Information</h3>
+                <div class="info-row">
+                    <div class="info-label">Name:</div>
+                    <div class="info-value"><strong>{{contact_name}}</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Email:</div>
+                    <div class="info-value"><a href="mailto:{{contact_email}}">{{contact_email}}</a></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Phone:</div>
+                    <div class="info-value"><a href="tel:{{contact_phone}}">{{contact_phone}}</a></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">User ID:</div>
+                    <div class="info-value">{{user_id}}</div>
+                </div>
+            </div>
+
+            <div class="payment-details">
+                <h4>💳 Payment Information</h4>
+                <div class="info-row">
+                    <div class="info-label">Payment Status:</div>
+                    <div class="info-value"><strong style="color: #28a745;">✓ Confirmed</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Payment Date:</div>
+                    <div class="info-value">{{payment_timestamp}}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Quote Sent:</div>
+                    <div class="info-value">{{quote_sent_date}}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Time to Payment:</div>
+                    <div class="info-value">{{time_to_payment}}</div>
+                </div>
+            </div>
+
+            <div class="action-required">
+                <h4>📌 Next Steps - Action Required:</h4>
+                <ul>
+                    <li><strong>Prepare detailed itinerary</strong> and send to customer within 24 hours</li>
+                    <li><strong>Confirm all bookings:</strong> Hotels, transportation, activities</li>
+                    <li><strong>Assign tour guide</strong> and brief them on customer requirements</li>
+                    <li><strong>Send travel documents</strong> 7 days before departure</li>
+                    <li><strong>Schedule pre-trip call</strong> with customer (optional)</li>
+                </ul>
+            </div>
+
+            {{#if special_requests}}
+            <div style="background-color: #fff9e6; border-left: 4px solid #ffc107; padding: 18px 20px; margin: 20px 0; border-radius: 6px;">
+                <h4 style="margin: 0 0 10px; color: #856404; font-size: 15px;">💬 Special Requests:</h4>
+                <p style="margin: 0; color: #856404; font-style: italic;">"{{special_requests}}"</p>
+            </div>
+            {{/if}}
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number">{{days_until_travel}}</div>
+                    <div class="label">Days Until Travel</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">24h</div>
+                    <div class="label">Free Cancellation Window</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{admin_panel_url}}/bookings/{{booking_id}}" class="cta-button">
+                    📊 View Full Booking
+                </a>
+                <a href="{{admin_panel_url}}/bookings/{{booking_id}}/prepare-itinerary" class="cta-button secondary">
+                    📝 Prepare Itinerary
+                </a>
+            </div>
+
+            <p style="text-align: center; color: #666; font-size: 14px; margin-top: 25px; padding: 20px; background-color: #f8f9fd; border-radius: 6px;">
+                <strong>Important:</strong> The customer can cancel for a full refund within 24 hours of this payment.
+                After that, standard cancellation terms apply. Payment has been confirmed to the customer via email.
+            </p>
+        </div>
+
+        <div class="timestamp">
+            Payment received at {{payment_timestamp}}
+        </div>
+
+        <div class="footer">
+            <p><strong>Ebenezer Tours - Admin Dashboard</strong></p>
+            <p>© {{current_year}} Ebenezer Tours. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

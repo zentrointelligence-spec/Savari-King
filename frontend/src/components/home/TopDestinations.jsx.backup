@@ -1,0 +1,331 @@
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import destinationService from "../../services/destinationService";
+import { EnrichedDestinationCard } from "../destinations";
+import { Loader } from "../common/Loader";
+
+/**
+ * TopDestinations Component - REFACTORED FOR PHASE 3
+ * Uses new enriched destination data and EnrichedDestinationCard
+ */
+const TopDestinations = () => {
+  const { t } = useTranslation();
+  const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [likedDestinations, setLikedDestinations] = useState(new Set());
+
+  useEffect(() => {
+    fetchDestinations();
+    loadLikedDestinations();
+  }, []);
+
+  const fetchDestinations = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Use new enriched API endpoint
+      const response = await destinationService.getPopularDestinations(6, 'popularity');
+
+      setDestinations(response.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error loading destinations:", error);
+      setError(error.message);
+      setLoading(false);
+      setDestinations([]);
+    }
+  };
+
+  const loadLikedDestinations = () => {
+    try {
+      const liked = JSON.parse(
+        localStorage.getItem("likedDestinations") || "[]"
+      );
+      setLikedDestinations(new Set(liked));
+    } catch (error) {
+      console.error("Error loading liked destinations:", error);
+    }
+  };
+
+  const toggleLike = async (destinationId) => {
+    const newLiked = new Set(likedDestinations);
+
+    if (newLiked.has(destinationId)) {
+      newLiked.delete(destinationId);
+    } else {
+      newLiked.add(destinationId);
+    }
+
+    setLikedDestinations(newLiked);
+
+    try {
+      localStorage.setItem("likedDestinations", JSON.stringify([...newLiked]));
+
+      // Optional: Sync with backend if user is logged in
+      // await destinationService.toggleDestinationLike(destinationId);
+    } catch (error) {
+      console.error("Error saving liked destinations:", error);
+    }
+  };
+      plage: faUmbrellaBeach,
+      montagne: faMountain,
+      ville: faCity,
+      mer: faWater,
+      lac: faWater,
+    };
+
+    const lowerType = (type || "").toLowerCase();
+    return iconMap[lowerType] || faMapMarkerAlt;
+  };
+
+  formatPrice = (price) => {
+    if (!price) return "From";
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    }).format(price);
+  };
+
+  renderLoadingSkeleton = () => {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white rounded-lg shadow-lg overflow-hidden animate-pulse"
+          >
+            <div className="aspect-video bg-gray-200"></div>
+            <div className="p-6">
+              <div className="h-6 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  renderDestinationCard = (destination) => {
+    const { likedDestinations } = this.state;
+    const isLiked = likedDestinations.has(destination.id);
+    const icon = this.getDestinationIcon(
+      destination.type || destination.category
+    );
+
+    return (
+      <div
+        key={destination.id}
+        className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+      >
+        {/* Image de la destination */}
+        <div className="relative aspect-video overflow-hidden">
+          <img
+            src={
+              destination.image_url ||
+              destination.mainImage ||
+              "/placeholder-destination.jpg"
+            }
+            alt={destination.name}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            onError={(e) => {
+              e.target.src = "/placeholder-destination.jpg";
+            }}
+          />
+
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+          {/* Bouton favori */}
+          <button
+            onClick={() => this.toggleLike(destination.id)}
+            className={`absolute top-4 right-4 p-2 rounded-full transition-all duration-300 ${
+              isLiked
+                ? "bg-red-500 text-white shadow-lg"
+                : "bg-white/80 text-gray-600 hover:bg-white hover:text-red-500"
+            }`}
+          >
+            <FontAwesomeIcon icon={faHeart} className="text-sm" />
+          </button>
+
+          {/* Badge de type */}
+          <div className="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full flex items-center space-x-1">
+            <FontAwesomeIcon icon={icon} className="text-xs" />
+            <span className="text-xs font-semibold capitalize">
+              {destination.type || destination.category || "Destination"}
+            </span>
+          </div>
+
+          {/* Informations en bas */}
+          <div className="absolute bottom-4 left-4 right-4">
+            <h3 className="text-white text-xl font-bold mb-1">
+              {destination.name}
+            </h3>
+            {destination.country && (
+              <div className="flex items-center text-white/90">
+                <FontAwesomeIcon
+                  icon={faMapMarkerAlt}
+                  className="mr-1 text-sm"
+                />
+                <span className="text-sm">{destination.country}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Contenu de la carte */}
+        <div className="p-6">
+          {/* Description */}
+          {destination.description && (
+            <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+              {destination.description}
+            </p>
+          )}
+
+          {/* Statistiques */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-4">
+              {/* Nombre de tours */}
+              {destination.tourCount && (
+                <div className="flex items-center text-gray-600">
+                  <FontAwesomeIcon icon={faCamera} className="mr-1" />
+                  <span className="text-sm">{destination.tourCount} tours</span>
+                </div>
+              )}
+
+              {/* Note moyenne */}
+              {destination.averageRating && (
+                <div className="flex items-center">
+                  <FontAwesomeIcon
+                    icon={faStar}
+                    className="text-yellow-400 mr-1"
+                  />
+                  <span className="text-sm font-semibold">
+                    {parseFloat(destination.averageRating).toFixed(1)}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Popularité */}
+            {destination.popularity && (
+              <div className="flex items-center text-green-600">
+                <FontAwesomeIcon icon={faUsers} className="mr-1" />
+                <span className="text-sm font-semibold">
+                  {destination.popularity}% populaire
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Prix à partir de */}
+          {destination.minPrice && (
+            <div className="mb-4">
+              <span className="text-gray-500 text-sm">À partir de </span>
+              <span className="text-xl font-bold text-blue-600">
+                {this.formatPrice(destination.minPrice)}
+              </span>
+            </div>
+          )}
+
+          {/* Boutons d'action */}
+          <div className="flex space-x-2">
+            <Link
+              to={`/destinations/${destination.id}`}
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2 text-sm font-semibold"
+            >
+              <FontAwesomeIcon icon={faEye} />
+              <span>Discover</span>
+            </Link>
+
+            <Link
+              to={`/tours?destination=${destination.id}`}
+              className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center space-x-2 text-sm font-semibold"
+            >
+              <FontAwesomeIcon icon={faCamera} />
+              <span>Tours</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  render() {
+    const { destinations, loading, error } = this.state;
+
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          {/* En-tête de section */}
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-4">
+              <FontAwesomeIcon
+                icon={faMapMarkerAlt}
+                className="text-3xl text-blue-600 mr-3"
+              />
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+                Popular Destinations
+              </h2>
+            </div>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore the most sought-after destinations by our travelers
+            </p>
+          </div>
+
+          {/* Contenu */}
+          {loading && this.renderLoadingSkeleton()}
+
+          {error && (
+            <div className="text-center py-8">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                <p className="text-red-600 mb-4">{error}</p>
+                <button
+                  onClick={this.fetchDestinations}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-300"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          )}
+
+          {!loading && !error && destinations.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {destinations
+                .slice(0, 6)
+                .map((destination) => this.renderDestinationCard(destination))}
+            </div>
+          )}
+
+          {!loading && !error && destinations.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">
+                No destinations available at the moment.
+              </p>
+            </div>
+          )}
+
+          {/* Bouton Voir plus */}
+          {!loading && !error && destinations.length > 0 && (
+            <div className="text-center mt-12">
+              <Link
+                to="/destinations"
+                className="inline-flex items-center bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold"
+              >
+                View All Destinations
+                <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }
+}
+
+export default TopDestinationsSimple;

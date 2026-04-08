@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Cancellation Confirmed</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        .content {
+            padding: 40px 30px;
+            color: #333;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .message {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .cancellation-box {
+            background-color: #f8f9fa;
+            border: 2px solid #6c757d;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .cancellation-box .status {
+            font-size: 16px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        .cancellation-box .reference {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+        .cancellation-details {
+            background-color: #f8f9fd;
+            border-left: 4px solid #6c757d;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        .cancellation-details h3 {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+        }
+        .detail-value {
+            color: #333;
+            text-align: right;
+        }
+        .refund-box {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        .refund-box h4 {
+            margin: 0 0 10px;
+            color: #155724;
+            font-size: 16px;
+        }
+        .refund-box p {
+            margin: 0;
+            color: #155724;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .refund-box.no-refund {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .refund-box.no-refund h4,
+        .refund-box.no-refund p {
+            color: #856404;
+        }
+        .refund-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #28a745;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 18px 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        .info-box h4 {
+            margin: 0 0 10px;
+            color: #0c5460;
+            font-size: 15px;
+        }
+        .info-box p {
+            margin: 0;
+            color: #0c5460;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #667eea;
+            color: white;
+            text-decoration: none;
+            padding: 14px 35px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            margin: 20px 10px;
+            transition: background-color 0.3s;
+        }
+        .cta-button:hover {
+            background-color: #5568d3;
+        }
+        .feedback-section {
+            background-color: #f8f9fd;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .feedback-section h3 {
+            margin: 0 0 15px;
+            color: #2c3e50;
+            font-size: 17px;
+        }
+        .feedback-section p {
+            margin: 0 0 20px;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .footer p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Booking Cancellation Confirmed</h1>
+            <p>We're sorry to see you go</p>
+        </div>
+
+        <div class="content">
+            <p class="greeting">Dear {{contact_name}},</p>
+
+            <p class="message">
+                Your booking cancellation request has been processed successfully. We're sorry that you won't be
+                joining us for the <strong>{{tour_name}}</strong> experience.
+            </p>
+
+            <div class="cancellation-box">
+                <div class="status">❌ BOOKING CANCELLED</div>
+                <div class="reference">{{booking_reference}}</div>
+                <p style="margin: 15px 0 0; color: #6c757d; font-size: 14px;">
+                    Cancelled on {{cancellation_date}}
+                </p>
+            </div>
+
+            <div class="cancellation-details">
+                <h3>📋 Cancelled Booking Details</h3>
+                <div class="detail-row">
+                    <span class="detail-label">Tour:</span>
+                    <span class="detail-value">{{tour_name}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Package:</span>
+                    <span class="detail-value">{{tier_name}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Original Travel Date:</span>
+                    <span class="detail-value">{{travel_date}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Booking Amount:</span>
+                    <span class="detail-value">₹{{final_price}}</span>
+                </div>
+            </div>
+
+            {{#if refund_eligible}}
+            <div class="refund-box">
+                <h4>✅ Refund Approved</h4>
+                <p>
+                    You are eligible for a full refund as your cancellation was made within the free cancellation window (24 hours after payment).
+                </p>
+                <div class="refund-amount">₹{{refund_amount}}</div>
+                <p style="margin-top: 15px;">
+                    <strong>Refund Timeline:</strong> Your refund will be processed within 5-7 business days
+                    to your original payment method. You will receive a separate confirmation email once the
+                    refund has been initiated.
+                </p>
+            </div>
+            {{else}}
+            <div class="refund-box no-refund">
+                <h4>⚠️ No Refund Available</h4>
+                <p>
+                    Unfortunately, this cancellation is not eligible for a refund as it was made after the
+                    24-hour free cancellation window. According to our cancellation policy, cancellations made
+                    more than 24 hours after payment are non-refundable.
+                </p>
+                {{#if cancellation_fee}}
+                <p style="margin-top: 10px;">
+                    <strong>Cancellation processed on:</strong> {{cancellation_date}}
+                </p>
+                {{/if}}
+            </div>
+            {{/if}}
+
+            <div class="info-box">
+                <h4>📧 What Happens Next?</h4>
+                <p>
+                    {{#if refund_eligible}}
+                    You'll receive a refund confirmation email within 24 hours. The actual refund will appear
+                    in your account within 5-7 business days depending on your payment provider.
+                    {{else}}
+                    This cancellation has been recorded in our system. Your booking status has been updated
+                    to "Cancelled" and no further action is required from your side.
+                    {{/if}}
+                </p>
+            </div>
+
+            <div class="feedback-section">
+                <h3>💭 We Value Your Feedback</h3>
+                <p>
+                    We'd love to know why you had to cancel and how we can improve. Your feedback helps us
+                    serve our customers better. Would you mind sharing your experience with us?
+                </p>
+                <a href="{{feedback_url}}" class="cta-button">
+                    Share Feedback
+                </a>
+            </div>
+
+            <p class="message" style="background-color: #f8f9fd; padding: 20px; border-radius: 8px; margin-top: 30px;">
+                <strong>🎯 We Hope to See You Again!</strong><br><br>
+                While we're sad to see this booking cancelled, we hope you'll consider Ebenezer Tours for your
+                future travel plans. We're constantly adding new destinations and improving our services.
+                <br><br>
+                <center>
+                    <a href="{{frontend_url}}/tours" class="cta-button">Browse Our Tours</a>
+                </center>
+            </p>
+
+            <p class="message" style="margin-top: 30px;">
+                If you have any questions about this cancellation or the refund process, please don't hesitate
+                to contact us at <strong>{{support_email}}</strong> or call <strong>{{support_phone}}</strong>.
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Ebenezer Tours</strong></p>
+            <p>Your Trusted Travel Partner</p>
+            <p style="margin-top: 15px;">
+                <a href="{{website_url}}">Website</a> |
+                <a href="{{terms_url}}">Cancellation Policy</a> |
+                <a href="mailto:{{support_email}}">Support</a>
+            </p>
+            <p style="margin-top: 20px; opacity: 0.8;">
+                © {{current_year}} Ebenezer Tours. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

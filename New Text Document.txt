@@ -1,0 +1,4 @@
+Tout d'abord je veux les elements du menu a droite au centre on doit avoir EBENEZER TOUR a gauche on doit 
+avoir le logo (je vais fournir l'image du logo dans assests/images). Puis il faut bien revoir la couleur 
+background du navbar. Je ne suis pas convaincu. Il faut aussi revoir le style des elements du menu, quand on 
+est sur le hover d'un menu, quand un menu est actif et quand un menu n'est pas actif.

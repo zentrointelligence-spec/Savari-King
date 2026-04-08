@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Booking Inquiry - Admin Alert</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fa;
+        }
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .header .alert-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 35px 30px;
+            color: #333;
+        }
+        .urgent-notice {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+        .urgent-notice strong {
+            color: #856404;
+            font-size: 15px;
+        }
+        .customer-info {
+            background-color: #f8f9fd;
+            border: 2px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .customer-info h3 {
+            margin: 0 0 15px;
+            font-size: 17px;
+            color: #2c3e50;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .info-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            width: 180px;
+            flex-shrink: 0;
+        }
+        .info-value {
+            color: #333;
+            flex: 1;
+        }
+        .reference-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 25px 0;
+        }
+        .reference-box strong {
+            font-size: 24px;
+            letter-spacing: 1.5px;
+        }
+        .cta-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .cta-button:hover {
+            background-color: #218838;
+        }
+        .cta-button.secondary {
+            background-color: #667eea;
+        }
+        .cta-button.secondary:hover {
+            background-color: #5568d3;
+        }
+        .special-requests {
+            background-color: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+        .special-requests h4 {
+            margin: 0 0 10px;
+            color: #0c5460;
+            font-size: 15px;
+        }
+        .special-requests p {
+            margin: 0;
+            color: #555;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .timestamp {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 New Booking Inquiry Received</h1>
+            <div class="alert-badge">ACTION REQUIRED</div>
+        </div>
+
+        <div class="content">
+            <div class="urgent-notice">
+                <strong>⏰ Response Required Within 30 Minutes</strong><br>
+                A new customer is waiting for a quote. Please review and send a personalized offer as soon as possible.
+            </div>
+
+            <div class="reference-box">
+                <p style="margin: 0 0 5px; font-size: 14px; opacity: 0.9;">Booking Reference</p>
+                <strong>{{booking_reference}}</strong>
+            </div>
+
+            <div class="customer-info">
+                <h3>📋 Booking Details</h3>
+                <div class="info-row">
+                    <div class="info-label">Tour:</div>
+                    <div class="info-value"><strong>{{tour_name}}</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Package Tier:</div>
+                    <div class="info-value">{{tier_name}}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Travel Date:</div>
+                    <div class="info-value">{{travel_date}}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Travelers:</div>
+                    <div class="info-value">{{num_adults}} Adult(s), {{num_children}} Child(ren)</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Estimated Price:</div>
+                    <div class="info-value"><strong>₹{{estimated_price}}</strong></div>
+                </div>
+            </div>
+
+            <div class="customer-info">
+                <h3>👤 Customer Information</h3>
+                <div class="info-row">
+                    <div class="info-label">Name:</div>
+                    <div class="info-value"><strong>{{contact_name}}</strong></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Email:</div>
+                    <div class="info-value"><a href="mailto:{{contact_email}}">{{contact_email}}</a></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Phone:</div>
+                    <div class="info-value"><a href="tel:{{contact_phone}}">{{contact_phone}}</a></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">User ID:</div>
+                    <div class="info-value">{{user_id}}</div>
+                </div>
+            </div>
+
+            {{#if special_requests}}
+            <div class="special-requests">
+                <h4>💬 Special Requests from Customer:</h4>
+                <p>"{{special_requests}}"</p>
+            </div>
+            {{/if}}
+
+            {{#if selected_addons}}
+            <div class="customer-info">
+                <h3>🎯 Selected Add-ons</h3>
+                {{#each selected_addons}}
+                <div class="info-row">
+                    <div class="info-label">{{this.name}}:</div>
+                    <div class="info-value">₹{{this.price}}</div>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+
+            {{#if selected_vehicles}}
+            <div class="customer-info">
+                <h3>🚗 Selected Vehicles</h3>
+                {{#each selected_vehicles}}
+                <div class="info-row">
+                    <div class="info-label">{{this.name}} (x{{this.quantity}}):</div>
+                    <div class="info-value">₹{{this.price_per_day}}/day</div>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+
+            <div class="cta-section">
+                <a href="{{admin_panel_url}}/bookings/{{booking_id}}/send-quote" class="cta-button">
+                    📨 Send Quote Now
+                </a>
+                <a href="{{admin_panel_url}}/bookings/{{booking_id}}" class="cta-button secondary">
+                    👁️ View Full Details
+                </a>
+            </div>
+
+            <p style="text-align: center; color: #666; font-size: 14px; margin-top: 25px;">
+                The customer has been sent a confirmation email and is expecting your response soon.
+            </p>
+        </div>
+
+        <div class="timestamp">
+            Inquiry received at {{inquiry_timestamp}}
+        </div>
+
+        <div class="footer">
+            <p><strong>Ebenezer Tours - Admin Dashboard</strong></p>
+            <p>© {{current_year}} Ebenezer Tours. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
