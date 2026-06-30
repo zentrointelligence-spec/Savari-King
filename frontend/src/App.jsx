@@ -10,7 +10,7 @@ import "./utils/leafletConfig";
 // Context Providers
 import { HomepageProvider } from "./contexts/HomepageContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
+
 
 // Common components import
 import Layout from "./components/common/Layout";
@@ -87,7 +87,6 @@ function App() {
   return (
     <>
       <ToastContainer position="bottom-right" theme="colored" />
-      <ThemeProvider>
       <CurrencyProvider>
         <Layout>
         <Routes>
@@ -408,7 +407,6 @@ function App() {
       </Layout>
       {/* <FloatingWhatsApp /> */}
       </CurrencyProvider>
-      </ThemeProvider>
     </>
   );
 }

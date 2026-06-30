@@ -1,14 +1,11 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { NAV_LINKS, buildWhatsAppLink } from "./constants";
-import { ThemeContext } from "../../contexts/ThemeContext";
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -57,13 +54,6 @@ const Navigation = () => {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle dark mode"
-              className="text-ivory/70 hover:text-gold transition-colors p-1"
-            >
-              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
             <a
               href={buildWhatsAppLink()}
               target="_blank"
@@ -107,13 +97,6 @@ const Navigation = () => {
                   {link.label}
                 </button>
               ))}
-              <button
-                onClick={toggleTheme}
-                className="flex items-center gap-3 font-display text-2xl text-ivory/70 text-left hover:text-gold transition-colors"
-              >
-                {theme === "dark" ? <Sun size={22} /> : <Moon size={22} />}
-                {theme === "dark" ? "Light Mode" : "Dark Mode"}
-              </button>
               <a
                 href={buildWhatsAppLink()}
                 target="_blank"
