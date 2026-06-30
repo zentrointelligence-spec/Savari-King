@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Horizontal navigation logo — transparent background
+  Works on dark headers (forest green, deep green, semi-transparent overlays)
+  ViewBox: 340 × 72
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 72" width="340" height="72">
+  <defs>
+    <linearGradient id="nav-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#EDD98C"/>
+      <stop offset="35%"  stop-color="#C9A84C"/>
+      <stop offset="70%"  stop-color="#A8872A"/>
+      <stop offset="100%" stop-color="#D4AF5C"/>
+    </linearGradient>
+    <linearGradient id="nav-ivory" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#F4EFE8"/>
+      <stop offset="100%" stop-color="#DDD5C8"/>
+    </linearGradient>
+    <filter id="nav-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#C9A84C" flood-opacity="0.20"/>
+    </filter>
+  </defs>
+
+  <!-- ── LEFT: EMBLEM (circle + crown + SK) ── -->
+
+  <!-- Outer circle ring -->
+  <circle cx="37" cy="37" r="31" fill="none" stroke="url(#nav-gold)" stroke-width="1.2" filter="url(#nav-glow)"/>
+  <!-- Inner hairline -->
+  <circle cx="37" cy="37" r="28.5" fill="none" stroke="#C9A84C" stroke-width="0.35" opacity="0.4"/>
+
+  <!-- Crown (sits at top inside the circle) -->
+  <path d="
+    M 24.5 22.5
+    L 26.5 14.5
+    L 31.5 19.5
+    L 37 11
+    L 42.5 19.5
+    L 47.5 14.5
+    L 49.5 22.5
+    Z
+  " fill="url(#nav-gold)"/>
+  <rect x="23.5" y="21" width="27" height="4" rx="2" fill="url(#nav-gold)"/>
+  <!-- Pearl dots at valleys -->
+  <circle cx="29"  cy="18.5" r="1.5" fill="#0C1C0C"/>
+  <circle cx="45"  cy="18.5" r="1.5" fill="#0C1C0C"/>
+  <circle cx="37"  cy="10.2" r="1.8" fill="#EDD98C"/>
+
+  <!-- SK Monogram (scaled down, italic serif) -->
+  <!-- S — ivory -->
+  <text
+    x="33" y="52"
+    font-family="Georgia, 'Palatino Linotype', 'Times New Roman', serif"
+    font-size="36" font-weight="bold" font-style="italic"
+    fill="url(#nav-ivory)" text-anchor="middle">S</text>
+  <!-- K — gold, overlapping -->
+  <text
+    x="43" y="52"
+    font-family="Georgia, 'Palatino Linotype', 'Times New Roman', serif"
+    font-size="36" font-weight="bold" font-style="italic"
+    fill="url(#nav-gold)" text-anchor="middle">K</text>
+
+  <!-- ── DIVIDER LINE ── -->
+  <line x1="76" y1="12" x2="76" y2="60" stroke="#C9A84C" stroke-width="0.8" opacity="0.50"/>
+
+  <!-- ── RIGHT: WORDMARK ── -->
+
+  <!-- SAVARI KING -->
+  <text
+    x="92" y="32"
+    font-family="'Palatino Linotype', 'Palatino', 'Book Antiqua', Georgia, 'Times New Roman', serif"
+    font-size="20" font-weight="700"
+    fill="#F4EFE8" letter-spacing="5">SAVARI KING</text>
+
+  <!-- Thin gold rule under main name -->
+  <line x1="92" y1="40" x2="332" y2="40" stroke="#C9A84C" stroke-width="0.5" opacity="0.40"/>
+
+  <!-- EBENEZER TOURS & TRAVELS -->
+  <text
+    x="92" y="53"
+    font-family="'Palatino Linotype', 'Palatino', 'Book Antiqua', Georgia, 'Times New Roman', serif"
+    font-size="8.5" font-weight="400"
+    fill="#F4EFE8" fill-opacity="0.75" letter-spacing="3.5">EBENEZER TOURS &amp; TRAVELS</text>
+
+  <!-- Est. tagline -->
+  <text
+    x="92" y="65"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="7" font-style="italic" font-weight="400"
+    fill="#C9A84C" fill-opacity="0.70" letter-spacing="1.2">Est. 1999 · Marthandam, Tamil Nadu</text>
+</svg>

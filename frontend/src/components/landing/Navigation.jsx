@@ -36,14 +36,15 @@ const Navigation = () => {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <button
             onClick={() => scrollTo("#hero")}
-            className="text-left group"
+            className="text-left group flex items-center"
+            aria-label="Savari King – Ebenezer Tours & Travels"
           >
-            <span className="font-accent text-gold text-xs tracking-[0.25em] uppercase block">
-              Est. 1999 · Marthandam
-            </span>
-            <span className="font-display text-ivory text-xl md:text-2xl font-semibold tracking-wide group-hover:text-gold transition-colors">
-              Tours & Travels
-            </span>
+            <img
+              src="/logos/logo-nav.svg"
+              alt="Savari King – Ebenezer Tours & Travels"
+              className="h-14 w-auto object-contain transition-opacity duration-300 group-hover:opacity-90"
+              loading="eager"
+            />
           </button>
 
           <div className="hidden lg:flex items-center gap-8">

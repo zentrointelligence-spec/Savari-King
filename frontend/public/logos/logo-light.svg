@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 470" width="500" height="470">
+  <defs>
+    <!-- Luxury gold gradient -->
+    <linearGradient id="gl-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#EDD98C"/>
+      <stop offset="30%"  stop-color="#C9A84C"/>
+      <stop offset="65%"  stop-color="#A8872A"/>
+      <stop offset="100%" stop-color="#D4AF5C"/>
+    </linearGradient>
+    <!-- Deep green gradient for fills -->
+    <linearGradient id="gl-green" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#243C24"/>
+      <stop offset="100%" stop-color="#1A2E1A"/>
+    </linearGradient>
+    <!-- Subtle drop shadow for emblem -->
+    <filter id="gl-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#1A2E1A" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- ── BACKGROUND ─────────────────────────────────── -->
+  <rect width="500" height="470" fill="#F8F4EE"/>
+
+  <!-- ── EMBLEM CIRCLE RINGS ────────────────────────── -->
+  <!-- Outer decorative ring -->
+  <circle cx="250" cy="185" r="82" fill="none" stroke="url(#gl-gold)" stroke-width="1.4" filter="url(#gl-shadow)"/>
+  <!-- Inner ring (hairline) -->
+  <circle cx="250" cy="185" r="76" fill="none" stroke="#C9A84C" stroke-width="0.4" opacity="0.45"/>
+
+  <!-- ── CROWN ───────────────────────────────────────── -->
+  <!-- Three-spike elegant crown body -->
+  <path d="
+    M 222 143
+    L 226 124
+    L 237 135
+    L 250 116
+    L 263 135
+    L 274 124
+    L 278 143
+    Z
+  " fill="url(#gl-gold)"/>
+  <!-- Crown base band (rounded pill) -->
+  <rect x="220" y="140" width="60" height="8" rx="4" fill="url(#gl-gold)"/>
+  <!-- Ivory pearl dots at inner valley tips -->
+  <circle cx="231.5" cy="133" r="3"   fill="#F8F4EE"/>
+  <circle cx="268.5" cy="133" r="3"   fill="#F8F4EE"/>
+  <!-- Center peak pearl -->
+  <circle cx="250"   cy="115" r="3.5" fill="#EDD98C"/>
+
+  <!-- ── SK MONOGRAM ────────────────────────────────── -->
+  <!-- S — deep forest green, italic serif -->
+  <text
+    x="238" y="213"
+    font-family="Georgia, 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif"
+    font-size="88" font-weight="bold" font-style="italic"
+    fill="url(#gl-green)" text-anchor="middle">S</text>
+  <!-- K — luxury gold, overlaps right side of S -->
+  <text
+    x="264" y="213"
+    font-family="Georgia, 'Palatino Linotype', 'Book Antiqua', 'Times New Roman', serif"
+    font-size="88" font-weight="bold" font-style="italic"
+    fill="url(#gl-gold)" text-anchor="middle">K</text>
+
+  <!-- ── LIGHTHOUSE (left of emblem) ──────────────── -->
+  <!-- Subtle light beams behind tower -->
+  <line x1="116" y1="161" x2="92"  y2="143" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round" opacity="0.50"/>
+  <line x1="116" y1="161" x2="87"  y2="161" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round" opacity="0.40"/>
+  <line x1="116" y1="161" x2="91"  y2="179" stroke="#C9A84C" stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
+  <!-- Tower body: slight taper (wider at base, narrower at top) -->
+  <path d="M 109 262 L 124 262 L 122 172 L 111 172 Z" fill="url(#gl-green)"/>
+  <!-- Lantern room box -->
+  <rect x="106" y="162" width="21" height="12" rx="1.5" fill="url(#gl-gold)"/>
+  <!-- Inner glow in lantern -->
+  <rect x="108" y="164" width="17" height="8"  rx="1"   fill="#EDD98C" opacity="0.55"/>
+  <!-- Roof cap (triangle) -->
+  <path d="M 105 162 L 116.5 150 L 128 162 Z" fill="url(#gl-gold)"/>
+  <!-- Foundation base -->
+  <rect x="104" y="260" width="28" height="5" rx="2.5" fill="url(#gl-gold)"/>
+  <!-- Door hint at tower base -->
+  <rect x="113" y="244" width="8" height="17" rx="4" fill="#C9A84C" opacity="0.4"/>
+
+  <!-- ── ELEGANT SEDAN (right of emblem) ──────────── -->
+  <!-- Main body path (sleek sedan profile, right-facing) -->
+  <path d="
+    M 330 262
+    L 330 238
+    Q 330 235 334 234
+    L 340 234
+    Q 347 217 363 210
+    Q 382 204 398 210
+    Q 404 214 407 221
+    L 416 231
+    Q 422 231 423 237
+    Q 424 243 419 246
+    L 419 262
+    Z
+  " fill="url(#gl-green)"/>
+  <!-- Cabin glass area (very subtle gold wash) -->
+  <path d="
+    M 342 234
+    Q 349 219 362 212
+    Q 381 206 396 212
+    Q 401 216 404 222
+    L 413 233
+    L 344 235
+    Z
+  " fill="#C9A84C" opacity="0.10"/>
+  <!-- Headlight detail (front right) -->
+  <path d="M 416 237 Q 422 240 423 248" stroke="#C9A84C" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round"/>
+  <!-- Wheel arch cutouts (ivory = background color) -->
+  <ellipse cx="358" cy="262" rx="18" ry="9" fill="#F8F4EE"/>
+  <ellipse cx="405" cy="262" rx="18" ry="9" fill="#F8F4EE"/>
+  <!-- Left wheel -->
+  <circle cx="358" cy="264" r="15" fill="#1A1A1A"/>
+  <circle cx="358" cy="264" r="10" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <circle cx="358" cy="264" r="4.5" fill="#C9A84C"/>
+  <!-- Right wheel -->
+  <circle cx="405" cy="264" r="15" fill="#1A1A1A"/>
+  <circle cx="405" cy="264" r="10" fill="none" stroke="#C9A84C" stroke-width="1.5"/>
+  <circle cx="405" cy="264" r="4.5" fill="#C9A84C"/>
+
+  <!-- ── LANDSCAPE WAVES ─────────────────────────── -->
+  <!-- Wave 1 — back, lightest -->
+  <path d="
+    M 80 280
+    Q 142 266 204 274
+    Q 248 280 288 270
+    Q 336 260 388 270
+    Q 408 275 420 268
+    L 420 292
+    L 80  292
+    Z
+  " fill="#1A2E1A" opacity="0.28"/>
+  <!-- Wave 2 — mid; gold accent line on top edge -->
+  <path d="
+    M 80 285
+    Q 150 271 215 279
+    Q 258 285 295 275
+    Q 348 264 400 276
+    Q 413 280 420 274
+    L 420 292
+    L 80  292
+    Z
+  " fill="#1A2E1A" opacity="0.58"/>
+  <path d="
+    M 80 285
+    Q 150 271 215 279
+    Q 258 285 295 275
+    Q 348 264 400 276
+    Q 413 280 420 274
+  " fill="none" stroke="url(#gl-gold)" stroke-width="1.5" opacity="0.65"/>
+  <!-- Wave 3 — front, darkest -->
+  <path d="
+    M 80 290
+    Q 158 277 224 284
+    Q 264 289 304 280
+    Q 360 269 420 282
+    L 420 292
+    L 80  292
+    Z
+  " fill="#1A2E1A"/>
+
+  <!-- ── BRAND TYPOGRAPHY ───────────────────────── -->
+
+  <!-- SAVARI KING — display title -->
+  <text
+    x="250" y="338"
+    font-family="'Palatino Linotype', 'Palatino', 'Book Antiqua', Georgia, 'Times New Roman', serif"
+    font-size="44" font-weight="700"
+    fill="#1A2E1A" text-anchor="middle" letter-spacing="10">SAVARI KING</text>
+
+  <!-- Ornamental separator: line · diamond · line -->
+  <line x1="84"  y1="355" x2="213" y2="355" stroke="#C9A84C" stroke-width="0.8"/>
+  <path d="M 247 352 L 250 348 L 253 352 L 250 356 Z" fill="#C9A84C"/>
+  <line x1="287" y1="355" x2="416" y2="355" stroke="#C9A84C" stroke-width="0.8"/>
+
+  <!-- EBENEZER TOURS & TRAVELS — subtitle -->
+  <text
+    x="250" y="377"
+    font-family="'Palatino Linotype', 'Palatino', 'Book Antiqua', Georgia, 'Times New Roman', serif"
+    font-size="12.5" font-weight="400"
+    fill="#1A2E1A" text-anchor="middle" letter-spacing="5">EBENEZER TOURS &amp; TRAVELS</text>
+
+  <!-- Thin rule line -->
+  <line x1="150" y1="392" x2="350" y2="392" stroke="#C9A84C" stroke-width="0.5" opacity="0.55"/>
+
+  <!-- TAGLINE — small, italic, tracked -->
+  <text
+    x="250" y="411"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="8.5" font-style="italic" font-weight="400"
+    fill="#1A2E1A" fill-opacity="0.52" text-anchor="middle" letter-spacing="1.8">
+    WHERE THE CONTINENT ENDS, WHERE YOUR JOURNEY BEGINS.
+  </text>
+
+  <!-- Bottom ornament — minimal diamond -->
+  <path d="M 246.5 428 L 250 423.5 L 253.5 428 L 250 432.5 Z" fill="#C9A84C" opacity="0.70"/>
+</svg>

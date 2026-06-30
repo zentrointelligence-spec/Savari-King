@@ -10,12 +10,12 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           <div>
-            <p className="font-accent text-gold text-xs tracking-[0.25em] uppercase mb-2">
-              Ebenezer
-            </p>
-            <h3 className="font-display text-2xl text-ivory font-semibold mb-3">
-              Tours & Travels
-            </h3>
+            <img
+              src="/logos/logo-nav.svg"
+              alt="Savari King – Ebenezer Tours & Travels"
+              className="h-16 w-auto object-contain mb-4 opacity-90"
+              loading="lazy"
+            />
             <p className="font-body text-sm text-ivory/60 italic leading-relaxed mb-4">
               {BRAND.tagline}
             </p>
