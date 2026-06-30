@@ -8,7 +8,13 @@ import {
   MapPin,
 } from "lucide-react";
 import SectionReveal from "./SectionReveal";
-import { PACKAGES, buildWhatsAppLink, detectCurrency, formatPrice, CURRENCY_RATES } from "./constants";
+import {
+  PACKAGES,
+  buildWhatsAppLink,
+  detectCurrency,
+  formatPrice,
+  CURRENCY_RATES,
+} from "./constants";
 
 const PackageCard = ({ pkg, index, currency }) => {
   const [tierIndex, setTierIndex] = useState(1);
@@ -19,34 +25,42 @@ const PackageCard = ({ pkg, index, currency }) => {
     ? pkg.pricingTiers[tierIndex].price
     : pkg.priceFrom;
 
+  const flagship = pkg.id === "southern-crown";
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.12, duration: 0.6 }}
-      className={`relative bg-ivory dark:bg-[#111F11] rounded-sm overflow-hidden border border-charcoal/10 dark:border-ivory/10 hover:border-gold/60 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(201,168,76,0.15)] ${
-        pkg.id === "southern-crown" ? "lg:col-span-1 ring-1 ring-gold/30" : ""
+      transition={{ delay: index * 0.08, duration: 0.6 }}
+      className={`relative flex flex-col bg-white rounded-2xl overflow-hidden border transition-all duration-300 hover:-translate-y-1.5 ${
+        flagship
+          ? "border-gold/60 ring-1 ring-gold/40 shadow-[0_24px_70px_rgba(201,168,76,0.18)]"
+          : "border-forest/10 hover:border-gold/50 hover:shadow-[0_24px_60px_rgba(26,46,26,0.12)]"
       }`}
     >
       {pkg.badge && (
-        <span className="absolute top-4 right-4 z-10 font-accent text-[10px] tracking-[0.2em] uppercase bg-gold text-forest px-3 py-1.5 rounded-sm">
+        <span
+          className={`absolute top-5 right-5 z-10 font-accent text-[10px] tracking-[0.2em] uppercase px-3 py-1.5 rounded-full ${
+            flagship ? "bg-gold text-forest" : "bg-forest-mist text-forest"
+          }`}
+        >
           {pkg.badge}
         </span>
       )}
 
-      <div className="p-6 md:p-8">
+      <div className="p-6 md:p-8 flex flex-col flex-1">
         <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-1.5 font-body text-xs text-forest bg-forest/10 px-3 py-1 rounded-sm">
-            <Calendar size={12} />
+          <span className="inline-flex items-center gap-1.5 font-body text-xs font-medium text-forest bg-forest-mist px-3 py-1 rounded-full">
+            <Calendar size={12} className="text-gold-deep" />
             {pkg.duration}
           </span>
         </div>
 
-        <h3 className="font-display text-2xl md:text-3xl text-forest dark:text-ivory font-semibold mb-2">
+        <h3 className="font-display text-2xl md:text-3xl text-forest font-semibold mb-2 pr-20">
           {pkg.name}
         </h3>
-        <p className="font-body text-charcoal/60 dark:text-ivory/50 text-sm italic mb-4">
+        <p className="font-body text-charcoal/60 text-sm italic mb-4">
           {pkg.tagline}
         </p>
 
@@ -54,9 +68,9 @@ const PackageCard = ({ pkg, index, currency }) => {
           {pkg.destinations.map((d) => (
             <span
               key={d}
-              className="inline-flex items-center gap-1 font-body text-xs text-charcoal/70 border border-charcoal/15 px-2 py-1 rounded-sm"
+              className="inline-flex items-center gap-1 font-body text-xs text-charcoal-soft border border-forest/15 px-2 py-1 rounded-full"
             >
-              <MapPin size={10} className="text-gold" />
+              <MapPin size={10} className="text-gold-deep" />
               {d}
             </span>
           ))}
@@ -72,17 +86,17 @@ const PackageCard = ({ pkg, index, currency }) => {
                 <button
                   key={tier.tier}
                   onClick={() => setTierIndex(i)}
-                  className={`flex-1 font-body text-xs py-2 px-2 rounded-sm border transition-all ${
+                  className={`flex-1 font-body text-xs py-2 px-2 rounded-full border transition-all ${
                     tierIndex === i
                       ? "bg-forest text-ivory border-forest"
-                      : "bg-transparent text-charcoal border-charcoal/20 hover:border-gold"
+                      : "bg-transparent text-charcoal border-forest/20 hover:border-gold"
                   }`}
                 >
                   {tier.tier}
                 </button>
               ))}
             </div>
-            <p className="font-body text-xs text-charcoal/50 mt-2">
+            <p className="font-body text-xs text-charcoal/60 mt-2">
               {pkg.pricingTiers[tierIndex].note}
             </p>
           </div>
@@ -90,7 +104,7 @@ const PackageCard = ({ pkg, index, currency }) => {
 
         <div className="mb-6">
           <p className="font-body text-sm text-charcoal/60">From</p>
-          <p className="font-display text-3xl md:text-4xl text-forest dark:text-gold font-semibold">
+          <p className="font-display text-3xl md:text-4xl text-forest font-semibold">
             {formatPrice(currentPriceINR, currency)}
             <span className="font-body text-sm text-charcoal/50 font-normal">
               {" "}
@@ -98,14 +112,14 @@ const PackageCard = ({ pkg, index, currency }) => {
             </span>
           </p>
           {currency !== "INR" && (
-            <p className="font-body text-xs text-charcoal/40 mt-1">
+            <p className="font-body text-xs text-charcoal/50 mt-1">
               ≈ {formatPrice(currentPriceINR, "INR")} · Indicative rate
             </p>
           )}
         </div>
 
         {(pkg.itinerary || pkg.highlights) && (
-          <div className="mb-6 border-t border-charcoal/10 pt-4">
+          <div className="mb-6 border-t border-forest/10 pt-4">
             <button
               onClick={() => setOpenItinerary(!openItinerary)}
               className="flex items-center justify-between w-full font-body text-sm font-semibold text-forest"
@@ -128,7 +142,7 @@ const PackageCard = ({ pkg, index, currency }) => {
                   {(pkg.itinerary || pkg.highlights).map((item, i) => (
                     <li
                       key={i}
-                      className="font-body text-sm text-charcoal/70 leading-relaxed pl-4 border-l-2 border-gold/40"
+                      className="font-body text-sm text-charcoal/75 leading-relaxed pl-4 border-l-2 border-gold/50"
                     >
                       {item}
                     </li>
@@ -141,32 +155,32 @@ const PackageCard = ({ pkg, index, currency }) => {
 
         <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
           <div>
-            <p className="font-accent text-[10px] tracking-[0.15em] uppercase text-charcoal/40 mb-2">
+            <p className="font-accent text-[10px] tracking-[0.15em] uppercase text-charcoal/50 mb-2">
               Includes
             </p>
-            <ul className="space-y-1">
+            <ul className="space-y-1.5">
               {pkg.includes.map((item) => (
                 <li
                   key={item}
-                  className="font-body text-xs text-charcoal/70 flex items-start gap-1.5"
+                  className="font-body text-xs text-charcoal/80 flex items-start gap-1.5"
                 >
-                  <Check size={12} className="text-gold mt-0.5 flex-shrink-0" />
+                  <Check size={12} className="text-gold-deep mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <p className="font-accent text-[10px] tracking-[0.15em] uppercase text-charcoal/40 mb-2">
+            <p className="font-accent text-[10px] tracking-[0.15em] uppercase text-charcoal/50 mb-2">
               Excludes
             </p>
-            <ul className="space-y-1">
+            <ul className="space-y-1.5">
               {pkg.excludes.map((item) => (
                 <li
                   key={item}
-                  className="font-body text-xs text-charcoal/50 flex items-start gap-1.5"
+                  className="font-body text-xs text-charcoal/60 flex items-start gap-1.5"
                 >
-                  <X size={12} className="text-charcoal/30 mt-0.5 flex-shrink-0" />
+                  <X size={12} className="text-charcoal/40 mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
               ))}
@@ -182,7 +196,11 @@ const PackageCard = ({ pkg, index, currency }) => {
             const source = `Package Card: ${pkg.name}`;
             console.log("Lead Source Tracker -> Source:", source);
           }}
-          className="block w-full text-center font-body font-semibold bg-forest text-ivory py-4 rounded-sm hover:bg-charcoal transition-all animate-cta-pulse"
+          className={`mt-auto block w-full text-center font-body font-semibold py-4 rounded-full transition-all ${
+            flagship
+              ? "bg-gold text-forest hover:bg-[#EDD98C] shadow-[0_10px_25px_rgba(201,168,76,0.3)]"
+              : "bg-forest text-ivory hover:bg-forest-soft"
+          }`}
         >
           Book This Tour
         </a>
@@ -199,27 +217,27 @@ const Packages = () => {
   }, []);
 
   return (
-    <SectionReveal id="packages" className="bg-forest py-20 md:py-28">
+    <SectionReveal id="packages" className="bg-forest-mist py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <p className="font-accent text-gold text-xs tracking-[0.3em] uppercase mb-3">
+        <div className="text-center mb-12">
+          <p className="font-accent text-gold-deep text-xs tracking-[0.3em] uppercase mb-3">
             Tour Packages
           </p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-ivory font-semibold">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-forest font-semibold">
             Curated Journeys
           </h2>
-          <p className="font-body text-ivory/70 mt-4 max-w-2xl mx-auto">
+          <p className="font-body text-charcoal/70 mt-4 max-w-2xl mx-auto">
             Fixed transparent pricing. Private Innova. No hidden charges.
           </p>
-          <div className="flex items-center justify-center gap-2 mt-4 flex-wrap">
+          <div className="flex items-center justify-center gap-2 mt-6 flex-wrap">
             {Object.keys(CURRENCY_RATES).map((c) => (
               <button
                 key={c}
                 onClick={() => setCurrency(c)}
-                className={`font-body text-xs px-3 py-1.5 rounded-sm border transition-all ${
+                className={`font-body text-xs px-3.5 py-1.5 rounded-full border transition-all ${
                   currency === c
-                    ? "bg-gold text-forest border-gold font-semibold"
-                    : "border-ivory/20 text-ivory/60 hover:border-gold/50 hover:text-ivory"
+                    ? "bg-forest text-ivory border-forest font-semibold"
+                    : "border-forest/20 text-charcoal hover:border-gold hover:text-forest"
                 }`}
               >
                 {CURRENCY_RATES[c].symbol} {c}
@@ -228,7 +246,7 @@ const Packages = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-7">
           {PACKAGES.map((pkg, i) => (
             <PackageCard key={pkg.id} pkg={pkg} index={i} currency={currency} />
           ))}

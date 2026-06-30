@@ -5,6 +5,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Light-mode base refinements for the landing experience ── */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: #f8f4ee;
+  color: #2d2d2d;
+}
+
+::selection {
+  background-color: rgba(201, 168, 76, 0.28);
+  color: #1a2e1a;
+}
+
+/* Refined scrollbar for the light theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ede5;
+}
+::-webkit-scrollbar-thumb {
+  background: #c9a84c;
+  border-radius: 9999px;
+  border: 2px solid #f1ede5;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8872a;
+}
+
 /* Variables CSS pour le thème violet unifié */
 :root {
   /* Couleurs principales du thème violet */

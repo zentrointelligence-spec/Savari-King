@@ -11,19 +11,16 @@ const items = [
 ];
 
 const TrustStrip = () => (
-  <SectionReveal id="trust" className="bg-charcoal dark:bg-[#0A0A0A] border-y border-gold/20">
+  <SectionReveal id="trust" className="bg-white border-y border-forest/10">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="flex flex-wrap justify-center gap-x-8 gap-y-4">
-        {items.map(({ icon: Icon, label }, i) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-5">
+        {items.map(({ icon: Icon, label }) => (
           <div
             key={label}
-            className="flex items-center gap-2 text-ivory/90 font-body text-sm sm:text-base"
+            className="flex items-center justify-center gap-2.5 text-forest font-body text-sm sm:text-base text-center"
           >
-            {i > 0 && (
-              <span className="hidden sm:inline text-gold/40 mr-4">·</span>
-            )}
-            <Icon size={18} className="text-gold flex-shrink-0" />
-            <span>{label}</span>
+            <Icon size={18} className="text-gold-deep flex-shrink-0" />
+            <span className="font-medium">{label}</span>
           </div>
         ))}
       </div>

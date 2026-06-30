@@ -14,18 +14,20 @@ import StickyWhatsApp from "./StickyWhatsApp";
 import TravelAdvisor from "./TravelAdvisor";
 
 const LandingPage = () => (
-  <div className="light font-body bg-ivory text-charcoal antialiased scroll-smooth pb-16 md:pb-0 min-h-screen">
+  <div className="light font-body bg-ivory text-charcoal antialiased scroll-smooth min-h-screen overflow-x-hidden">
     <Navigation />
-    <Hero />
-    <TrustStrip />
-    <Destinations />
-    <Packages />
-    <WhyChooseUs />
-    <FounderSection />
-    <HowItWorks />
-    <Testimonials />
-    <Gallery />
-    <Contact />
+    <main>
+      <Hero />
+      <TrustStrip />
+      <Destinations />
+      <Packages />
+      <WhyChooseUs />
+      <FounderSection />
+      <HowItWorks />
+      <Testimonials />
+      <Gallery />
+      <Contact />
+    </main>
     <Footer />
     <StickyWhatsApp />
     <TravelAdvisor />

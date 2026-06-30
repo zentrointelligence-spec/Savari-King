@@ -8,9 +8,14 @@ export default {
     extend: {
       colors: {
         forest: "#1A2E1A",
+        "forest-soft": "#243C24",
+        "forest-mist": "#EEF3EA",
         gold: "#C9A84C",
+        "gold-deep": "#8A6D1F",
+        "gold-soft": "#F6EFD9",
         ivory: "#F8F4EE",
         charcoal: "#2D2D2D",
+        "charcoal-soft": "#5B5B5B",
         terracotta: "#A05C40",
         primary: "#7045af",
         secondary: "#59378a",

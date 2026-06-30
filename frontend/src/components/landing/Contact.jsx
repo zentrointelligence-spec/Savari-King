@@ -14,6 +14,9 @@ import {
   buildInquiryMessage,
 } from "./constants";
 
+const fieldClass =
+  "w-full font-body text-sm text-charcoal border border-forest/15 rounded-xl px-4 py-3 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/25 bg-white transition-all placeholder:text-charcoal/40";
+
 const Contact = () => {
   const [form, setForm] = useState({
     name: "",
@@ -30,8 +33,10 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const message = buildInquiryMessage(form);
-    const source = window.location.pathname === '/' ? 'Home Page - Contact Section' : `Page: ${window.location.pathname}`;
-    // We would typically send the lead source to the backend here
+    const source =
+      window.location.pathname === "/"
+        ? "Home Page - Contact Section"
+        : `Page: ${window.location.pathname}`;
     console.log("Lead Source Tracker -> Source:", source);
     window.open(buildWhatsAppLink(message), "_blank", "noopener,noreferrer");
   };
@@ -69,35 +74,35 @@ const Contact = () => {
   ];
 
   return (
-    <SectionReveal id="contact" className="bg-ivory dark:bg-[#0D160D] py-20 md:py-28">
+    <SectionReveal id="contact" className="bg-forest-mist py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="font-accent text-terracotta text-xs tracking-[0.3em] uppercase mb-3">
+          <p className="font-accent text-gold-deep text-xs tracking-[0.3em] uppercase mb-3">
             Contact
           </p>
-          <h2 className="font-display text-4xl md:text-5xl text-forest dark:text-gold font-semibold">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-forest font-semibold">
             Plan Your Perfect Trip
           </h2>
-          <p className="font-body text-charcoal/70 dark:text-ivory/60 mt-4 max-w-xl mx-auto">
+          <p className="font-body text-charcoal/70 mt-4 max-w-xl mx-auto">
             Indian or international — everyone is welcome. Tell us your dates
             and we will craft a trip made just for you.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
+          <div className="space-y-4">
             {contactItems.map((item) => {
               const Icon = item.icon;
               const content = (
-                <div className="flex items-start gap-4 p-4 rounded-sm hover:bg-white transition-colors">
-                  <div className="w-10 h-10 rounded-sm bg-forest/5 flex items-center justify-center flex-shrink-0">
-                    <Icon size={18} className="text-gold" />
+                <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-forest/10 hover:border-gold/40 hover:shadow-[0_12px_30px_rgba(26,46,26,0.08)] transition-all">
+                  <div className="w-11 h-11 rounded-xl bg-forest-mist flex items-center justify-center flex-shrink-0">
+                    <Icon size={18} className="text-gold-deep" />
                   </div>
-                  <div>
-                    <p className="font-accent text-[10px] tracking-[0.15em] uppercase text-charcoal/40">
+                  <div className="min-w-0">
+                    <p className="font-accent text-[10px] tracking-[0.15em] uppercase text-charcoal/60">
                       {item.label}
                     </p>
-                    <p className="font-body text-sm text-charcoal mt-1">
+                    <p className="font-body text-sm text-forest mt-1 break-words">
                       {item.value}
                     </p>
                   </div>
@@ -110,7 +115,7 @@ const Contact = () => {
                   target={item.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   onClick={() => {
-                    if (item.label.includes('WhatsApp')) {
+                    if (item.label.includes("WhatsApp")) {
                       const source = `Contact Section: WhatsApp Direct`;
                       console.log("Lead Source Tracker -> Source:", source);
                     }
@@ -127,11 +132,11 @@ const Contact = () => {
 
           <form
             onSubmit={handleSubmit}
-            className="bg-white dark:bg-[#162016] p-6 md:p-8 border border-charcoal/10 dark:border-ivory/10 rounded-sm shadow-sm"
+            className="bg-white p-6 md:p-8 border border-forest/10 rounded-3xl shadow-[0_20px_60px_rgba(26,46,26,0.08)]"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="font-body text-xs text-charcoal/60 mb-1 block">
+                <label className="font-body text-xs font-medium text-forest mb-1.5 block">
                   Name
                 </label>
                 <input
@@ -139,12 +144,12 @@ const Contact = () => {
                   required
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full font-body text-sm border border-charcoal/15 dark:border-ivory/10 rounded-sm px-4 py-3 focus:outline-none focus:border-gold bg-ivory/50 dark:bg-[#0D160D] dark:text-ivory"
+                  className={fieldClass}
                   placeholder="Your name"
                 />
               </div>
               <div>
-                <label className="font-body text-xs text-charcoal/60 mb-1 block">
+                <label className="font-body text-xs font-medium text-forest mb-1.5 block">
                   Country / City
                 </label>
                 <input
@@ -152,7 +157,7 @@ const Contact = () => {
                   required
                   value={form.country}
                   onChange={handleChange}
-                  className="w-full font-body text-sm border border-charcoal/15 dark:border-ivory/10 rounded-sm px-4 py-3 focus:outline-none focus:border-gold bg-ivory/50 dark:bg-[#0D160D] dark:text-ivory"
+                  className={fieldClass}
                   placeholder="UK · Chennai · Dubai · Delhi…"
                 />
               </div>
@@ -160,7 +165,7 @@ const Contact = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="font-body text-xs text-charcoal/60 mb-1 block">
+                <label className="font-body text-xs font-medium text-forest mb-1.5 block">
                   Travel Dates
                 </label>
                 <input
@@ -168,12 +173,12 @@ const Contact = () => {
                   required
                   value={form.dates}
                   onChange={handleChange}
-                  className="w-full font-body text-sm border border-charcoal/15 dark:border-ivory/10 rounded-sm px-4 py-3 focus:outline-none focus:border-gold bg-ivory/50 dark:bg-[#0D160D] dark:text-ivory"
-                  placeholder="e.g. March 2025"
+                  className={fieldClass}
+                  placeholder="e.g. March 2026"
                 />
               </div>
               <div>
-                <label className="font-body text-xs text-charcoal/60 mb-1 block">
+                <label className="font-body text-xs font-medium text-forest mb-1.5 block">
                   Group Size
                 </label>
                 <input
@@ -181,21 +186,21 @@ const Contact = () => {
                   required
                   value={form.groupSize}
                   onChange={handleChange}
-                  className="w-full font-body text-sm border border-charcoal/15 dark:border-ivory/10 rounded-sm px-4 py-3 focus:outline-none focus:border-gold bg-ivory/50 dark:bg-[#0D160D] dark:text-ivory"
+                  className={fieldClass}
                   placeholder="2 adults, 1 child"
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="font-body text-xs text-charcoal/60 mb-1 block">
+              <label className="font-body text-xs font-medium text-forest mb-1.5 block">
                 Interested Tour
               </label>
               <select
                 name="tour"
                 value={form.tour}
                 onChange={handleChange}
-                className="w-full font-body text-sm border border-charcoal/15 dark:border-ivory/10 rounded-sm px-4 py-3 focus:outline-none focus:border-gold bg-ivory/50 dark:bg-[#0D160D] dark:text-ivory"
+                className={fieldClass}
               >
                 {TOUR_OPTIONS.map((t) => (
                   <option key={t} value={t}>
@@ -206,7 +211,7 @@ const Contact = () => {
             </div>
 
             <div className="mb-6">
-              <label className="font-body text-xs text-charcoal/60 mb-1 block">
+              <label className="font-body text-xs font-medium text-forest mb-1.5 block">
                 Message
               </label>
               <textarea
@@ -214,16 +219,16 @@ const Contact = () => {
                 rows={4}
                 value={form.message}
                 onChange={handleChange}
-                className="w-full font-body text-sm border border-charcoal/15 dark:border-ivory/10 rounded-sm px-4 py-3 focus:outline-none focus:border-gold bg-ivory/50 dark:bg-[#0D160D] dark:text-ivory resize-none"
+                className={`${fieldClass} resize-none`}
                 placeholder="Tell us about your interests, dietary needs, or special requests..."
               />
             </div>
 
             <button
               type="submit"
-              className="w-full font-body font-semibold bg-forest text-ivory py-4 rounded-sm hover:bg-charcoal transition-all flex items-center justify-center gap-2 animate-cta-pulse"
+              className="w-full inline-flex items-center justify-center gap-2 font-body font-semibold bg-forest text-ivory py-4 rounded-full hover:bg-forest-soft transition-all shadow-[0_12px_28px_rgba(26,46,26,0.2)]"
             >
-              <MessageCircle size={18} />
+              <MessageCircle size={18} className="text-gold" />
               Send WhatsApp Inquiry
             </button>
           </form>
