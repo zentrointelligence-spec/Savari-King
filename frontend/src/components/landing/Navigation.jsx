@@ -33,7 +33,7 @@ const Navigation = () => {
             : "bg-transparent"
         }`}
       >
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-28 flex items-center justify-between">
           <button
             onClick={() => scrollTo("#hero")}
             className="text-left group flex items-center"
@@ -42,7 +42,7 @@ const Navigation = () => {
             <img
               src="/logos/logo-nav.svg"
               alt="Savari King – Ebenezer Tours & Travels"
-              className="h-14 w-auto object-contain transition-opacity duration-300 group-hover:opacity-90"
+              className="h-24 w-auto max-w-[420px] object-contain transition-opacity duration-300 group-hover:opacity-90"
               loading="eager"
             />
           </button>
