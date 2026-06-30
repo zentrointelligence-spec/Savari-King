@@ -136,6 +136,10 @@ app.use("/api/admin/email-templates", emailTemplateRoutes);
 // All routes related to currencies will be handled by currencyRoutes
 app.use("/api/currencies", currencyRoutes);
 
+// Rule-based travel package recommendation engine (no LLM)
+const recommendRoutes = require("./routes/recommendRoutes");
+app.use("/api/recommend", recommendRoutes);
+
 app.get("/api/health/db", async (req, res) => {
   try {
     const r = await db.query("SELECT 1 AS ok");

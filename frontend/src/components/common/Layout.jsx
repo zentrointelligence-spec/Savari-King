@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AuthContext } from "../../contexts/AuthContext";
 import ThemeToggle from "./ThemeToggle";
@@ -290,7 +290,12 @@ const Sidebar = () => {
 
 // --- Composant principal du Layout ---
 const Layout = ({ children }) => {
-  const { t } = useTranslation();
+  const location = useLocation();
+
+  if (location.pathname === "/") {
+    return <>{children}</>;
+  }
+
   return (
     <div className="h-screen flex flex-col app-container">
       <TopBar />

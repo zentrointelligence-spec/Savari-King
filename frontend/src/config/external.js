@@ -75,7 +75,7 @@ const EXTERNAL_CONFIG = {
   SERVICES: {
     WHATSAPP: {
       BASE_URL: "https://wa.me",
-      DEFAULT_NUMBER: import.meta.env.VITE_WHATSAPP_NUMBER || "1234567890",
+      DEFAULT_NUMBER: import.meta.env.VITE_WHATSAPP_NUMBER || "919952703765",
       DEFAULT_MESSAGE: "Hi, I'm interested in booking a tour package.",
     },
   },

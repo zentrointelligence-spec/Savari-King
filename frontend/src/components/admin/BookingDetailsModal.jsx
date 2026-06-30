@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTimes,
@@ -22,10 +22,22 @@ import {
   faUsers,
   faChild,
   faBaby,
+  faRobot,
+  faLink,
 } from '@fortawesome/free-solid-svg-icons';
 
 const BookingDetailsModal = ({ booking, onClose }) => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [aiSummary, setAiSummary] = useState(null);
+  const [aiDraft, setAiDraft] = useState(null);
+
+  useEffect(() => {
+    if (booking) {
+      // Simulate AI generation process for demonstration
+      setAiSummary(`This is a high-priority lead from a ${booking.contact_country || 'foreign'} customer traveling with ${booking.num_adults || 2} adults and ${booking.num_children || 0} children. They are interested in ${booking.tour_name || 'a private tour'}. Follow up soon to confirm dates.`);
+      setAiDraft(`Hi ${booking.contact_name?.split(' ')[0] || 'there'}, thanks for reaching out to Ebenezer Tours & Travels! I see you're interested in the ${booking.tour_name || 'tour'} for your upcoming trip to South India. Our private Innova and English-speaking drivers are perfect for your group. When is a good time to discuss the itinerary?`);
+    }
+  }, [booking]);
 
   if (!booking) return null;
 
@@ -116,6 +128,7 @@ const BookingDetailsModal = ({ booking, onClose }) => {
   // Tabs
   const tabs = [
     { id: 'overview', label: 'Overview', icon: faInfoCircle },
+    { id: 'ai-assistant', label: 'AI Assistant', icon: faRobot },
     { id: 'customer', label: 'Customer', icon: faUser },
     { id: 'pricing', label: 'Pricing', icon: faMoneyBillWave },
     { id: 'timeline', label: 'Timeline', icon: faClock },
@@ -322,7 +335,45 @@ const BookingDetailsModal = ({ booking, onClose }) => {
             </div>
           )}
 
-          {/* Customer Tab */}
+          {/* AI Assistant Tab */}
+          {activeTab === 'ai-assistant' && (
+            <div className="space-y-6">
+              {/* AI Summary */}
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-100 p-6 rounded-xl">
+                <h3 className="text-xl font-bold text-indigo-900 mb-4 flex items-center">
+                  <FontAwesomeIcon icon={faRobot} className="mr-3 text-indigo-600" />
+                  AI Lead Summary
+                </h3>
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-indigo-50">
+                  <p className="text-gray-800 leading-relaxed">{aiSummary}</p>
+                </div>
+              </div>
+
+              {/* AI WhatsApp Draft */}
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-100 p-6 rounded-xl">
+                <h3 className="text-xl font-bold text-green-900 mb-4 flex items-center">
+                  <FontAwesomeIcon icon={faPaperPlane} className="mr-3 text-green-600" />
+                  Suggested WhatsApp Reply
+                </h3>
+                <div className="bg-white p-4 rounded-lg shadow-sm border border-green-50 mb-4">
+                  <p className="text-gray-800 whitespace-pre-wrap">{aiDraft}</p>
+                </div>
+                {booking.contact_phone && (
+                  <a
+                    href={`https://wa.me/${booking.contact_phone.replace(/\D/g, '')}?text=${encodeURIComponent(aiDraft || '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold py-3 px-6 rounded-lg transition-colors shadow-sm"
+                  >
+                    <FontAwesomeIcon icon={faPhone} />
+                    Send via WhatsApp
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+              {/* Customer Tab */}
           {activeTab === 'customer' && (
             <div className="space-y-6">
               <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl">
@@ -331,6 +382,13 @@ const BookingDetailsModal = ({ booking, onClose }) => {
                   Customer Information
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white p-5 rounded-lg shadow-sm">
+                    <p className="text-sm text-gray-600 mb-2">Lead Source</p>
+                    <p className="font-semibold text-lg text-primary flex items-center">
+                      <FontAwesomeIcon icon={faLink} className="mr-2 text-primary/60" />
+                      {booking.source_page || booking.source || 'Direct Direct'}
+                    </p>
+                  </div>
                   <div className="bg-white p-5 rounded-lg shadow-sm">
                     <p className="text-sm text-gray-600 mb-2">Full Name</p>
                     <p className="font-semibold text-lg text-gray-900">

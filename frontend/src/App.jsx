@@ -10,6 +10,7 @@ import "./utils/leafletConfig";
 // Context Providers
 import { HomepageProvider } from "./contexts/HomepageContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 // Common components import
 import Layout from "./components/common/Layout";
@@ -47,6 +48,7 @@ import AdminEmailLogsPage from "./pages/admin/AdminEmailLogsPage";
 import AdminBlogPage from "./pages/admin/AdminBlogPage";
 import AdminBlogFormPage from "./pages/admin/AdminBlogFormPage";
 import AdminBlogCommentsPage from "./pages/admin/AdminBlogCommentsPage";
+import AdminLeadsPage from "./pages/admin/AdminLeadsPage";
 import MyAccountPage from "./pages/MyAccountPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import ContactPage from "./pages/ContactPage";
@@ -64,6 +66,7 @@ import DetailedQuotePage from "./pages/DetailedQuotePage";
 import GeneralQuotePage from "./pages/GeneralQuotePage";
 import DestinationsPage from "./pages/DestinationsPage";
 import DestinationDetailPage from "./pages/DestinationDetailPage";
+import DynamicSeoLandingPage from "./pages/DynamicSeoLandingPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import GalleryPage from "./pages/GalleryPage";
@@ -84,6 +87,7 @@ function App() {
   return (
     <>
       <ToastContainer position="bottom-right" theme="colored" />
+      <ThemeProvider>
       <CurrencyProvider>
         <Layout>
         <Routes>
@@ -325,6 +329,12 @@ function App() {
             }
           />
           <Route
+            path="/routes/:slug"
+            element={
+              <DynamicSeoLandingPage />
+            }
+          />
+          <Route
             path="/notifications"
             element={
               <PrivateRoute>
@@ -383,7 +393,7 @@ function App() {
             <Route path="blog/new" element={<AdminBlogFormPage />} />
             <Route path="blog/edit/:id" element={<AdminBlogFormPage />} />
             <Route path="blog/comments" element={<AdminBlogCommentsPage />} />
-            {/* ... (autres routes admin à venir) */}
+            <Route path="leads" element={<AdminLeadsPage />} />
           </Route>
 
           <Route
@@ -398,6 +408,7 @@ function App() {
       </Layout>
       {/* <FloatingWhatsApp /> */}
       </CurrencyProvider>
+      </ThemeProvider>
     </>
   );
 }

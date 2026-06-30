@@ -7,6 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
+        forest: "#1A2E1A",
+        gold: "#C9A84C",
+        ivory: "#F8F4EE",
+        charcoal: "#2D2D2D",
+        terracotta: "#A05C40",
         primary: "#7045af",
         secondary: "#59378a",
         accent: "#8b65c2",
@@ -31,6 +36,9 @@ export default {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         heading: ["Poppins", "system-ui", "sans-serif"],
+        display: ["Cormorant Garamond", "Georgia", "serif"],
+        body: ["DM Sans", "system-ui", "sans-serif"],
+        accent: ["Cinzel", "Georgia", "serif"],
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",
@@ -40,6 +48,8 @@ export default {
         "bounce-gentle": "bounceGentle 2s infinite",
         "pulse-slow": "pulse 3s infinite",
         float: "float 3s ease-in-out infinite",
+        "cta-pulse": "ctaPulse 2.5s ease-in-out infinite",
+        "hero-zoom": "heroZoom 20s ease-in-out infinite alternate",
       },
       keyframes: {
         fadeIn: {
@@ -65,6 +75,14 @@ export default {
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-10px)" },
+        },
+        ctaPulse: {
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(201, 168, 76, 0.4)" },
+          "50%": { boxShadow: "0 0 0 12px rgba(201, 168, 76, 0)" },
+        },
+        heroZoom: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(1.08)" },
         },
       },
       boxShadow: {

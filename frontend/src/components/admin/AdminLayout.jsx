@@ -16,6 +16,7 @@ import {
   faChartLine,
   faEnvelope,
   faNewspaper,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -100,6 +101,12 @@ const AdminLayout = () => {
       icon: faReceipt,
       text: "Bookings",
       badge: badgeCounts.bookings,
+    },
+    {
+      to: "/admin/leads",
+      icon: faFilter,
+      text: "Leads",
+      badge: 2,
     },
     { to: "/admin/tours", icon: faSuitcaseRolling, text: "Tours" },
     { to: "/admin/catalog", icon: faBook, text: "Catalog" },

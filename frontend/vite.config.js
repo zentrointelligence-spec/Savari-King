@@ -8,7 +8,7 @@ export default defineConfig({
   // Configuration du serveur de développement
   server: {
     port: 3000,
-    host: true,
+    host: "0.0.0.0", // Expose network
     proxy: {
       "/api": {
         target: "http://localhost:5000",

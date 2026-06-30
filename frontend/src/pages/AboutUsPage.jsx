@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FounderImage from "../components/landing/FounderImage";
 import {
   faCompass,
   faMapMarkerAlt,
@@ -15,9 +16,12 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
+// Served from frontend/public/founder.png
+const founderImg = "/founder.png";
+
 const AboutUsPage = () => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("mission");
+  const [activeTab, setActiveTab] = useState("team");
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -70,10 +74,10 @@ const AboutUsPage = () => {
 
   const teamMembers = [
     {
-      name: "Rajesh Kumar",
-      role: "Founder & CEO",
-      bio: "Travel enthusiast with over 15 years of experience in the tourism industry",
-      img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887",
+      name: "Mr. Sundar Mesiadhas",
+      role: "Founder & Chief Guide",
+      bio: "A true local expert known for his warmth and friendliness. With deep roots in South India, Mr. Sundar doesn't just guide tours—he shares his home with the world.",
+      img: founderImg,
     },
     {
       name: "Priya Sharma",
@@ -361,15 +365,59 @@ const AboutUsPage = () => {
                 />
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                {t("about.ourTeam")}
+                Meet Your Host
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                {t("about.subtitle")}
+                Traveling with Ebenezer Tours means traveling with family.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {teamMembers.map((member, index) => (
+            {/* Founder Spotlight */}
+            <div className="max-w-4xl mx-auto mb-16">
+              <motion.div
+                className="bg-white/80 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-gold/30"
+                whileHover={{ y: -5 }}
+              >
+                <div className="grid md:grid-cols-2">
+                  <div className="relative h-full">
+                    <FounderImage className="h-full min-h-[420px]" overlay />
+                    <div className="absolute bottom-4 left-6 z-10 text-white">
+                      <p className="font-accent tracking-widest text-sm text-gold uppercase">Founder</p>
+                      <h3 className="font-display text-3xl font-semibold">Mr. Sundar Mesiadhas</h3>
+                    </div>
+                  </div>
+                  <div className="p-8 md:p-12 flex flex-col justify-center">
+                    <FontAwesomeIcon icon={faQuoteLeft} className="text-gold/40 text-4xl mb-6" />
+                    <h4 className="text-2xl font-bold text-forest mb-4">
+                      "I don't just show you places. I welcome you to my home."
+                    </h4>
+                    <p className="text-charcoal/70 leading-relaxed mb-6">
+                      Mr. Sundar is the heart and soul of Ebenezer Tours & Travels. Known by our guests as the friendliest guide in South India, he ensures every traveler feels completely safe, deeply respected, and genuinely welcomed. 
+                    </p>
+                    <p className="text-charcoal/70 leading-relaxed">
+                      Whether he's driving you personally in his pristine Innova or recommending the best authentic local meal, his unmatched local knowledge and warm smile turn a simple vacation into a lifelong memory.
+                    </p>
+                    <div className="mt-8 flex gap-4">
+                      <div className="text-center">
+                        <span className="block text-2xl font-bold text-forest">20+</span>
+                        <span className="text-xs uppercase tracking-wider text-charcoal/50">Years Exp</span>
+                      </div>
+                      <div className="text-center">
+                        <span className="block text-2xl font-bold text-forest">100%</span>
+                        <span className="text-xs uppercase tracking-wider text-charcoal/50">5-Star Reviews</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-800">The Rest of the Team</h3>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              {teamMembers.slice(1).map((member, index) => (
                 <motion.div
                   key={index}
                   className="group bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-soft hover:shadow-xl transition-all duration-500 border border-purple-100"
