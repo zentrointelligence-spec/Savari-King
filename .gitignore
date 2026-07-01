@@ -47,3 +47,4 @@ out/
 *.tmp
 *.temp
 .cache/
+*:Zone.Identifier
