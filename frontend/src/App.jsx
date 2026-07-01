@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,71 +11,75 @@ import "./utils/leafletConfig";
 import { HomepageProvider } from "./contexts/HomepageContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 
-
-// Common components import
+// Common components import (kept eager: used by every route / shell)
 import Layout from "./components/common/Layout";
 import FloatingWhatsApp from "./components/common/FloatingWhatsApp";
 import AdminRoute from "./components/admin/AdminRoute";
 import PrivateRoute from "./components/common/PrivateRoute";
+import PageWithTitle from "./components/common/PageWithTitle";
 
-// Pages import
-import PageWithTitle from "./components/common/PageWithTitle"; // Assurez-vous que le chemin est correct
-import HomePage from "./pages/HomePage";
-import TourDetailPage from "./pages/TourDetailPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
-import MyBookingsPage from "./pages/MyBookingsPage";
-import MyReviewsPage from "./pages/MyReviewsPage";
-import BookingReviewPage from "./pages/BookingReviewPage";
-import ToursPage from "./pages/ToursPage";
+// Pages — lazy-loaded for route-level code splitting
+const HomePage = lazy(() => import("./pages/HomePage"));
+const TourDetailPage = lazy(() => import("./pages/TourDetailPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage"));
+const MyBookingsPage = lazy(() => import("./pages/MyBookingsPage"));
+const MyReviewsPage = lazy(() => import("./pages/MyReviewsPage"));
+const BookingReviewPage = lazy(() => import("./pages/BookingReviewPage"));
+const ToursPage = lazy(() => import("./pages/ToursPage"));
 
 // Admin Pages
-import AdminLayout from "./components/admin/AdminLayout";
-import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import AdminToursPage from "./pages/admin/AdminToursPage";
-import AdminBookingsPage from "./pages/admin/AdminBookingsPage";
-import AdminUsersPage from "./pages/admin/AdminUsersPage";
-import AdminCatalogPage from "./pages/admin/AdminCatalogPage";
-import AdminTourCategoriesPage from "./pages/admin/AdminTourCategoriesPage";
-import AdminReviewsPage from "./pages/admin/AdminReviewsPage";
-import AdminRecommendationStatsPage from "./pages/admin/AdminRecommendationStatsPage";
-import AdminSecurityPage from "./pages/admin/AdminSecurityPage";
-import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
-import AdminQuoteReviewPage from "./pages/admin/AdminQuoteReviewPage";
-import AdminRevisionHistoryPage from "./pages/admin/AdminRevisionHistoryPage";
-import AdminEmailLogsPage from "./pages/admin/AdminEmailLogsPage";
-import AdminBlogPage from "./pages/admin/AdminBlogPage";
-import AdminBlogFormPage from "./pages/admin/AdminBlogFormPage";
-import AdminBlogCommentsPage from "./pages/admin/AdminBlogCommentsPage";
-import AdminLeadsPage from "./pages/admin/AdminLeadsPage";
-import MyAccountPage from "./pages/MyAccountPage";
-import AboutUsPage from "./pages/AboutUsPage";
-import ContactPage from "./pages/ContactPage";
-import TermsPage from "./pages/TermsPage";
-import BlogPage from "./pages/BlogPage";
-import BlogPostPage from "./pages/BlogPostPage";
-import BlogListPage from "./pages/BlogListPage";
-import BlogDetailPage from "./pages/BlogDetailPage";
-import BookingsPage from "./pages/BookingsPage";
-import BookingPage from "./pages/BookingPage";
-import BookingDetailsPage from "./pages/BookingDetailsPage";
-import BookingConfirmationPage from "./pages/BookingConfirmationPage";
-import PaymentPage from "./pages/PaymentPage";
-import DetailedQuotePage from "./pages/DetailedQuotePage";
-import GeneralQuotePage from "./pages/GeneralQuotePage";
-import DestinationsPage from "./pages/DestinationsPage";
-import DestinationDetailPage from "./pages/DestinationDetailPage";
-import DynamicSeoLandingPage from "./pages/DynamicSeoLandingPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import GalleryPage from "./pages/GalleryPage";
+const AdminLayout = lazy(() => import("./components/admin/AdminLayout"));
+const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage"));
+const AdminToursPage = lazy(() => import("./pages/admin/AdminToursPage"));
+const AdminBookingsPage = lazy(() => import("./pages/admin/AdminBookingsPage"));
+const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
+const AdminCatalogPage = lazy(() => import("./pages/admin/AdminCatalogPage"));
+const AdminTourCategoriesPage = lazy(() => import("./pages/admin/AdminTourCategoriesPage"));
+const AdminReviewsPage = lazy(() => import("./pages/admin/AdminReviewsPage"));
+const AdminRecommendationStatsPage = lazy(() => import("./pages/admin/AdminRecommendationStatsPage"));
+const AdminSecurityPage = lazy(() => import("./pages/admin/AdminSecurityPage"));
+const AdminAnalyticsPage = lazy(() => import("./pages/admin/AdminAnalyticsPage"));
+const AdminQuoteReviewPage = lazy(() => import("./pages/admin/AdminQuoteReviewPage"));
+const AdminRevisionHistoryPage = lazy(() => import("./pages/admin/AdminRevisionHistoryPage"));
+const AdminEmailLogsPage = lazy(() => import("./pages/admin/AdminEmailLogsPage"));
+const AdminBlogPage = lazy(() => import("./pages/admin/AdminBlogPage"));
+const AdminBlogFormPage = lazy(() => import("./pages/admin/AdminBlogFormPage"));
+const AdminBlogCommentsPage = lazy(() => import("./pages/admin/AdminBlogCommentsPage"));
+const AdminLeadsPage = lazy(() => import("./pages/admin/AdminLeadsPage"));
+const MyAccountPage = lazy(() => import("./pages/MyAccountPage"));
+const AboutUsPage = lazy(() => import("./pages/AboutUsPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const TermsPage = lazy(() => import("./pages/TermsPage"));
+const BlogPage = lazy(() => import("./pages/BlogPage"));
+const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
+const BlogListPage = lazy(() => import("./pages/BlogListPage"));
+const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
+const BookingsPage = lazy(() => import("./pages/BookingsPage"));
+const BookingPage = lazy(() => import("./pages/BookingPage"));
+const BookingDetailsPage = lazy(() => import("./pages/BookingDetailsPage"));
+const BookingConfirmationPage = lazy(() => import("./pages/BookingConfirmationPage"));
+const PaymentPage = lazy(() => import("./pages/PaymentPage"));
+const DetailedQuotePage = lazy(() => import("./pages/DetailedQuotePage"));
+const GeneralQuotePage = lazy(() => import("./pages/GeneralQuotePage"));
+const DestinationsPage = lazy(() => import("./pages/DestinationsPage"));
+const DestinationDetailPage = lazy(() => import("./pages/DestinationDetailPage"));
+const DynamicSeoLandingPage = lazy(() => import("./pages/DynamicSeoLandingPage"));
+const NotificationsPage = lazy(() => import("./pages/NotificationsPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const GalleryPage = lazy(() => import("./pages/GalleryPage"));
 // import AdminTourDetailPage from "./pages/admin/AdminTourDetailPage";
 
-// Dans src/index.js ou App.js
+// Dan src/index.js ou App.js
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from "react";
+
+const PageFallback = () => (
+  <div className="flex items-center justify-center min-h-[40vh]">
+    <div className="animate-pulse text-gray-500">Loading…</div>
+  </div>
+);
 
 function App() {
   useEffect(() => {
@@ -89,6 +93,7 @@ function App() {
       <ToastContainer position="bottom-right" theme="colored" />
       <CurrencyProvider>
         <Layout>
+        <Suspense fallback={<PageFallback />}>
         <Routes>
           {/* Routes Publiques */}
           <Route
@@ -404,6 +409,7 @@ function App() {
             }
           />
         </Routes>
+        </Suspense>
       </Layout>
       {/* <FloatingWhatsApp /> */}
       </CurrencyProvider>

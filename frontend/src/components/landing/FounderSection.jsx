@@ -30,7 +30,7 @@ const FounderSection = () => (
           <div className="relative min-h-[380px] lg:min-h-full">
             <FounderImage className="h-full" />
             <div className="absolute bottom-6 left-6 right-6 z-10">
-              <p className="font-accent text-gold text-xs tracking-[0.25em] uppercase mb-1">
+              <p className="font-accent text-[#F2C75C] text-xs tracking-[0.25em] uppercase mb-1 [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]">
                 Founder &amp; Chief Guide
               </p>
               <h3 className="font-display text-3xl text-ivory font-semibold drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">

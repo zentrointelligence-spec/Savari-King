@@ -33,7 +33,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="font-accent text-xs tracking-[0.2em] uppercase text-gold mb-5">
+            <p className="font-accent text-xs tracking-[0.2em] uppercase text-[#F2C75C] mb-5">
               Quick Links
             </p>
             <ul className="space-y-3">
@@ -51,7 +51,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="font-accent text-xs tracking-[0.2em] uppercase text-gold mb-5">
+            <p className="font-accent text-xs tracking-[0.2em] uppercase text-[#F2C75C] mb-5">
               Connect
             </p>
             <p className="font-body text-sm text-ivory/70 mb-5">

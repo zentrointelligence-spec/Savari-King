@@ -8,10 +8,13 @@ import {
   MapPin,
 } from "lucide-react";
 import SectionReveal from "./SectionReveal";
+import AnimatedPrice from "./AnimatedPrice";
 import {
   PACKAGES,
   buildWhatsAppLink,
   detectCurrency,
+  detectCurrencyByLocation,
+  rememberCurrencyChoice,
   formatPrice,
   CURRENCY_RATES,
 } from "./constants";
@@ -104,13 +107,22 @@ const PackageCard = ({ pkg, index, currency }) => {
 
         <div className="mb-6">
           <p className="font-body text-sm text-charcoal/60">From</p>
-          <p className="font-display text-3xl md:text-4xl text-forest font-semibold">
-            {formatPrice(currentPriceINR, currency)}
+          <motion.p
+            key={`${pkg.id}-${tierIndex}`}
+            initial={{ opacity: 0.4, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="font-display text-3xl md:text-4xl text-forest font-semibold"
+          >
+            <AnimatedPrice
+              value={currentPriceINR}
+              format={(v) => formatPrice(v, currency)}
+            />
             <span className="font-body text-sm text-charcoal/50 font-normal">
               {" "}
               / person (2 pax)
             </span>
-          </p>
+          </motion.p>
           {currency !== "INR" && (
             <p className="font-body text-xs text-charcoal/50 mt-1">
               ≈ {formatPrice(currentPriceINR, "INR")} · Indicative rate
@@ -211,10 +223,29 @@ const PackageCard = ({ pkg, index, currency }) => {
 
 const Packages = () => {
   const [currency, setCurrency] = useState("INR");
+  const [detecting, setDetecting] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+    // Instant timezone fallback so prices render immediately, then refine
+    // via IP geolocation (country → currency) without requiring permission.
     setCurrency(detectCurrency());
+    detectCurrencyByLocation()
+      .then((detected) => {
+        if (mounted) setCurrency(detected);
+      })
+      .catch(() => {})
+      .finally(() => mounted && setDetecting(false));
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  const handleCurrencyChange = (e) => {
+    const code = e.target.value;
+    setCurrency(code);
+    rememberCurrencyChoice(code);
+  };
 
   return (
     <SectionReveal id="packages" className="bg-forest-mist py-20 md:py-28">
@@ -229,20 +260,29 @@ const Packages = () => {
           <p className="font-body text-charcoal/70 mt-4 max-w-2xl mx-auto">
             Fixed transparent pricing. Private Innova. No hidden charges.
           </p>
+
           <div className="flex items-center justify-center gap-2 mt-6 flex-wrap">
-            {Object.keys(CURRENCY_RATES).map((c) => (
-              <button
-                key={c}
-                onClick={() => setCurrency(c)}
-                className={`font-body text-xs px-3.5 py-1.5 rounded-full border transition-all ${
-                  currency === c
-                    ? "bg-forest text-ivory border-forest font-semibold"
-                    : "border-forest/20 text-charcoal hover:border-gold hover:text-forest"
-                }`}
+            <span className="font-body text-xs text-charcoal/60">
+              {detecting ? "Detecting your currency…" : "Prices shown in:"}
+            </span>
+            <div className="relative">
+              <select
+                value={currency}
+                onChange={handleCurrencyChange}
+                aria-label="Display currency"
+                className="appearance-none font-body text-sm pl-4 pr-9 py-2 rounded-full border border-forest/25 bg-white text-forest font-semibold hover:border-gold focus:outline-none focus:ring-2 focus:ring-gold/40 cursor-pointer transition-all"
               >
-                {CURRENCY_RATES[c].symbol} {c}
-              </button>
-            ))}
+                {Object.entries(CURRENCY_RATES).map(([code, info]) => (
+                  <option key={code} value={code}>
+                    {info.symbol} {code} — {info.label}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                size={14}
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-forest/60"
+              />
+            </div>
           </div>
         </div>
 

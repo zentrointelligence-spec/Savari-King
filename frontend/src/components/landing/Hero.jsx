@@ -50,7 +50,7 @@ const Hero = () => {
           transition={{ duration: 0.9, delay: 0.35 }}
           className="w-full"
         >
-          <p className="font-accent text-gold text-[11px] sm:text-sm tracking-[0.35em] uppercase mb-6">
+          <p className="font-accent text-[#F2C75C] text-[11px] sm:text-sm tracking-[0.35em] uppercase mb-6 [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
             Where Kerala Meets Tamil Nadu — South India&apos;s Gateway
           </p>
 
@@ -58,7 +58,7 @@ const Hero = () => {
             <span className="block text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-ivory font-semibold pb-3 drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)]">
               Three Seas. One Sunrise.
             </span>
-            <span className="block text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-gold font-semibold pt-3 drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)]">
+            <span className="block text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-[#F2C75C] font-semibold pt-3 drop-shadow-[0_2px_20px_rgba(0,0,0,0.45)] [text-shadow:0_2px_10px_rgba(0,0,0,0.5)]">
               Endless South India.
             </span>
           </h1>

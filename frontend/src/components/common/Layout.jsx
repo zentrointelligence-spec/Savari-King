@@ -288,11 +288,16 @@ const Sidebar = () => {
   );
 };
 
+// Public marketing pages render their own chrome (Navigation + Footer) to
+// match the landing page brand — they must not get the internal app shell
+// (dashboard sidebar/topbar), which is only for logged-in/app-style pages.
+const PUBLIC_MARKETING_PATHS = ["/", "/about-us"];
+
 // --- Composant principal du Layout ---
 const Layout = ({ children }) => {
   const location = useLocation();
 
-  if (location.pathname === "/") {
+  if (PUBLIC_MARKETING_PATHS.includes(location.pathname)) {
     return <>{children}</>;
   }
 

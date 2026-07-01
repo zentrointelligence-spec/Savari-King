@@ -310,7 +310,7 @@ const AdminBookingsPage = () => {
   };
 
   const handleDownloadInvoice = (booking) => {
-    generateInvoicePDF(booking);
+    generateInvoicePDF(booking).catch((err) => console.error("Invoice PDF failed:", err));
   };
 
   const handleContactCustomer = (booking) => {

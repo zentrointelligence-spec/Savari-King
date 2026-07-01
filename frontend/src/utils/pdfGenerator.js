@@ -1,8 +1,11 @@
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 import logo from '../assets/images/EbenezerTourTransparentLogo.png';
 
-export const generateInvoicePDF = (booking) => {
+export const generateInvoicePDF = async (booking) => {
+  const [{ default: jsPDF }] = await Promise.all([
+    import('jspdf'),
+    import('jspdf-autotable'),
+  ]);
+
   const doc = new jsPDF();
 
   // Add logo

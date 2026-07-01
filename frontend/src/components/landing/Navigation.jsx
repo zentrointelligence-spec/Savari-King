@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { NAV_LINKS, buildWhatsAppLink } from "./constants";
@@ -6,6 +7,9 @@ import { NAV_LINKS, buildWhatsAppLink } from "./constants";
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -20,10 +24,56 @@ const Navigation = () => {
     };
   }, [mobileOpen]);
 
+  // Section anchors only exist on the homepage. From any other page, jump
+  // back to "/" first, then let the browser scroll to the hash on load.
   const scrollTo = (href) => {
     setMobileOpen(false);
+    if (!isHome) {
+      navigate(`/${href}`);
+      return;
+    }
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const navLinkClass =
+    "relative font-body text-sm font-medium text-forest/80 hover:text-forest tracking-wide transition-colors group";
+  const navUnderline =
+    "absolute -bottom-1 left-0 right-0 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300";
+
+  const renderNavLink = (link, mobile = false) => {
+    if (link.href.startsWith("#")) {
+      return (
+        <button
+          key={link.href}
+          onClick={() => scrollTo(link.href)}
+          className={
+            mobile
+              ? "font-display text-2xl text-forest text-left py-3 border-b border-forest/10 hover:text-gold-deep transition-colors"
+              : navLinkClass
+          }
+        >
+          {link.label}
+          {!mobile && <span className={navUnderline} />}
+        </button>
+      );
+    }
+
+    return (
+      <Link
+        key={link.href}
+        to={link.href}
+        onClick={() => setMobileOpen(false)}
+        className={
+          mobile
+            ? "font-display text-2xl text-forest text-left py-3 border-b border-forest/10 hover:text-gold-deep transition-colors"
+            : navLinkClass
+        }
+      >
+        {link.label}
+        {!mobile && <span className={navUnderline} />}
+      </Link>
+    );
   };
 
   return (
@@ -47,22 +97,13 @@ const Navigation = () => {
             <img
               src="/logos/logo-nav-light.svg"
               alt="Savari King — Ebenezer Tours & Travels"
-              className="h-12 w-auto max-w-[300px] object-contain"
+              className="h-[68px] w-auto max-w-[380px] object-contain"
               loading="eager"
             />
           </button>
 
           <div className="hidden lg:flex items-center gap-9">
-            {NAV_LINKS.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => scrollTo(link.href)}
-                className="relative font-body text-sm font-medium text-forest/80 hover:text-forest tracking-wide transition-colors group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 right-0 h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-              </button>
-            ))}
+            {NAV_LINKS.map((link) => renderNavLink(link))}
             <a
               href={buildWhatsAppLink()}
               target="_blank"
@@ -94,15 +135,7 @@ const Navigation = () => {
             className="fixed inset-0 z-40 bg-white lg:hidden pt-20 px-8"
           >
             <div className="flex flex-col gap-2">
-              {NAV_LINKS.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => scrollTo(link.href)}
-                  className="font-display text-2xl text-forest text-left py-3 border-b border-forest/10 hover:text-gold-deep transition-colors"
-                >
-                  {link.label}
-                </button>
-              ))}
+              {NAV_LINKS.map((link) => renderNavLink(link, true))}
               <a
                 href={buildWhatsAppLink()}
                 target="_blank"

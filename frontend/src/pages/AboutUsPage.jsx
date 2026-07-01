@@ -1,619 +1,360 @@
-import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FounderImage from "../components/landing/FounderImage";
 import {
-  faCompass,
-  faMapMarkerAlt,
-  faStar,
-  faUserTie,
-  faHandshake,
-  faHeadset,
-  faLeaf,
-  faQuoteLeft,
-  faHeart,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+  Compass,
+  MapPin,
+  Star,
+  Handshake,
+  Headset,
+  Leaf,
+  Quote,
+  MessageCircle,
+} from "lucide-react";
+import Navigation from "../components/landing/Navigation";
+import Footer from "../components/landing/Footer";
+import StickyWhatsApp from "../components/landing/StickyWhatsApp";
+import FounderImage from "../components/landing/FounderImage";
+import { BRAND, TESTIMONIALS, buildWhatsAppLink } from "../components/landing/constants";
 
-// Served from frontend/public/founder.png
-const founderImg = "/founder.png";
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } },
+};
 
-const AboutUsPage = () => {
-  const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("team");
-  const [isVisible, setIsVisible] = useState(false);
+const VALUES = [
+  {
+    icon: MapPin,
+    title: "Local, Not Outsourced",
+    description:
+      "Every route, hotel and stop is personally scouted by Mr. Sundar — no subcontracted drivers, no surprises.",
+  },
+  {
+    icon: Handshake,
+    title: "Honest, All-In Pricing",
+    description:
+      "The price we quote is the price you pay. No hidden fuel surcharges, no last-minute 'convenience fees'.",
+  },
+  {
+    icon: Leaf,
+    title: "Small-Group, Personal",
+    description:
+      "We run private tours only — your own vehicle, your own pace, never herded into a bus with strangers.",
+  },
+  {
+    icon: Headset,
+    title: "Always Reachable",
+    description:
+      "WhatsApp support from 8am–10pm IST, with replies typically within 30 minutes — before, during and after your trip.",
+  },
+];
 
-  useEffect(() => {
-    setIsVisible(true);
-    return () => setIsVisible(false);
-  }, []);
+const STATS = [
+  { value: "20+", label: "Years of Local Experience" },
+  { value: "5,000+", label: "Travellers Guided" },
+  { value: "98%", label: "5-Star Reviews" },
+  { value: "12", label: "Signature Destinations" },
+];
 
-  // Animation variants améliorées
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
-  };
+const AboutUsPage = () => (
+  <div className="light font-body bg-ivory text-charcoal antialiased scroll-smooth min-h-screen overflow-x-hidden">
+    <Navigation />
 
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.46, 0.45, 0.94], // easeOutQuart
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { y: 50, opacity: 0, scale: 0.95 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.7,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
-  const tabs = [
-    { id: "mission", label: t("about.ourMission"), icon: faCompass },
-    { id: "values", label: t("about.ourValues"), icon: faStar },
-    { id: "team", label: t("about.ourTeam"), icon: faUserTie },
-  ];
-
-  const teamMembers = [
-    {
-      name: "Mr. Sundar Mesiadhas",
-      role: "Founder & Chief Guide",
-      bio: "A true local expert known for his warmth and friendliness. With deep roots in South India, Mr. Sundar doesn't just guide tours—he shares his home with the world.",
-      img: founderImg,
-    },
-    {
-      name: "Priya Sharma",
-      role: "Operations Director",
-      bio: "Expert in logistics and exceptional customer experience",
-      img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1888",
-    },
-    {
-      name: "Arjun Patel",
-      role: "Tour Designer",
-      bio: "Creator of immersive and authentic cultural experiences",
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887",
-    },
-    {
-      name: "Meena Desai",
-      role: "Customer Relations",
-      bio: "Ensures every journey becomes an unforgettable memory",
-      img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=2071",
-    },
-  ];
-
-  const testimonials = [
-    {
-      text: "Ebenezer Tours transformed our Kerala trip into a magical experience. Their attention to detail and local knowledge were exceptional.",
-      author: "Sarah Johnson",
-      location: "London, UK",
-    },
-    {
-      text: "The personalized itinerary they created for our family captured the essence of Tamil Nadu. We felt like locals, not tourists.",
-      author: "Michael Chen",
-      location: "Toronto, Canada",
-    },
-    {
-      text: "From the moment we landed until our departure, every detail was perfect. Their 24/7 support gave us complete peace of mind.",
-      author: "Isabella Rossi",
-      location: "Milan, Italy",
-    },
-  ];
-
-  return (
-    <motion.div
-      className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50/30 to-white"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      {/* Hero Section Améliorée */}
-      <div className="relative h-[80vh] overflow-hidden">
-        <div className="absolute inset-0">
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070')",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-secondary/80 to-accent/70"></div>
-          </div>
-        </div>
+    <main>
+      {/* Hero */}
+      <section className="relative h-[70vh] min-h-[520px] overflow-hidden bg-forest">
+        <img
+          src="https://images.unsplash.com/photo-1609067641058-77305f0158f7?auto=format&fit=crop&w=1600&q=80"
+          alt="Kanniyakumari sunrise, South India"
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-forest/95 via-forest/60 to-forest/30" />
 
         <motion.div
-          className="relative container mx-auto h-full flex flex-col justify-center items-center text-center px-6"
-          variants={containerVariants}
           initial="hidden"
-          animate={isVisible ? "visible" : "hidden"}
+          animate="visible"
+          variants={fadeUp}
+          className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 sm:px-6 max-w-4xl mx-auto"
         >
-          <motion.div
-            className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-8 shadow-lg"
-            variants={itemVariants}
-          >
-            <FontAwesomeIcon icon={faHeart} className="text-3xl text-white" />
-          </motion.div>
-
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold text-white mb-6 text-shadow"
-            variants={itemVariants}
-          >
-            {t("about.title")}
-          </motion.h1>
-
-          <motion.p
-            className="text-xl md:text-2xl text-white/90 max-w-4xl mb-10 leading-relaxed"
-            variants={itemVariants}
-          >
-            {t("about.subtitle")}
-          </motion.p>
-
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4"
-            variants={itemVariants}
-          >
-            <motion.button
-              className="px-8 py-4 bg-white text-primary font-bold rounded-full hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FontAwesomeIcon icon={faCompass} className="mr-2" />
-              {t("home.hero.cta")}
-            </motion.button>
-            <motion.button
-              className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all backdrop-blur-sm"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <FontAwesomeIcon icon={faUsers} className="mr-2" />
-              {t("about.ourTeam")}
-            </motion.button>
-          </motion.div>
+          <p className="font-accent text-[#F2C75C] [text-shadow:0_1px_4px_rgba(0,0,0,0.7)] text-xs tracking-[0.3em] uppercase mb-4">
+            About {BRAND.name}
+          </p>
+          <h1 className="font-display text-4xl md:text-6xl text-ivory font-semibold mb-6 drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+            {BRAND.tagline}
+          </h1>
+          <p className="font-body text-ivory/90 text-lg max-w-2xl [text-shadow:0_1px_3px_rgba(0,0,0,0.6)]">
+            A family-run, driver-guided travel company built on one idea: treat every guest
+            like family, not a booking number.
+          </p>
         </motion.div>
-      </div>
+      </section>
 
-      {/* Navigation par Onglets Élégante */}
-      <div className="bg-white/80 backdrop-blur-lg shadow-xl rounded-2xl mx-auto -mt-12 max-w-6xl relative z-10 border border-purple-100">
-        <div className="flex flex-wrap justify-center">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`px-8 py-6 font-semibold flex items-center transition-all duration-300 rounded-2xl m-2 ${
-                activeTab === tab.id
-                  ? "text-white bg-primary-gradient shadow-primary transform scale-105"
-                  : "text-gray-600 hover:text-primary hover:bg-purple-50"
-              }`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <FontAwesomeIcon icon={tab.icon} className="mr-3 text-lg" />
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Sections de Contenu Améliorées */}
-      <div className="container mx-auto px-6 py-20 max-w-7xl">
-        {/* Section Mission */}
-        {activeTab === "mission" && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="grid lg:grid-cols-2 gap-16 items-center"
-          >
-            <div className="space-y-8">
-              <div>
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-gradient rounded-full mb-6 shadow-primary">
-                  <FontAwesomeIcon
-                    icon={faCompass}
-                    className="text-2xl text-white"
-                  />
-                </div>
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                  {t("about.ourMission")}
-                </h2>
-              </div>
-
-              <div className="space-y-6">
-                <p className="text-xl text-gray-700 leading-relaxed">
-                  {t("about.ourStory")}
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {t("about.subtitle")}
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl border border-purple-100 shadow-soft">
-                <FontAwesomeIcon
-                  icon={faQuoteLeft}
-                  className="text-primary text-2xl mb-4 opacity-60"
-                />
-                <p className="text-primary text-lg italic leading-relaxed">
-                  {t("about.ourVision")}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              <motion.div
-                className="bg-gradient-to-br from-purple-100 to-purple-50 rounded-2xl h-64 shadow-soft hover:shadow-medium transition-all duration-300"
-                whileHover={{ scale: 1.02, y: -5 }}
-              />
-              <motion.div
-                className="bg-gradient-to-br from-indigo-100 to-indigo-50 rounded-2xl h-80 mt-8 shadow-soft hover:shadow-medium transition-all duration-300"
-                whileHover={{ scale: 1.02, y: -5 }}
-              />
-              <motion.div
-                className="bg-gradient-to-br from-violet-100 to-violet-50 rounded-2xl h-80 shadow-soft hover:shadow-medium transition-all duration-300"
-                whileHover={{ scale: 1.02, y: -5 }}
-              />
-              <motion.div
-                className="bg-gradient-to-br from-purple-100 to-purple-50 rounded-2xl h-64 mt-8 shadow-soft hover:shadow-medium transition-all duration-300"
-                whileHover={{ scale: 1.02, y: -5 }}
-              />
-            </div>
-          </motion.div>
-        )}
-
-        {/* Section Valeurs */}
-        {activeTab === "values" && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="space-y-16"
-          >
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-gradient rounded-full mb-6 shadow-primary">
-                <FontAwesomeIcon
-                  icon={faStar}
-                  className="text-2xl text-white"
-                />
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                {t("home.whyChooseUs.title")}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                {t("about.subtitle")}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  icon: faMapMarkerAlt,
-                  title: t("home.features.expertGuides"),
-                  description: t("home.features.expertGuidesDesc"),
-                  color: "from-purple-500 to-indigo-500",
-                },
-                {
-                  icon: faHandshake,
-                  title: t("home.features.customTours"),
-                  description: t("home.features.customToursDesc"),
-                  color: "from-indigo-500 to-blue-500",
-                },
-                {
-                  icon: faLeaf,
-                  title: t("home.features.bestPrices"),
-                  description: t("home.features.bestPricesDesc"),
-                  color: "from-blue-500 to-cyan-500",
-                },
-                {
-                  icon: faHeadset,
-                  title: t("navigation.support"),
-                  description: t("home.features.safeTravelDesc"),
-                  color: "from-cyan-500 to-teal-500",
-                },
-              ].map((value, index) => (
-                <motion.div
-                  key={index}
-                  className="group bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-500 h-full flex flex-col border border-purple-100"
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  variants={cardVariants}
-                >
-                  <div
-                    className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${value.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
-                  >
-                    <FontAwesomeIcon
-                      icon={value.icon}
-                      className="text-white text-2xl"
-                    />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4 group-hover:text-primary transition-colors">
-                    {value.title}
-                  </h3>
-                  <p className="text-gray-600 flex-grow leading-relaxed">
-                    {value.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Section Équipe */}
-        {activeTab === "team" && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="space-y-16"
-          >
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-gradient rounded-full mb-6 shadow-primary">
-                <FontAwesomeIcon
-                  icon={faUserTie}
-                  className="text-2xl text-white"
-                />
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                Meet Your Host
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Traveling with Ebenezer Tours means traveling with family.
-              </p>
-            </div>
-
-            {/* Founder Spotlight */}
-            <div className="max-w-4xl mx-auto mb-16">
-              <motion.div
-                className="bg-white/80 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-gold/30"
-                whileHover={{ y: -5 }}
-              >
-                <div className="grid md:grid-cols-2">
-                  <div className="relative h-full">
-                    <FounderImage className="h-full min-h-[420px]" overlay />
-                    <div className="absolute bottom-4 left-6 z-10 text-white">
-                      <p className="font-accent tracking-widest text-sm text-gold uppercase">Founder</p>
-                      <h3 className="font-display text-3xl font-semibold">Mr. Sundar Mesiadhas</h3>
-                    </div>
-                  </div>
-                  <div className="p-8 md:p-12 flex flex-col justify-center">
-                    <FontAwesomeIcon icon={faQuoteLeft} className="text-gold/40 text-4xl mb-6" />
-                    <h4 className="text-2xl font-bold text-forest mb-4">
-                      "I don't just show you places. I welcome you to my home."
-                    </h4>
-                    <p className="text-charcoal/70 leading-relaxed mb-6">
-                      Mr. Sundar is the heart and soul of Ebenezer Tours & Travels. Known by our guests as the friendliest guide in South India, he ensures every traveler feels completely safe, deeply respected, and genuinely welcomed. 
-                    </p>
-                    <p className="text-charcoal/70 leading-relaxed">
-                      Whether he's driving you personally in his pristine Innova or recommending the best authentic local meal, his unmatched local knowledge and warm smile turn a simple vacation into a lifelong memory.
-                    </p>
-                    <div className="mt-8 flex gap-4">
-                      <div className="text-center">
-                        <span className="block text-2xl font-bold text-forest">20+</span>
-                        <span className="text-xs uppercase tracking-wider text-charcoal/50">Years Exp</span>
-                      </div>
-                      <div className="text-center">
-                        <span className="block text-2xl font-bold text-forest">100%</span>
-                        <span className="text-xs uppercase tracking-wider text-charcoal/50">5-Star Reviews</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-800">The Rest of the Team</h3>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              {teamMembers.slice(1).map((member, index) => (
-                <motion.div
-                  key={index}
-                  className="group bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-soft hover:shadow-xl transition-all duration-500 border border-purple-100"
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  variants={cardVariants}
-                >
-                  <div className="h-64 bg-gradient-to-br from-purple-100 via-indigo-50 to-blue-100 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  <div className="p-6 text-center space-y-4">
-                    <h3 className="text-xl font-bold text-gray-800 group-hover:text-primary transition-colors">
-                      {member.name}
-                    </h3>
-                    <p className="text-primary font-semibold">{member.role}</p>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {member.bio}
-                    </p>
-                    <div className="flex justify-center space-x-3 pt-4">
-                      {[...Array(3)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                        >
-                          <div className="w-5 h-5 bg-gradient-to-r from-primary to-secondary rounded-full" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Section Statistiques Améliorée */}
-        <motion.div
-          className="mt-32 bg-primary-gradient rounded-3xl p-12 text-white shadow-2xl relative overflow-hidden"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
-          <div className="relative z-10">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl md:text-4xl font-bold mb-4">
-                Our Achievements
-              </h3>
-              <p className="text-white/90 text-lg">
-                Numbers that testify to our excellence
-              </p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {[
-                {
-                  value: "5000+",
-                  label: t("home.whyChooseUs.satisfaction"),
-                  icon: faUsers,
-                },
-                {
-                  value: "12",
-                  label: t("home.whyChooseUs.experience"),
-                  icon: faCompass,
-                },
-                {
-                  value: "98%",
-                  label: t("home.whyChooseUs.satisfaction"),
-                  icon: faStar,
-                },
-                {
-                  value: "50+",
-                  label: t("home.whyChooseUs.destinations"),
-                  icon: faMapMarkerAlt,
-                },
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  className="space-y-4"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-                    <FontAwesomeIcon icon={stat.icon} className="text-2xl" />
-                  </div>
-                  <div className="text-4xl md:text-5xl font-bold mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-white/80 font-medium">{stat.label}</div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Section Témoignages Améliorée */}
-        <motion.div
-          className="mt-32 space-y-16"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-gradient rounded-full mb-6 shadow-primary">
-              <FontAwesomeIcon
-                icon={faQuoteLeft}
-                className="text-2xl text-white"
-              />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-              {t("home.testimonials.title")}
+      {/* Founder spotlight */}
+      <section className="bg-forest-mist py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="font-accent text-gold-deep text-xs tracking-[0.3em] uppercase mb-3">
+              Your Host
+            </p>
+            <h2 className="font-display text-4xl md:text-5xl text-forest font-semibold">
+              Meet Mr. Sundar Mesiadhas
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {t("home.testimonials.subtitle")}
+            <p className="font-body text-charcoal/70 mt-4 max-w-2xl mx-auto">
+              Traveling with {BRAND.name} means traveling with family.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                className="group bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-soft hover:shadow-xl transition-all duration-500 relative border border-purple-100"
-                whileHover={{ y: -10, scale: 1.02 }}
-                variants={cardVariants}
-              >
-                <div className="absolute -top-4 -left-4 w-12 h-12 bg-primary-gradient rounded-full flex items-center justify-center shadow-lg">
-                  <FontAwesomeIcon
-                    icon={faQuoteLeft}
-                    className="text-white text-lg"
-                  />
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="bg-white rounded-3xl overflow-hidden border border-forest/10 shadow-[0_30px_80px_rgba(26,46,26,0.1)]"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="relative min-h-[380px] lg:min-h-full">
+                <FounderImage className="h-full" />
+                <div className="absolute bottom-6 left-6 right-6 z-10">
+                  <p className="font-accent text-[#F2C75C] text-xs tracking-[0.25em] uppercase mb-1 [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]">
+                    Founder &amp; Chief Guide
+                  </p>
+                  <h3 className="font-display text-3xl text-ivory font-semibold drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
+                    Mr. Sundar Mesiadhas
+                  </h3>
                 </div>
+              </div>
 
-                <p className="text-gray-700 italic mb-8 relative z-10 leading-relaxed text-lg">
-                  {testimonial.text}
+              <div className="p-8 md:p-12 flex flex-col justify-center">
+                <Quote size={36} className="text-gold/40 mb-6" />
+                <h4 className="font-display text-2xl text-forest font-semibold mb-4">
+                  &ldquo;I don&apos;t just show you places. I welcome you to my home.&rdquo;
+                </h4>
+                <p className="font-body text-charcoal/70 leading-relaxed mb-5">
+                  Mr. Sundar is the heart and soul of {BRAND.name}. Known by our guests as the
+                  friendliest guide in South India, he ensures every traveller feels completely
+                  safe, deeply respected, and genuinely welcomed.
                 </p>
+                <p className="font-body text-charcoal/70 leading-relaxed mb-8">
+                  Whether he&apos;s driving you personally in his pristine Innova or recommending
+                  the best authentic local meal, his unmatched local knowledge and warm smile turn
+                  a simple vacation into a lifelong memory.
+                </p>
+                <div className="flex gap-8">
+                  {STATS.slice(0, 2).map((s) => (
+                    <div key={s.label}>
+                      <span className="block font-display text-3xl text-forest font-semibold">
+                        {s.value}
+                      </span>
+                      <span className="font-body text-xs uppercase tracking-wider text-charcoal/50">
+                        {s.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-                <div className="flex items-center space-x-4">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
-                    <div className="w-8 h-8 bg-primary-gradient rounded-full" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-800 text-lg">
-                      {testimonial.author}
-                    </div>
-                    <div className="text-primary font-medium">
-                      {testimonial.location}
-                    </div>
-                  </div>
+      {/* Mission */}
+      <section className="bg-ivory py-20 md:py-28">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-forest rounded-full mb-6">
+              <Compass size={24} className="text-gold" />
+            </div>
+            <h2 className="font-display text-4xl md:text-5xl text-forest font-semibold mb-6">
+              Our Mission
+            </h2>
+            <p className="font-body text-charcoal/80 text-lg leading-relaxed mb-5">
+              To share the real South India — its temples, its backwaters, its hill mist and its
+              people — through private, driver-guided journeys that feel personal, safe and
+              unforgettable.
+            </p>
+            <div className="bg-forest-mist p-7 rounded-2xl border border-forest/10">
+              <Quote size={22} className="text-gold-deep mb-3" />
+              <p className="font-body text-forest text-base italic leading-relaxed">
+                Our vision is simple: become the most trusted name for private South India travel
+                — one family, one journey at a time.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="grid grid-cols-2 gap-5"
+          >
+            {[
+              "https://images.unsplash.com/photo-1571980844080-5568fbce49f7?auto=format&fit=crop&w=700&q=80",
+              "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=700&q=80",
+              "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=700&q=80",
+              "https://images.unsplash.com/photo-1766051224978-a57732014f9a?auto=format&fit=crop&w=700&q=80",
+            ].map((src, i) => (
+              <motion.div
+                key={src}
+                whileHover={{ scale: 1.02, y: -4 }}
+                className={`rounded-2xl overflow-hidden shadow-sm ${i % 2 === 1 ? "mt-8" : ""}`}
+              >
+                <img
+                  src={src}
+                  alt="South India scenery"
+                  className="w-full h-64 object-cover"
+                  loading="lazy"
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="bg-forest-mist py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="font-accent text-gold-deep text-xs tracking-[0.3em] uppercase mb-3">
+              Why Travellers Choose Us
+            </p>
+            <h2 className="font-display text-4xl md:text-5xl text-forest font-semibold">
+              What We Stand For
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {VALUES.map((v) => (
+              <motion.div
+                key={v.title}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                whileHover={{ y: -6 }}
+                className="bg-white p-7 rounded-2xl border border-forest/10 shadow-sm hover:shadow-[0_20px_50px_rgba(26,46,26,0.1)] transition-all duration-300"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-forest flex items-center justify-center mb-5">
+                  <v.icon size={22} className="text-gold" />
+                </div>
+                <h3 className="font-display text-xl text-forest font-semibold mb-3">
+                  {v.title}
+                </h3>
+                <p className="font-body text-sm text-charcoal/70 leading-relaxed">
+                  {v.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="bg-forest py-16 md:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {STATS.map((s) => (
+              <motion.div
+                key={s.label}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+              >
+                <div className="font-display text-4xl md:text-5xl text-gold font-semibold mb-2">
+                  {s.value}
+                </div>
+                <div className="font-body text-ivory/80 text-sm uppercase tracking-wider">
+                  {s.label}
                 </div>
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* Section CTA Améliorée */}
-        <motion.div
-          className="mt-32 bg-gradient-to-br from-amber-400 via-orange-400 to-yellow-500 rounded-3xl p-12 text-center relative overflow-hidden shadow-2xl"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
-          <div className="relative z-10 space-y-8">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                {t("home.specialOffers.title")}
-              </h2>
-              <p className="text-gray-800/90 text-xl max-w-3xl mx-auto leading-relaxed">
-                {t("about.subtitle")}
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <motion.button
-                className="px-10 py-4 bg-primary text-white font-bold rounded-full hover:bg-secondary transition-all shadow-lg hover:shadow-xl"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FontAwesomeIcon icon={faCompass} className="mr-2" />
-                {t("home.hero.cta")}
-              </motion.button>
-              <motion.button
-                className="px-10 py-4 bg-white text-primary font-bold rounded-full hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FontAwesomeIcon icon={faHeadset} className="mr-2" />
-                {t("navigation.contact")}
-              </motion.button>
-            </div>
+      {/* Testimonials (reuse brand data) */}
+      <section className="bg-ivory py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="font-accent text-gold-deep text-xs tracking-[0.3em] uppercase mb-3">
+              Testimonials
+            </p>
+            <h2 className="font-display text-4xl md:text-5xl text-forest font-semibold">
+              What Our Guests Say
+            </h2>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {TESTIMONIALS.slice(0, 3).map((t) => (
+              <motion.blockquote
+                key={t.author}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                className="relative p-7 bg-white border border-forest/10 rounded-2xl flex flex-col"
+              >
+                <Quote size={32} className="text-gold/25 absolute top-6 right-6" />
+                <div className="flex gap-0.5 mb-4">
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <Star key={i} size={14} className="text-gold-deep fill-gold" />
+                  ))}
+                </div>
+                <p className="font-body text-sm text-charcoal/80 leading-relaxed mb-6 italic flex-1">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <footer className="flex items-center gap-3 border-t border-forest/10 pt-5">
+                  {t.flag && <span className="text-2xl leading-none">{t.flag}</span>}
+                  <div>
+                    <cite className="font-display text-base text-forest not-italic font-semibold block">
+                      {t.author}
+                    </cite>
+                    <p className="font-body text-xs text-charcoal/60 mt-0.5">{t.location}</p>
+                  </div>
+                </footer>
+              </motion.blockquote>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-forest-mist py-20">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        >
+          <h2 className="font-display text-3xl md:text-4xl text-forest font-semibold mb-4">
+            Ready to Plan Your South India Journey?
+          </h2>
+          <p className="font-body text-charcoal/70 mb-8 max-w-xl mx-auto">
+            Tell us your dates and we&apos;ll reply on WhatsApp within 30 minutes with a
+            personalised itinerary.
+          </p>
+          <a
+            href={buildWhatsAppLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-body text-sm font-semibold bg-forest text-ivory px-7 py-3.5 rounded-full hover:bg-forest-soft transition-all shadow-[0_8px_20px_rgba(26,46,26,0.18)]"
+          >
+            <MessageCircle size={16} className="text-gold" />
+            Chat With Us on WhatsApp
+          </a>
         </motion.div>
-      </div>
-    </motion.div>
-  );
-};
+      </section>
+    </main>
+
+    <Footer />
+    <StickyWhatsApp />
+  </div>
+);
 
 export default AboutUsPage;
